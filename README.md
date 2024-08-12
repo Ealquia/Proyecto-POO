@@ -2,4 +2,4 @@
 App de química 
 
 
-Puro tonto usa variables descriptivas
+Keyner por favor usa variables descriptivas
