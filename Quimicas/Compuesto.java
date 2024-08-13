@@ -1,35 +1,23 @@
-
-import java.io.*;
 import java.util.*;
 
 /**
  * 
  */
 public class Compuesto {
-
-    /**
-     * Default constructor
-     */
-    public Compuesto() {
-    }
-
-    /**
-     * 
-     */
+    //ATRIBUTOS
     private String Compuesto;
-
-    /**
-     * 
-     */
     private int Coeficiente;
 
     /**
-     * 
+     * Constructor
+     * @param Compuesto: string con la fórmula del compuesto
      */
-    public Compuesto() {
-        // TODO implement here
+    public Compuesto(String Compuesto) {
+        this.Compuesto = Compuesto;
+        this.Coeficiente = 1;
     }
 
+    //MÉTODOS
     /**
      * @return
      */
@@ -62,34 +50,33 @@ public class Compuesto {
         return null;
     }
 
+    //SETTERS AND GETTERS
     /**
      * @return
      */
     public String getCompuesto() {
-        // TODO implement here
-        return "";
+        return this.Compuesto;
     }
 
     /**
      * @param value
      */
     public void setCompuesto(String value) {
-        // TODO implement here
+        this.Compuesto = value;
     }
 
     /**
      * @return
      */
     public int getCoeficiente() {
-        // TODO implement here
-        return 0;
+        return this.Coeficiente;
     }
 
     /**
      * @param value
      */
     public void setCoeficiente(int value) {
-        // TODO implement here
+        this.Coeficiente = value;
     }
 
 }
