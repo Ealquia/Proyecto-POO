@@ -8,7 +8,7 @@ public class Paginas extends JFrame {
     private JTextField datosIngresados;
     private JButton botonRegistrar;
     private JLabel respuesta;
-
+ ///Comentario x
     public Paginas() {
         setTitle("Pagina GUI");
         setSize(400, 300);
