@@ -17,12 +17,18 @@ class Compuesto:
             div2 = []
             coefs2 = []
             for x in range(len(div1)): #Por cada bloque en la lista anterior de divisiones 
-                new = div1[x].split(sep) #Crear una nueva lista con las divisiones del bloque según el separador
+                #Crear una nueva lista con las divisiones del bloque según el separador, y asegurarse de no incluir strings vacíos
+                new = [elemento for elemento in div1[x].split(sep) if elemento != '']
                 for i in range(len(new)): #Por cada nuevo string (nuevo bloque) que resultó de la división:
                     if sep == "*": #Si el separador es *
-                        if new[i][0].isdigit(): #Si el primer caracter es un número, extraerlo como coheficiente del bloque
-                            coefs2.append(int(new[i][0]))
-                            new[i] = new[i][0:]
+                        if new[i][0].isdigit(): #Si el primer caracter es un número
+                            coef = new[i][0] #Extraerlo
+                            if len(new[i])>1 and new[i][1].isdigit(): #Verificar si el siguiente caracter también es un número
+                                coef = coef + new[i][1]
+                                new[i] = new[i][1:] #Eliminar los dos dígitos de la cadena
+                            else:
+                                new[i] = new[i][0:] #Eliminar el númúnico dígito de la cadena
+                            coefs2.append(int(coef)) #Añadir el coeficiente a la lista 
                         else:
                             coefs2.append(1) #Si no, el coheficiente es 1
                     else: #Si el separador es ( o [ el fin del bloque será ) o ] respectivamente
@@ -53,9 +59,12 @@ class Compuesto:
                     simb = iones[x][-(i+1):cut] #Se guarda la sección de la cadena desde la mayúscula hasta el punto de corte en una nueva variable 
                     cut = -(i+1) #El punto de corte es el final de la cadena la primera vez, y la última mayúscula el resto de veces
                     if simb[-1].isdigit(): #Si el último caracter de la subcadena es un número:
-                        co = int(simb[-1])*coefs[x] #Extraerlo, multiplicarlo por el coheficiente anterior y añadirlo como el nuevo coheficiente
-                        simb = simb[:-1] 
-                        coefs2.append(co)
+                        co = simb[-1]
+                        simb = simb[:-1] #Quitar el número
+                        if simb[-1].isdigit(): #Verificar si el siguiente caracter también es un número
+                            co = simb[-1] + co #Añadirlo al coeficiente
+                            simb = simb[:-1] #Quitar el otro dígito
+                        coefs2.append(int(co)*coefs[x]) #Convertir coeficiente a entero, multiplicarlo por el coheficiente anterior y añadirlo como el nuevo coheficiente      
                     else:
                         coefs2.append(coefs[x]) #Si no hay coheficiente mantener el anterior
                     el.append(simb) #Añadir el símbolo del elemento a la lista de elementos
@@ -64,5 +73,5 @@ class Compuesto:
     
         return elementos #Devolver el dataframe
 
-y = Compuesto("H3COOH2Na")
+y = Compuesto("C2H6O")
 print(y.getElementos())
