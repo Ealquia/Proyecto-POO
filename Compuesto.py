@@ -1,4 +1,5 @@
 import pandas as pd
+#import Elemento*
 
 class Compuesto:
     #Constructor
@@ -7,7 +8,7 @@ class Compuesto:
                 self.coheficiente = float(coheficiente) #Coeficiente estequimétrico si es parte de una reacción, 1 por default 
 
     #Devuelve un dataframe de qué elementos forman el compuesto y cuántos átomos de cada elemento tiene
-    def getElementos(self):
+    def getElementosDF(self):
         #Listas de las divisiones y coheficientes hasta ese punto
         div1 = [self.compuesto]
         coefs1 = [1]
@@ -68,10 +69,27 @@ class Compuesto:
                     else:
                         coefs2.append(coefs[x]) #Si no hay coheficiente mantener el anterior
                     el.append(simb) #Añadir el símbolo del elemento a la lista de elementos
-        elementos = pd.DataFrame({"Elementos":el, "Coheficientes": coefs2}) #Crear un dataframe con las dos listas como columnas
+        elementos = pd.DataFrame({"Elementos":el, "Coeficientes": coefs2}) #Crear un dataframe con las dos listas como columnas
         elementos = elementos.groupby('Elementos', as_index=False).sum() #Si hay elementos duplicados, sumarlos y dejar una sola fila
     
         return elementos #Devolver el dataframe
 
+    """def getElementos(self):
+        elementos = []
+        for row in getElementosDF().itertuples(index=True):
+            elementos.append(Elemento(row.Elementos, row.Coeficientes))
+        return elementos
+    """
+
+    """def masaMolar(self):
+        masaMolar = 0
+        for elemento in getElementos():
+            masaMolar = masaMolar + elemento.MasaMolar*elemento.coeficiente
+        return masaMolar
+    """
+    """def elementoPuro(self):
+        return getElementosDF.shape()>1
+    """
+
 y = Compuesto("C2H6O")
-print(y.getElementos())
+print(y.getElementosDF())

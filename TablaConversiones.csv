@@ -1,0 +1,36 @@
+Tipo;Simbolo;Estandar?;Estandarizar
+Masa;g;1;1
+Masa;kg;0;1000
+Masa;mg;0;0.001
+Masa;microg;0;0.000001
+Masa;oz;0;28.3495
+Masa;lb;0;453.592
+Masa;ton;0;1000000
+Cantidad materia;mol;1;1
+Cantidad materia;micromol;0;0.000001
+Cantidad materia;mmol;0;0.001
+Volumen;L;1;1
+Volumen;mL;0;0.001
+Volumen;microL;0;0.000001
+Volumen;m3;0;1000
+Volumen;cm3;0;0.001
+Volumen;pulg3;0;0.0163871
+Volumen;gal;0;3.78541
+Volumen;ft3;0;28.3168
+Concentracion;M;1;1
+Concentracion;porcentaje (masa);0;0
+Presion;Pa;0;9.87E-06
+Presion;kPa;0;0.00986923
+Presion;mmHg;0;0.00131579
+Presion;atm;1;1
+Temperatura;K;1;1
+Temperatura;C;0;0
+Temperatura;F;0;0
+Densidad;g/cm3;0;0
+Densidad;kg/m3;0;0
+Densidad;kg/L;0;0
+Densidad;g/L;1;1
+Energia;J;1;1
+Energia;kJ;0;0.001
+Energia;cal;0;4.184
+Energia;kcal;0;4184
