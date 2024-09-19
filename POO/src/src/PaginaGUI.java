@@ -2,6 +2,8 @@ package src;
 
 import java.awt.EventQueue;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -10,12 +12,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class PaginaGUI {
-	  private JTextArea instrucciones;
-	  private JTextField datosIngresados;
-	  private JButton botonRegistrar;
-	  private JLabel respuesta;
-
-
+	
 	private JFrame frame;
 
 	/**
@@ -23,7 +20,7 @@ public class PaginaGUI {
 	 */
 	public static void main(String[] args) {
 		PaginaGUI window = new PaginaGUI();
-		window.frame.setVisible(true);
+		window.getFrame().setVisible(true);
 				
 	}
 
@@ -38,22 +35,40 @@ public class PaginaGUI {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    frame.setTitle("Pagina GUI");
-	    frame.setSize(400, 300);
-	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setFrame(new JFrame());
+		getFrame().setBounds(100, 100, 450, 300);
+	    getFrame().setTitle("Pagina GUI");
+	    getFrame().setSize(400, 300);
+	    getFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    //frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
 	        instrucciones = new JTextArea();
 	        datosIngresados = new JTextField();
 	        botonRegistrar = new JButton("Registrar");
 	        respuesta = new JLabel();
-	        frame.setLayout(new GridLayout(4, 1));
-	        frame.add(instrucciones);
-	        frame.add(datosIngresados);
-	        frame.add(botonRegistrar);
-	        frame.add(respuesta);
+	        getFrame().setLayout(new GridLayout(4, 1));
+	        getFrame().add(instrucciones);
+	        getFrame().add(datosIngresados);
+	        getFrame().add(botonRegistrar);
+	        getFrame().add(respuesta);
+	}
+	
+	public JFrame getFrame() {
+		return frame;
+	}
+
+	public void setFrame(JFrame frame) {
+		this.frame = frame;
+	}
+
+	private class Oyente implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
 	}
 
 }
