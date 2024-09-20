@@ -4,14 +4,14 @@ from Elemento import Elemento
 class Compuesto:
     #Constructor
     def __init__(self, compuesto, coheficiente=1):
-                self.compuesto = compuesto #String con la fórmula del compuesto
-                self.coheficiente = float(coheficiente) #Coeficiente estequimétrico si es parte de una reacción, 1 por default 
-                self.elementos = []
+                self.__Compuesto = compuesto #String con la fórmula del compuesto
+                self.__Coeficiente = float(coheficiente) #Coeficiente estequimétrico si es parte de una reacción, 1 por default 
+                self.__Elementos = []
 
     #Devuelve un dataframe con los símbolos de los elementos del compuesto y la cantidad de cada uno
     def DFElementos(self):
         #Listas de las divisiones y coheficientes hasta ese punto
-        div1 = [self.compuesto]
+        div1 = [self.__Compuesto]
         coefs1 = [1]
         #Sub funcion para subdividir en base a *, () o []. Sep es el separador, y div1 y coefs1 las listas hasta ahora
         def dividir(sep,div1,coefs1):
@@ -78,19 +78,28 @@ class Compuesto:
     #Devuelve una lista de objetos elemento de los elementos que forman el compuesto 
     #El atributo cant de cada objeto representa cuántos átomos del elemento hay en el compuesto
     def getElementos(self):
-        if self.elementos == []:
+        if self.__Elementos == []:
             for row in self.DFElementos().itertuples(index=True):
-                self.elementos.append(Elemento(row.Elementos, row.Coeficientes))
-        return self.elementos
+                self.__Elementos.append(Elemento(row.Elementos, row.Coeficientes))
+        return self.__Elementos
 
+    #Devuelve la masa molar
     def masaMolar(self):
         masaMolar = 0
-        for elemento in self.getElementos():
-            masaMolar = masaMolar + elemento.masa_molar*elemento.cant
+        for elemento in self.getElementos(): #Por cada elemento del compuesto
+            masaMolar = masaMolar + elemento.masa_molar*elemento.cant #Se multiplica la masa molar por la cantidad y se suma
         return masaMolar
     
+    #Verdadero si el compuesto es un solo elemento
     def elementoPuro(self):
         return len(self.getElementos)>1
 
+    #Sets y gets
+    def getCompuesto(self):
+        return self.__Compuesto
 
-
+    def getCoeficiente(self):
+        return self.__Coeficiente
+    
+    def setCoeficiente(self,nuevoCoef):
+        self.__Coeficiente = nuevoCoef
