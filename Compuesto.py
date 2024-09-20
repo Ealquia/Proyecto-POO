@@ -91,5 +91,3 @@ class Compuesto:
         return getElementosDF.shape()>1
     """
 
-y = Compuesto("C2H6O")
-print(y.getElementosDF())
