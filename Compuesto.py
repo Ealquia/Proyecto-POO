@@ -92,7 +92,5 @@ class Compuesto:
     def elementoPuro(self):
         return len(self.getElementos)>1
 
-y = Compuesto("C2H6O")
 
-print(y.DFElementos())
-print(y.masaMolar())
+
