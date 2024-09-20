@@ -1,8 +1,11 @@
 import pandas as pd
+import os 
 
 class Elemento:
     try:
-        elementos_df = pd.read_csv(r'C:/Users/isaac/Downloads/tabla CSV/c2dd862cd38f21b0ad36b8f96b4bf1ee-1d92663004489a5b6926e944c1b3d9ec5c40900e/Periodic Table of Elements.csv')
+        ruta_relativa = 'Periodic Table of Elements.csv'  # Ruta relativa al archivo
+        ruta_absoluta = os.path.join(os.path.dirname(__file__), ruta_relativa)
+        elementos_df = pd.read_csv(ruta_absoluta)
     except FileNotFoundError:
         raise FileNotFoundError("El archivo de la tabla periódica no se encontró.")
 
