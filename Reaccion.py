@@ -57,15 +57,5 @@ def dividir(list1):
             reactivos =list1[0].split("+")# se separa cada reactivo en un nuevo string
             productos = list1[1].split("+")# se separa cada producto en un nuevo string
             return reactivos, productos # de vuelve la lista de los strings de reactivos y productos.
-
-
-y = Reaccion("O2 +H2= H2O")
-
-print(y.getReactivosString())
-print(y.getProductosString())
-
-
-
-print(y.Balancear())
                     
 
