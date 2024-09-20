@@ -8,13 +8,18 @@ class Conversiones:
     #Valor: valor numérico a convertir
     #dimensional: unidad de medida que se desea convertir al SI estándar
     def aSI(self, valor, dimensional):
-        def convert(valor, dimensional):
-            estandar = self.tabla[self.tabla['Simbolo'] == dimensional].reset_index().at[0, "Estandarizar"]
-            return valor*estandar
-        if self.tabla[self.tabla['Simbolo'] == dimensional].reset_index().at[0, "Tipo"] == "Densidad":
-            dims = dimensional.split("/")
-            return convert(valor,dims[0])/convert(1,dims[1])
-        else:
+        def convert(valor, dimensional): #Sub proceso que hace una conversión con el factor dado en el df
+            estandar = self.tabla[self.tabla['Simbolo'] == dimensional].reset_index().at[0, "Estandarizar"] #Encontrar el factor correspondiente
+            return valor*estandar #Devolver la conversión
+        if self.tabla[self.tabla['Simbolo'] == dimensional].reset_index().at[0, "Tipo"] == "Densidad": #Si la medida es de densidad
+            dims = dimensional.split("/") #Separar las dimensionales de masa y volumen
+            return convert(valor,dims[0])/convert(1,dims[1]) #Convertir ambos masa y volumen y dividir  
+        elif self.tabla[self.tabla['Simbolo'] == dimensional].reset_index().at[0, "Tipo"] == "Temperatura": #Si la medida es de temperatura
+            if dimensional=="C": #Conversión de Celsius a Kelvin
+                return valor + 273.15
+            if dimensional=="F": #Conversión de Farenheit a Kelvin
+                return (valor - 32)*(5/9) + 273.15
+        else: #Para el resto de tipos de medida, usar el subproceso convert
             return convert(valor, dimensional)
 
     #Convierte un valor en unidades estándar a una unidad no estándar
@@ -27,8 +32,11 @@ class Conversiones:
         if self.tabla[self.tabla['Simbolo'] == dimensional].reset_index().at[0, "Tipo"] == "Densidad":
             dims = dimensional.split("/")
             return convert(valor,dims[0])/convert(1,dims[1])
+        elif self.tabla[self.tabla['Simbolo'] == dimensional].reset_index().at[0, "Tipo"] == "Temperatura": #Si la medida es de temperatura
+            if dimensional=="C": #Conversión de Kelvin a Celsius
+                return valor - 273.15
+            if dimensional=="F": #Conversión de Kelvin a Farenheit
+                return (valor - 273.15)*(9/5) + 32
         else:
             return convert(valor, dimensional)
     
-x = Conversiones()
-print(x.convert(43.5,"kg/L"))

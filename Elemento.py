@@ -1,18 +1,21 @@
 import pandas as pd
+import os 
 
 class Elemento:
     try:
-        elementos_df = pd.read_csv(r'C:/Users/isaac/Downloads/tabla CSV/c2dd862cd38f21b0ad36b8f96b4bf1ee-1d92663004489a5b6926e944c1b3d9ec5c40900e/Periodic Table of Elements.csv')
+        ruta_relativa = 'Periodic Table of Elements.csv'  # Ruta relativa al archivo
+        ruta_absoluta = os.path.join(os.path.dirname(__file__), ruta_relativa)
+        elementos_df = pd.read_csv(ruta_absoluta)
     except FileNotFoundError:
         raise FileNotFoundError("El archivo de la tabla periódica no se encontró.")
 
-    def __init__(self, simbolo):
+    def __init__(self, simbolo, cant=1):
         elemento_info = Elemento.elementos_df[Elemento.elementos_df['Symbol'] == simbolo]
         
         if not elemento_info.empty:
             # Asigna los atributos al elemento
             self.elemento = elemento_info['Element'].values[0]
-            self.cant = 0 
+            self.cant = cant
             self.masa_molar = elemento_info['AtomicMass'].values[0]
             self.densidad = elemento_info['Density'].values[0]
             self.nombre = elemento_info['Element'].values[0]
@@ -52,5 +55,3 @@ class Elemento:
                     print(elemento.toString())
                 except ValueError as e:
                     print(e)
-
-Elemento.iniciar_interaccion()

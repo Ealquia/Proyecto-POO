@@ -1,14 +1,15 @@
 import pandas as pd
-#import Elemento*
+from Elemento import Elemento 
 
 class Compuesto:
     #Constructor
     def __init__(self, compuesto, coheficiente=1):
                 self.compuesto = compuesto #String con la fórmula del compuesto
                 self.coheficiente = float(coheficiente) #Coeficiente estequimétrico si es parte de una reacción, 1 por default 
+                self.elementos = []
 
-    #Devuelve un dataframe de qué elementos forman el compuesto y cuántos átomos de cada elemento tiene
-    def getElementosDF(self):
+    #Devuelve un dataframe con los símbolos de los elementos del compuesto y la cantidad de cada uno
+    def DFElementos(self):
         #Listas de las divisiones y coheficientes hasta ese punto
         div1 = [self.compuesto]
         coefs1 = [1]
@@ -73,21 +74,23 @@ class Compuesto:
         elementos = elementos.groupby('Elementos', as_index=False).sum() #Si hay elementos duplicados, sumarlos y dejar una sola fila
     
         return elementos #Devolver el dataframe
+        
+    #Devuelve una lista de objetos elemento de los elementos que forman el compuesto 
+    #El atributo cant de cada objeto representa cuántos átomos del elemento hay en el compuesto
+    def getElementos(self):
+        if self.elementos == []:
+            for row in self.DFElementos().itertuples(index=True):
+                self.elementos.append(Elemento(row.Elementos, row.Coeficientes))
+        return self.elementos
 
-    """def getElementos(self):
-        elementos = []
-        for row in getElementosDF().itertuples(index=True):
-            elementos.append(Elemento(row.Elementos, row.Coeficientes))
-        return elementos
-    """
-
-    """def masaMolar(self):
+    def masaMolar(self):
         masaMolar = 0
-        for elemento in getElementos():
-            masaMolar = masaMolar + elemento.MasaMolar*elemento.coeficiente
+        for elemento in self.getElementos():
+            masaMolar = masaMolar + elemento.masa_molar*elemento.cant
         return masaMolar
-    """
-    """def elementoPuro(self):
-        return getElementosDF.shape()>1
-    """
+    
+    def elementoPuro(self):
+        return len(self.getElementos)>1
+
+
 
