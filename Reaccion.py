@@ -58,3 +58,4 @@ def dividir(list1):
             productos = list1[1].split("+")# se separa cada producto en un nuevo string
             return reactivos, productos # de vuelve la lista de los strings de reactivos y productos 
 
+
