@@ -59,3 +59,4 @@ def dividir(list1):
             return reactivos, productos # de vuelve la lista de los strings de reactivos y productos 
 
 
+ 
