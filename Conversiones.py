@@ -40,4 +40,15 @@ class Conversiones:
         else:
             return convert(valor, dimensional)
     
-    
+    #Devuelve la dimensional estándar para el tipo de unidad (masa, volumen, etc) que se le pase como parámetro
+    #dimensional: String con la dimensional que se tiene 
+    def dimensionalSI(self,dimensional):
+        tipo = self.__Tabla[self.__Tabla['Simbolo'] == dimensional].reset_index().at[0, "Tipo"] #Encontrar el tipo de la dimensional dada
+        tipos = self.__Tabla[self.__Tabla['Tipo'] == tipo] #Crear un df con todas las filas de ese tipo
+        dimensionalSI = tipos[tipos['Estandar?'] == 1].reset_index().at[0, "Simbolo"] #Encontrar el símbolo de la dimensional de ese tipo definida como estándar
+        return dimensionalSI #Devolver la dimensional
+
+    def mismoTipo(self, dimensional1, dimensional2):
+        tipo = self.__Tabla[self.__Tabla['Simbolo'] == dimensional1].reset_index().at[0, "Tipo"] #Encontrar el tipo de la primera dimensional
+        tipos = self.__Tabla[self.__Tabla['Tipo'] == tipo] #Crear un df con todas las filas de ese tipo
+        return dimensional2 in tipos["Dimensional"]
