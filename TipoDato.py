@@ -3,7 +3,7 @@ from Conversiones import Conversiones
 
 class TipoDato:
     #Constructor
-    def __init__(self, dimensional, compuesto, magnitud = None, moles = None, cifrasSig = [], teorico = True):
+    def __init__(self, dimensional: str, compuesto, magnitud: float = None, cifrasSig: list[int] = [], teorico: bool = True, moles: float = None,):
         self.__Magnitud = magnitud #Float magnitud (Pueda inicializarse como None)
         self.__Dimensional = dimensional #String con la dimensional
         if isinstance(compuesto, Compuesto): #Si el parámetro es un objeto Compuesto asignarlo al atributo
@@ -20,21 +20,15 @@ class TipoDato:
     def SI(self):
         conversion = self.C.aSI(self.__Magnitud,self.__Dimensional) #Convertir la magnitud dada a las unidades estándar del SI
         self.__Magnitud = conversion #Actualizar el atributo Magnitud
-        self.__Dimensional = self.C.aSI(self.__Magnitud,self.__Dimensional) #Actualizar el atributo Dimensional
+        self.__Dimensional = self.C.dimensionalSI(self.__Dimensional) #Actualizar el atributo Dimensional
         return conversion #Devolver la nueva magnitud
     
     #Convierte el dato (que debe estar en forma estándar) a la unidad pasada como parámetro
-    def Convert(self, nuevadimensional):
-        if self.__Dimensional == self.C.dimensionalSI(self.__Dimensional): #Verificar si el dato actual está en forma estándar
-            if self.C.mismoTipo(self.__Dimensional,nuevadimensional): #Verificar si la unidad pasada como parámetro es del mismo tipo
-                conversion = self.C.convert(self.__Magnitud,self.__Dimensional) #Encontrar la conversión
-                self.__Magnitud = conversion #Actualizar Magnitud
-                self.__Dimensional = nuevadimensional #Actualizar Dimensional
-                return conversion #Devolver la conversión
-            else:
-                raise Exception("La dimensional no es del mismo tipo") #Si la unidad pasada no es del mismo tipo, mostrar error
-        else: 
-            raise Exception("El dato actual no está en forma estándar")
+    def Convert(self, nuevadimensional: str):
+        conversion = self.C.convert(self.__Magnitud,self.__Dimensional) #Encontrar la conversión
+        self.__Magnitud = conversion #Actualizar Magnitud
+        self.__Dimensional = nuevadimensional #Actualizar Dimensional
+        return conversion #Devolver la conversión
         
     #Convierte la magnitud a moles
     def aMoles(self):
@@ -52,11 +46,50 @@ class TipoDato:
                 return self.aMoles() #encontrar con el método aMoles
             if self.__Magnitud == None: #Si falta la magnitud
                 mag = self.__Moles*self.__Compuesto.masaMolar() #Encontrar con el proceso inverso
-                self.__Magnitud = mag #Actualizar magnitud
-                return mag #Devolver magnitud
+                self.__Magnitud = self.C.convert(mag, self.__Dimensional) #Convertir la incógnita encontrada a la unidad del dato. actualizar magnitud
+                return self.__Magnitud #Devolver magnitud
         else: #Si los datos son insuficientes
             raise Exception("No hay datos suficientes")
         
     #Verdadero si hay más de una incógnita
     def DatosInsuficientes(self):
         return self.__Magnitud == None and self.__Moles == None
+
+    #toString
+    def __str__(self):
+        info = f"{self.__Magnitud} {self.__Dimensional} de {self.__Compuesto.getCompuesto()}"
+        return info
+
+    #Setters and getters
+    def getMagnitud(self):
+        return self.__Magnitud 
+    
+    def setMagnitud(self, magnitud: float):
+        self.__Magnitud = magnitud
+    
+    def getDimensional(self):
+        return  self.__Dimensional
+    
+    def getCompuesto(self):
+        return  self.__Compuesto
+    
+    def getCifrasSig(self):
+        return  self.__CifrasSig
+
+    def setCifrasSig(self,cifras: list[int]):
+        self.__CifrasSig = cifras
+    
+    def getMoles(self):
+        return  self.__Moles
+    
+    def setMoles(self, moles):
+        self.__Moles = moles
+    
+    def getTeorico(self):
+        return  self.__Teorico
+    
+    def getPuntoPartida(self):
+        return  self.__PuntoPartida
+    
+    def setPuntoPartida(self, cambio: bool):
+        self.__PuntoPartida = cambio
