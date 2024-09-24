@@ -48,7 +48,10 @@ class Conversiones:
         dimensionalSI = tipos[tipos['Estandar?'] == 1].reset_index().at[0, "Simbolo"] #Encontrar el símbolo de la dimensional de ese tipo definida como estándar
         return dimensionalSI #Devolver la dimensional
 
+    #Verdadero si las dos dimensionales son del mismo tipo
     def mismoTipo(self, dimensional1, dimensional2):
         tipo = self.__Tabla[self.__Tabla['Simbolo'] == dimensional1].reset_index().at[0, "Tipo"] #Encontrar el tipo de la primera dimensional
         tipos = self.__Tabla[self.__Tabla['Tipo'] == tipo] #Crear un df con todas las filas de ese tipo
-        return dimensional2 in tipos["Dimensional"]
+        return dimensional2 in tipos["Simbolo"] #Devolver verdadero si la segunda dimensional está en el df del tipo
+    
+    
