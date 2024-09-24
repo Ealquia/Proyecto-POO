@@ -46,7 +46,7 @@ class TipoDato:
                 return self.aMoles() #encontrar con el método aMoles
             if self.__Magnitud == None: #Si falta la magnitud
                 mag = self.__Moles*self.__Compuesto.masaMolar() #Encontrar con el proceso inverso
-                self.__Magnitud = self.C.convert(mag, self.__Dimensional) #Convertir la incógnita encontrada a la unidad del dato. actualizar magnitud
+                self.__Magnitud = self.C.convert(mag, self.__Dimensional) #Convertir la incógnita encontrada a la unidad del dato. Actualizar magnitud
                 return self.__Magnitud #Devolver magnitud
         else: #Si los datos son insuficientes
             raise Exception("No hay datos suficientes")
