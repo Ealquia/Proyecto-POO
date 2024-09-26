@@ -1,5 +1,5 @@
 from Compuesto import Compuesto
-from Conversiones import Conversiones
+from Estequiometria.Conversiones import Conversiones
 
 class TipoDato:
     #Constructor

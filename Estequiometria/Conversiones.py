@@ -1,8 +1,13 @@
+import os
 import pandas as pd
 
 class Conversiones:
     def __init__(self):
-        self.__Tabla = pd.read_csv('TablaConversiones.csv', sep=";")
+        # Directorio donde está el script
+        directorio_script = os.path.dirname(__file__)
+        #Ruta relativa al archivo
+        nombre_archivo = os.path.join(directorio_script,'TablaConversiones.csv')
+        self.__Tabla = pd.read_csv(nombre_archivo, sep=";")
 
     #Convierte cualquier unidad a su equivalente en el SI definido como estándar
     #Valor: valor numérico a convertir
@@ -50,8 +55,9 @@ class Conversiones:
 
     #Verdadero si las dos dimensionales son del mismo tipo
     def mismoTipo(self, dimensional1, dimensional2):
-        tipo = self.__Tabla[self.__Tabla['Simbolo'] == dimensional1].reset_index().at[0, "Tipo"] #Encontrar el tipo de la primera dimensional
-        tipos = self.__Tabla[self.__Tabla['Tipo'] == tipo] #Crear un df con todas las filas de ese tipo
-        return dimensional2 in tipos["Simbolo"] #Devolver verdadero si la segunda dimensional está en el df del tipo
+        tipo = self.__Tabla[self.__Tabla['Tipo'] == self.getTipo(dimensional1)] #Crear un df con todas las filas del tipo de la dimensional 1
+        return dimensional2 in tipo["Simbolo"].values #Devolver verdadero si la segunda dimensional está en el df del tipo
     
-    
+    def getTipo(self,dimensional: str):
+        tipo = self.__Tabla[self.__Tabla['Simbolo'] == dimensional].reset_index().at[0, "Tipo"] #Encontrar el tipo 
+        return tipo
