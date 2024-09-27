@@ -58,6 +58,11 @@ class Conversiones:
         tipo = self.__Tabla[self.__Tabla['Tipo'] == self.getTipo(dimensional1)] #Crear un df con todas las filas del tipo de la dimensional 1
         return dimensional2 in tipo["Simbolo"].values #Devolver verdadero si la segunda dimensional está en el df del tipo
     
+    #Encontrar el tipo de una dimensional dada
     def getTipo(self,dimensional: str):
         tipo = self.__Tabla[self.__Tabla['Simbolo'] == dimensional].reset_index().at[0, "Tipo"] #Encontrar el tipo 
         return tipo
+    
+    def listaDimensionales(self, tipo: str):
+        dimensionales = self.__Tabla[self.__Tabla["Tipo"] == tipo]["Tipo"].to_list
+        return dimensionales
