@@ -22,6 +22,7 @@ class Moles:
         else:
             masa.setMagnitud(gramos)
             masa.setMoles(self.__Magnitud)
+            masa.getIncognita()
             return masa
     
     #Convierte a la unidad pasada como parámetro

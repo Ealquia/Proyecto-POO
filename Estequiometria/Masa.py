@@ -9,10 +9,12 @@ class Masa(TipoDato):
         if not(self.DatosInsuficientes()): #Si hay datos suficientes
             if self._Moles == None: #Si faltan los moles, 
                 return self.aMoles() #encontrar con el método aMoles
-            if self._Magnitud == None: #Si falta la magnitud
+            elif self._Magnitud == None: #Si falta la magnitud
                 mag = self._Moles*self._Compuesto.masaMolar() #Encontrar con el proceso inverso
                 self._Magnitud = self.C.convert(mag, self._Dimensional) #Convertir la incógnita encontrada a la unidad del dato. Actualizar magnitud
                 return self._Magnitud #Devolver magnitud
+            else:
+                self._Magnitud = self.C.convert(self._Magnitud, self._Dimensional) #Convertir la incógnita encontrada a la unidad del dato. Actualizar magnitud
         else: #Si los datos son insuficTientes
             raise Exception("No hay datos suficientes")
         
