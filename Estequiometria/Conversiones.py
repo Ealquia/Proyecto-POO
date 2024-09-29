@@ -12,8 +12,8 @@ class Conversiones:
     #Convierte cualquier unidad a su equivalente en el SI definido como estándar
     #Valor: valor numérico a convertir
     #dimensional: unidad de medida que se desea convertir al SI estándar
-    def aSI(self, valor, dimensional):
-        def convert(valor, dimensional): #Sub proceso que hace una conversión con el factor dado en el df
+    def aSI(self, valor: float, dimensional: str):
+        def convert(valor: float, dimensional: str): #Sub proceso que hace una conversión con el factor dado en el df
             estandar = self.__Tabla[self.__Tabla['Simbolo'] == dimensional].reset_index().at[0, "Estandarizar"] #Encontrar el factor correspondiente
             return valor*estandar #Devolver la conversión
         if self.__Tabla[self.__Tabla['Simbolo'] == dimensional].reset_index().at[0, "Tipo"] == "Densidad": #Si la medida es de densidad
@@ -30,7 +30,7 @@ class Conversiones:
     #Convierte un valor en unidades estándar a una unidad no estándar
     #Valor: valor numérico a convertir
     #Dimensional: unidad de medida a la que se desea convertir 
-    def convert(self, valor, dimensional):
+    def convert(self, valor: float, dimensional: str):
         def convert(valor, dimensional):
             estandar = self.__Tabla[self.__Tabla['Simbolo'] == dimensional].reset_index().at[0, "Estandarizar"]
             return valor/estandar
@@ -50,8 +50,11 @@ class Conversiones:
     def dimensionalSI(self,dimensional):
         tipo = self.__Tabla[self.__Tabla['Simbolo'] == dimensional].reset_index().at[0, "Tipo"] #Encontrar el tipo de la dimensional dada
         tipos = self.__Tabla[self.__Tabla['Tipo'] == tipo] #Crear un df con todas las filas de ese tipo
-        dimensionalSI = tipos[tipos['Estandar?'] == 1].reset_index().at[0, "Simbolo"] #Encontrar el símbolo de la dimensional de ese tipo definida como estándar
-        return dimensionalSI #Devolver la dimensional
+        if len(tipos) <1 :
+            raise Exception("La dimensional no existe")
+        else:
+            dimensionalSI = tipos[tipos['Estandar?'] == 1].reset_index().at[0, "Simbolo"] #Encontrar el símbolo de la dimensional de ese tipo definida como estándar
+            return dimensionalSI #Devolver la dimensional
 
     #Verdadero si las dos dimensionales son del mismo tipo
     def mismoTipo(self, dimensional1, dimensional2):
@@ -63,6 +66,7 @@ class Conversiones:
         tipo = self.__Tabla[self.__Tabla['Simbolo'] == dimensional].reset_index().at[0, "Tipo"] #Encontrar el tipo 
         return tipo
     
+    #Devuelve una lista de las dimensionales para el tipo indicado
     def listaDimensionales(self, tipo: str):
         dimensionales = self.__Tabla[self.__Tabla["Tipo"] == tipo]["Tipo"].to_list
         return dimensionales
