@@ -2,23 +2,22 @@ from Estequiometria.TipoDato import TipoDato
 
 class Masa(TipoDato):
     def __init__(self, compuesto, dimensional: str="g", magnitud: float = None, cifrasSig = [], teorico: bool = True, moles: float = None):
-        super().__init__(dimensional, compuesto, magnitud, cifrasSig, teorico, moles)
+        super().__init__(dimensional, compuesto, magnitud, cifrasSig, teorico, moles) #Llamar a la clase padre
         
-    def getIncognita(self):
-        if not(self.DatosInsuficientes()): #Si hay datos suficientes
-            if self._Moles == None: #Si faltan los moles, 
-                return self.aMoles() #encontrar con el método aMoles
-            elif self._Magnitud == None: #Si falta la magnitud
+   #Override 
+    def getIncognita(self, moles: float = None):
+        def getOtrasIncognitas():
+            if self._Magnitud == None: #Si falta la magnitud
                 mag = self._Moles*self._Compuesto.masaMolar() #Encontrar con el proceso inverso
-                self._Magnitud = self.C.convert(mag, self._Dimensional) #Convertir la incógnita encontrada a la unidad del dato. Actualizar magnitud
+                self._Magnitud = self.C.convert(mag, self._Dimensional) #Convertir la masa encontrada a la unidad del dato. Actualizar magnitud
                 return self._Magnitud #Devolver magnitud
-            else:
-                self._Magnitud = self.C.convert(self._Magnitud, self._Dimensional) #Convertir la incógnita encontrada a la unidad del dato. Actualizar magnitud
-        else: #Si los datos son insuficTientes
-            raise Exception("No hay datos suficientes")
+            else: #Si se tienen los dos
+                self._Magnitud = self.C.convert(self._Magnitud, self._Dimensional) #Convertir la masa a la unidad del dato. Actualizar magnitud
+        return super.getIncognita(getOtrasIncognitas, moles) #Hacer el proceso general + el proceso "getOtrasIncognitas"
         
+    #Override
     def aMoles(self):
-        self.SI()
-        moles = self._Magnitud/self._Compuesto.masaMolar() #Didivir la magnitud (masa) dentro de la masa molar
+        self.SI() #Estandarizar
+        moles = self._Magnitud/self._Compuesto.masaMolar() #Didivir la magnitud (g) dentro de la masa molar (g/mol)
         self._Moles = moles #Actualizar el atributo moles
-        return moles
+        return super.aMoles() #Devolver un objeto moles

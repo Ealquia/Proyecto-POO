@@ -1,5 +1,6 @@
 from Compuesto import Compuesto
 from Estequiometria.Conversiones import Conversiones
+from Estequiometria.Moles import Moles
 
 class TipoDato:
     #Constructor
@@ -32,15 +33,27 @@ class TipoDato:
         
     #Convierte la magnitud a moles. Devuelve un objeto tipo moles 
     def aMoles(self):
-        raise NotImplementedError("Este método debe ser implementado por tipos específicos de dato")
+        return Moles(compuesto = self._Compuesto, magnitud = self._Moles) #Devolver un objeto moles
     
     #Encuentra el valor faltante
-    def getIncognita(self):
-        raise NotImplementedError("Este método debe ser implementado por tipos específicos de dato")
+    def getIncognita(self, getOtrasIncognitas: function, moles: float =None):
+        if not(moles == None): #Si se pasó algún parámetro para moles
+            self._Moles = moles
+        if not(self.DatosInsuficientes([self._Magnitud, self._Moles, self._Molaridad])): #Si hay datos suficientes
+            if self._Moles == None: #Si faltan los moles, 
+                return self.aMoles() #encontrar con el método aMoles
+            else: #De lo contrario, realizar la función pasada como parámetro
+                getOtrasIncognitas()
+        else: #Si los datos son insuficTientes
+            raise Exception("No hay datos suficientes")
         
     #Verdadero si hay más de una incógnita
-    def DatosInsuficientes(self):
-        return self._Magnitud == None and self._Moles == None
+    def DatosInsuficientes(self, atributos):
+        vacios = 0
+        for atribute in atributos:
+            if atribute == None:
+                vacios =+ 1
+        return vacios>1
 
     #toString
     def __str__(self):
