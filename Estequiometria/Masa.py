@@ -13,11 +13,11 @@ class Masa(TipoDato):
                 return self._Magnitud #Devolver magnitud
             else: #Si se tienen los dos
                 self._Magnitud = self.C.convert(self._Magnitud, self._Dimensional) #Convertir la masa a la unidad del dato. Actualizar magnitud
-        return super.getIncognita(getOtrasIncognitas, moles) #Hacer el proceso general + el proceso "getOtrasIncognitas"
+        return super().getIncognita(getOtrasIncognitas, moles=moles) #Hacer el proceso general + el proceso "getOtrasIncognitas"
         
     #Override
     def aMoles(self):
         self.SI() #Estandarizar
         moles = self._Magnitud/self._Compuesto.masaMolar() #Didivir la magnitud (g) dentro de la masa molar (g/mol)
         self._Moles = moles #Actualizar el atributo moles
-        return super.aMoles() #Devolver un objeto moles
+        return super().aMoles() #Devolver un objeto moles

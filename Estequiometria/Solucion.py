@@ -12,8 +12,9 @@ class Solucion(TipoDato):
         self.SI() #Estandarizar
         moles = self._Magnitud*self._Molaridad #Multiplicar la magnitud (L) por la molaridad (mol/L)
         self._Moles = moles #Actualizar atributo moles
-        return super.aMoles() #Devolver un objeto moles
+        return super().aMoles() #Devolver un objeto moles
     
+    #Override
     def getIncognita(self,moles = None):
         def getOtrasIncognitas():
             if self._Magnitud == None: #Si falta la magnitud
@@ -21,8 +22,11 @@ class Solucion(TipoDato):
                 self._Magnitud = self.C.convert(mag, self._Dimensional) #Convertir el volumen encontrado a la unidad del dato. Actualizar magnitud
                 return self._Magnitud #Devolver magnitud
             if self._Molaridad == None: #Si falta la molaridad
-                self._Molaridad = self._Moles/self._Magnitud #Encontrarla como moles (mol) / Magnitud (L)
+                self._Molaridad = self._Moles/self.C.aSI(self._Magnitud, self._Dimensional) #Encontrarla como moles (mol) / Magnitud (L)
                 return self._Molaridad
-        return super.getIncognita(getOtrasIncognitas,moles) #Hacer el proceso general + el proceso "getOtrasIncognitas"
+        return super().getIncognita(getOtrasIncognitas,[self._Molaridad],moles) #Hacer el proceso general + el proceso "getOtrasIncognitas"
     
-    
+    #Override
+    def __str__(self):
+        info = super().__str__() + f" {self._Molaridad} Molar"
+        return info

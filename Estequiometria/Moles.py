@@ -25,3 +25,21 @@ class Moles:
     def __str__(self):
         info = f"{self.__Magnitud} {self.__Dimensional}es de {self.__Compuesto.getCompuesto()}"
         return info
+    
+    #Setters and getters
+    def getMoles(self):
+        return self.__Magnitud
+    
+    def setMoles(self,moles):
+        self.__Magnitud = moles
+        
+    def getCompuesto(self):
+        return self.__Compuesto
+    
+    def setCompuesto(self,compuesto):
+        if isinstance(compuesto, Compuesto): #Si el parámetro es un objeto Compuesto asignarlo al atributo
+            self.__Compuesto = compuesto 
+        if isinstance(compuesto, str): #Si el parámetro es el string del compuesto, crear el objeto y asignarlo al atributo
+            self.__Compuesto = Compuesto(compuesto)
+            
+    
