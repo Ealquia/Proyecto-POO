@@ -1,7 +1,7 @@
 from Estequiometria.TipoDato import TipoDato
 
 class Masa(TipoDato):
-    def __init__(self, compuesto, dimensional: str="g", magnitud: float = None, cifrasSig = [], teorico: bool = True, moles: float = None):
+    def __init__(self, compuesto, dimensional: str="g", magnitud: float = None, cifrasSig = None, teorico: bool = True, moles: float = None):
         super().__init__(dimensional, compuesto, magnitud, cifrasSig, teorico, moles) #Llamar a la clase padre
         
    #Override 

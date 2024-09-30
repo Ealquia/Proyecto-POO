@@ -2,10 +2,11 @@ from Estequiometria.TipoDato import TipoDato
 
 class Solucion(TipoDato):
     #Constructor
-    def __init__(self, compuesto, dimensional: str="L", magnitud: float = None, molaridad:float = None, cifrasSig = [], teorico: bool = True, moles: float = None):
+    def __init__(self, compuesto, dimensional: str="L", magnitud: float = None, molaridad:float = None, cifrasSig = None, teorico: bool = True, moles: float = None):
         super().__init__(dimensional, compuesto, magnitud, cifrasSig, teorico, moles) #Llamar al constructor de la clase padre
         self._PuntoPartida = not(magnitud==None) and not(molaridad==None) #Actualizar punto partida: Verdadero si se tienen la magnitud y la molaridad
         self._Molaridad = molaridad #Agregar atributo molaridad
+        self._CifrasSig = [self._CifrasSig, Solucion.cifrasSignificativas(molaridad)] #Añadir las cifras significativas de la molaridad
         
     #Override
     def aMoles(self):

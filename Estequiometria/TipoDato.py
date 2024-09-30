@@ -3,15 +3,23 @@ from Estequiometria.Conversiones import Conversiones
 from Estequiometria.Moles import Moles
 
 class TipoDato:
+    def cifrasSignificativas(magnitud: float):
+        #Contar el número de dígitos en la magnitud y devolverlo
+        cifrasSig = str(magnitud) 
+        return sum(c.isdigit() for c in cifrasSig if c != '.')
+        
     #Constructor
-    def __init__(self, dimensional: str, compuesto, magnitud: float = None, cifrasSig = [], teorico: bool = True, moles: float = None,):
+    def __init__(self, dimensional: str, compuesto, magnitud: float = None, cifrasSig = None, teorico: bool = True, moles: float = None,):
         self._Magnitud = magnitud #Float magnitud (Pueda inicializarse como None)
         self._Dimensional = dimensional #String con la dimensional
         if isinstance(compuesto, Compuesto): #Si el parámetro es un objeto Compuesto asignarlo al atributo
             self._Compuesto = compuesto 
         if isinstance(compuesto, str): #Si el parámetro es el string del compuesto, crear el objeto y asignarlo al atributo
             self._Compuesto = Compuesto(compuesto)
-        self._CifrasSig = cifrasSig #Cifras significativas como una lista de enteros (para todos los subdatos asociados)
+        if cifrasSig==None: #Si no se dan cifras significativas
+            self._CifrasSig = TipoDato.cifrasSignificativas(magnitud) #Calcular las cifras significativas usando el método estático
+        else:
+            self._CifrasSig = cifrasSig
         self._Moles = moles #Número de moles (puede inicializarse como None)
         self._Teorico = teorico #True por default. Útil si el problema trabaja con porcentajes de rendimiento
         self._PuntoPartida = not(magnitud==None) #Verdadero solo si la magnitud no es nula
@@ -19,10 +27,13 @@ class TipoDato:
         
     #Convierte el dato a su unidad estándar del SI y actualiza los atributos Magnitud y Dimensional
     def SI(self):
-        conversion = self.C.aSI(self._Magnitud,self._Dimensional) #Convertir la magnitud dada a las unidades estándar del SI
-        self._Magnitud = conversion #Actualizar el atributo Magnitud
-        self._Dimensional = self.C.dimensionalSI(self._Dimensional) #Actualizar el atributo Dimensional
-        return conversion #Devolver la nueva magnitud
+        if type(self._Dimensional) == str: #Si hay un solo subdato
+            self._Magnitud = self.C.aSI(self._Magnitud,self._Dimensional) #Convertir la magnitud dada a las unidades estándar del SI
+            self._Dimensional = self.C.dimensionalSI(self._Dimensional) #Actualizar la dimensional
+        if type(self._Dimensional) == dict: #Si hay varios subdatos
+            self._Magnitud = self.C.aSI(self._Magnitud,self._Dimensional["Magnitud"]) 
+            self._Dimensional["Magnitud"] = self.C.dimensionalSI(self._Dimensional["Magnitud"]) 
+        return self._Magnitud #Devolver la nueva magnitud
     
     #Convierte el dato (que debe estar en forma estándar) a la unidad pasada como parámetro
     def Convert(self, nuevadimensional: str):
@@ -58,7 +69,8 @@ class TipoDato:
 
     #toString
     def __str__(self):
-        info = f"{self._Magnitud} {self._Dimensional} de {self._Compuesto.getCompuesto()}"
+        dimensional = self._Dimensional if type(self._Dimensional) == str else self._Dimensional["Magnitud"]
+        info = f"{self._Magnitud} {dimensional} de {self._Compuesto.getCompuesto()}"
         return info
 
     #Setters and getters
