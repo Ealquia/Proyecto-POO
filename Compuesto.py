@@ -92,7 +92,7 @@ class Compuesto:
     
     #Verdadero si el compuesto es un solo elemento
     def elementoPuro(self):
-        return len(self.getElementos)>1
+        return len(self.getElementos())==1
 
     #Sets y gets
     def getCompuesto(self):
