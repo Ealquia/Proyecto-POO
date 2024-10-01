@@ -2,40 +2,47 @@ package src;
 
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+public class MasaMolar extends PaginaGUI {
 
-public class MasaMolar extends JFrame {
+    private static final long serialVersionUID = 1L;
 
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
+    /**
+     * Lanza la aplicación.
+     */
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    MasaMolar window = new MasaMolar();
+                    window.getFrame().setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
-	/**
-	 * Launch the application.
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MasaMolar frame = new MasaMolar();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    /**
+     * Crea el frame.
+     */
+@wbp.parser.entryPoint
+    public MasaMolar() {
+        super(); // Llama al constructor de la clase base
+        initialize(); // Inicializa los componentes específicos de MasaMolar
+    }
 
-	/**
-	 * Create the frame.
-	 */
-	public MasaMolar() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+    /**
+     * Inicializa el contenido específico del frame.
+     */
+    @Override
+    protected void initialize() {
+        super.initialize(); // Llama al método initialize de la clase base
 
-		setContentPane(contentPane);
-	}
+        // Personaliza los componentes específicos de MasaMolar
+        setInstrucciones("Instrucciones específicas para Masa Molar: Por favor, ingrese los datos necesarios.");
+        botonRegistrar.setText("Calcular Masa Molar");
 
+        // Puedes añadir más personalizaciones aquí si es necesario
+    }
 }
+
