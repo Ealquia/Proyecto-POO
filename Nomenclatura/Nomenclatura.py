@@ -41,10 +41,27 @@ class Nomenclatura:
         return a
 
     def Problema(self, ionesNivel):
-        a = rn.randint(0,3)
+        #función para generar un problema aleatorio de un ion específico
+        problema = ""
+        a = rn.randint(0,2)
         cantIones = ionesNivel.shape[0]
         b = rn.randint(1,cantIones)
         if a == 0: # caso en el que muestra el nombre del ión y pregunta la formula
+            pregunta = "¿Cuál es la fórmula de este ión"+ionesNivel.iloc[b,0]+ " ?"
+        elif a == 1:
+            pregunta = "¿Cuál es el nombre del ión "+ ionesNivel.iloc[b,1]+ " ?"
+        elif a  == 2:
+            aleatorio2 =  rn.randint(0,1)
+            if aleatorio2 == 0:
+                pregunta = "¿Cuál es la carga del ión "+ ionesNivel.iloc[b,0] + " ?"
+            elif aleatorio2 ==1:
+                pregunta = "¿Cuál es la carga del ión "+ ionesNivel.iloc[b,1] +" ?"
+            else:
+                pregunta = "error en la generación del número aleatorio2"
+        else:
+            pregunta = "error en la generación del número aleatorio1"
+
+        return problema
             
 
 
