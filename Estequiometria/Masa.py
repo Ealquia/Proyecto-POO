@@ -1,3 +1,4 @@
+from Estequiometria.Moles import Moles
 from Estequiometria.TipoDato import TipoDato
 
 class Masa(TipoDato):
@@ -5,7 +6,7 @@ class Masa(TipoDato):
         super().__init__(dimensional, compuesto, magnitud, cifrasSig, teorico, moles) #Llamar a la clase padre
         
    #Override 
-    def getIncognita(self, moles: float = None):
+    def getIncognita(self, moles: Moles = None):
         def getOtrasIncognitas():
             if self._Magnitud == None: #Si falta la magnitud
                 mag = self._Moles*self._Compuesto.masaMolar() #Encontrar con el proceso inverso

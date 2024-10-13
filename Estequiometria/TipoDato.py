@@ -48,9 +48,9 @@ class TipoDato:
         return Moles(compuesto = self._Compuesto, magnitud = self._Moles) #Devolver un objeto moles
     
     #Encuentra el valor faltante
-    def getIncognita(self, getOtrasIncognitas, moles: float = None):
+    def getIncognita(self, getOtrasIncognitas, moles: Moles = None):
         if not(moles == None): #Si se pasó algún parámetro para moles
-            self.setMoles(moles)
+            self.setMoles(moles.getMoles())
         datos = self.DatosInsuficientes()
         if not(datos): #Si hay datos suficientes
             if self._Moles == None: #Si faltan los moles, 

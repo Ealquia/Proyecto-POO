@@ -1,3 +1,4 @@
+from Estequiometria.Moles import Moles
 from Estequiometria.TipoDato import TipoDato
 
 class Solucion(TipoDato):
@@ -17,7 +18,7 @@ class Solucion(TipoDato):
         return super().aMoles() #Devolver un objeto moles
     
     #Override
-    def getIncognita(self, moles: float = None):
+    def getIncognita(self, moles: Moles = None):
         def getOtrasIncognitas():
             if self._Magnitud == None: #Si falta la magnitud
                 mag = self._Moles/self._Molaridad #Encontrar con el proceso inverso

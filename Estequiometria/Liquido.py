@@ -1,5 +1,6 @@
 from Estequiometria.TipoDato import TipoDato
 from Estequiometria.Masa import Masa
+from Estequiometria.Moles import Moles
 
 class Liquido(TipoDato):
     #Constructor
@@ -46,7 +47,7 @@ class Liquido(TipoDato):
         return super().aMoles() #Devolver el objeto moles
         
     #Override 
-    def getIncognita(self, moles: float = None):
+    def getIncognita(self, moles: Moles = None):
         def getOtrasIncognitas():
             #self.setMoles(moles)
             masa = self.aMasa().getMagnitud() #Encotrar la masa (g) con el método aMasa
