@@ -9,13 +9,12 @@ class TipoDato:
         return sum(c.isdigit() for c in cifrasSig if c != '.')
         
     #Constructor
-    def __init__(self, dimensional: str, compuesto, magnitud: float = None, cifrasSig = None, teorico: bool = True, moles: float = None,):
+    def __init__(self, dimensional: str, compuesto, magnitud: float = None, cifrasSig = None, teorico: bool = True, moles: float = None):
         self._Magnitud = magnitud #Float magnitud (Pueda inicializarse como None)
         self._Dimensional = dimensional #String con la dimensional
-        if isinstance(compuesto, Compuesto): #Si el parámetro es un objeto Compuesto asignarlo al atributo
-            self._Compuesto = compuesto 
         if isinstance(compuesto, str): #Si el parámetro es el string del compuesto, crear el objeto y asignarlo al atributo
             self._Compuesto = Compuesto(compuesto)
+        else: self._Compuesto = compuesto 
         if cifrasSig==None: #Si no se dan cifras significativas
             self._CifrasSig = TipoDato.cifrasSignificativas(magnitud) #Calcular las cifras significativas usando el método estático
         else:
@@ -30,10 +29,10 @@ class TipoDato:
     def SI(self):
         if type(self._Dimensional) == str: #Si hay un solo subdato
             self._Magnitud = self.C.aSI(self._Magnitud,self._Dimensional) #Convertir la magnitud dada a las unidades estándar del SI
-            self._Dimensional = self.C.dimensionalSI(self._Dimensional) #Actualizar la dimensional
+            if self._PuntoPartida: self._Dimensional = self.C.dimensionalSI(self._Dimensional) #Actualizar la dimensional
         if type(self._Dimensional) == dict: #Si hay varios subdatos
             self._Magnitud = self.C.aSI(self._Magnitud,self._Dimensional["Magnitud"]) 
-            self._Dimensional["Magnitud"] = self.C.dimensionalSI(self._Dimensional["Magnitud"]) 
+            if self._PuntoPartida: self._Dimensional["Magnitud"] = self.C.dimensionalSI(self._Dimensional["Magnitud"]) 
         return self._Magnitud #Devolver la nueva magnitud
     
     #Convierte el dato (que debe estar en forma estándar) a la unidad pasada como parámetro

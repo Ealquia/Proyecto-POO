@@ -4,9 +4,9 @@ from Elemento import Elemento
 class Compuesto:
     #Constructor
     def __init__(self, compuesto, coheficiente=1):
-                self.__Compuesto = compuesto #String con la fórmula del compuesto
-                self.__Coeficiente = float(coheficiente) #Coeficiente estequimétrico si es parte de una reacción, 1 por default 
-                self.__Elementos = []
+        self.__Compuesto = compuesto #String con la fórmula del compuesto
+        self.__Coeficiente = float(coheficiente) #Coeficiente estequimétrico si es parte de una reacción, 1 por default 
+        self.__Elementos = []
 
     #Devuelve un dataframe con los símbolos de los elementos del compuesto y la cantidad de cada uno
     def DFElementos(self):

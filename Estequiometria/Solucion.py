@@ -12,11 +12,14 @@ class Solucion(TipoDato):
         
     #Override
     def aMoles(self):
-        self.SI() #Estandarizar
-        moles = self._Magnitud*self._Molaridad #Multiplicar la magnitud (L) por la molaridad (mol/L)
-        self._Moles = moles #Actualizar atributo moles
-        return super().aMoles() #Devolver un objeto moles
-    
+        if  self._PuntoPartida:
+            self.SI() #Estandarizar
+            moles = self._Magnitud*self._Molaridad #Multiplicar la magnitud (L) por la molaridad (mol/L)
+            self._Moles = moles #Actualizar atributo moles
+            return super().aMoles() #Devolver un objeto moles
+        else:
+            raise ValueError("El dato utilizado no era un punto de partida válido")
+        
     #Override
     def getIncognita(self, moles: Moles = None):
         def getOtrasIncognitas():

@@ -31,7 +31,7 @@ Densidad;kg/gal;0;0
 Densidad;kg/m3;0;0
 Densidad;kg/L;0;0
 Densidad;g/L;1;1
-Energia;J;1;1
-Energia;kJ;0;0.001
+Energia;J;0;1000
+Energia;kJ;1;1
 Energia;cal;0;4.184
 Energia;kcal;0;4184

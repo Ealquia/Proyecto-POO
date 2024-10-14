@@ -30,8 +30,10 @@ class Conversiones:
         elif self.__Tabla[self.__Tabla['Simbolo'] == dimensional].reset_index().at[0, "Tipo"] == "Temperatura": #Si la medida es de temperatura
             if dimensional=="C": #Conversión de Celsius a Kelvin
                 return valor + 273.15
-            if dimensional=="F": #Conversión de Farenheit a Kelvin
+            elif dimensional=="F": #Conversión de Farenheit a Kelvin
                 return (valor - 32)*(5/9) + 273.15
+            else:
+                return valor
         else: #Para el resto de tipos de medida, usar el subproceso convert
             return convert(valor, dimensional)
 

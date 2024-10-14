@@ -12,10 +12,9 @@ class Liquido(TipoDato):
             self._Densidad = self._Compuesto.getElementos()[0].getDensidad() #Si lo es, encontrar la densidad del elemento
             self._Dimensional["Densidad"] = "g/mL" #Actualizar la dimensional de la densidad (las densidades de los elementos están en g/mL)
         self._PuntoPartida = not(magnitud==None) and not(densidad==None) #Actualizar punto partida: Verdadero si se tiene la magnitud y la densidad
-        self._CifrasSig = [self._CifrasSig, Liquido.cifrasSignificativas(densidad)] #Añadir las cifras significativas de la densidad
         self.Atributos.append(self._Densidad) #Añadir el atributo  densidad a la lista de atributos
+        self._CifrasSig = [self._CifrasSig, Liquido.cifrasSignificativas(densidad)] #Añadir las cifras significativas de la densidad
 
-        
     def elementoPuro(self):
         return self._Compuesto.elementoPuro()
     
@@ -42,14 +41,16 @@ class Liquido(TipoDato):
     
     #Override
     def aMoles(self):
-        masa = self.aMasa() #Convertir a masa con el método aMasa
-        self._Moles = masa.aMoles().getMoles() #Usar el método aMoles del objeto masa, actualizar atributo Moles
-        return super().aMoles() #Devolver el objeto moles
-        
+        if self._PuntoPartida:
+            masa = self.aMasa() #Convertir a masa con el método aMasa
+            self._Moles = masa.aMoles().getMoles() #Usar el método aMoles del objeto masa, actualizar atributo Moles
+            return super().aMoles() #Devolver el objeto moles
+        else:
+            raise  ValueError("No se puede convertir a moles si no se tiene la magnitud o la densidad")
+    
     #Override 
     def getIncognita(self, moles: Moles = None):
         def getOtrasIncognitas():
-            #self.setMoles(moles)
             masa = self.aMasa().getMagnitud() #Encotrar la masa (g) con el método aMasa
             if self._Magnitud == None: #Si falta la magnitud
                 densidadEstandar = self.C.aSI(self._Densidad,self._Dimensional["Densidad"]) #Convertir la densidad a las unidades estándar del SI
