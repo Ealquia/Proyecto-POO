@@ -1,4 +1,4 @@
-package src;
+
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -18,7 +18,7 @@ public class Home {
     private JButton estequiometria;
     private Nomenclatura nomenVentana;
     private Perfil perfii;
-    private MasaMolar mamol;
+    private momamolar mamol;
     private TablaP tablap;
     private Balanceo balanc;
     private informacion infos;
@@ -48,7 +48,7 @@ public class Home {
 
         nomenVentana = new Nomenclatura();
         perfii = new Perfil();
-        mamol = new MasaMolar();
+   
         tablap = new TablaP();
         balanc = new Balanceo();
         infos = new informacion();
@@ -61,7 +61,7 @@ public class Home {
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         // Pantalla de fondo
-        BackgroundPanel panel = new BackgroundPanel(new ImageIcon("C:\\Users\\esteb\\OneDrive\\Escritorio\\UVG\\UVG 2024 EHVM\\Segundo Semestre\\PROGRAMACIÓN ORIENTADA A OBJETOS\\Proyecto Progra\\POO\\src\\src\\T1.png").getImage());
+        BackgroundPanel panel = new BackgroundPanel(new ImageIcon("C:\\Users\\esteb\\OneDrive\\Escritorio\\UVG\\UVG 2024 EHVM\\Segundo Semestre\\PROGRAMACIÓN ORIENTADA A OBJETOS\\Proyecto Progra\\POO\\src\\T1.png").getImage());
         panel.setLayout(null); // Position absoluta
         frame.getContentPane().add(panel);
         Oyente mp = new Oyente();
@@ -132,8 +132,10 @@ public class Home {
     			nomenVentana.setVisible(true);}
     		if (e.getSource() == perfil)
     			perfii.setVisible(true);
-    		if (e.getSource() == masamolar)
-    			mamol.setVisible(true);
+    		if (e.getSource() == masamolar) {
+    			   mamol = new momamolar();
+    			   mamol.setVisible(true);
+    		}
     		if (e.getSource() == tabla)
     			tablap.setVisible(true);
     		if (e.getSource() == balanceo)

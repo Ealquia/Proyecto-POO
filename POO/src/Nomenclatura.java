@@ -1,4 +1,4 @@
-package src;
+
 
 import java.awt.EventQueue;
 
@@ -6,18 +6,18 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-public class informacion extends JFrame {
+public class Nomenclatura extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 
 	/**
-	 * Launch the application.
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					informacion frame = new informacion();
+					Nomenclatura frame = new Nomenclatura();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -26,10 +26,9 @@ public class informacion extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
+
 	 */
-	public informacion() {
+	public Nomenclatura() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();

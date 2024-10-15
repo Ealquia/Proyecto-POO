@@ -1,4 +1,4 @@
-package src;
+
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class PaginaGUI {
+public class PaginaGUI extends JFrame {
 
     protected JFrame frame;
     protected JTextArea instrucciones;
@@ -21,7 +21,7 @@ public class PaginaGUI {
     /**
      * Lanza la aplicación.
      */
-    public static void main(String[] args) {
+  /*  public static void main(String[] args) {
         PaginaGUI window = new PaginaGUI();
         window.getFrame().setVisible(true);
     }
@@ -31,6 +31,7 @@ public class PaginaGUI {
      */
     public PaginaGUI() {
         initialize();
+        frame.setVisible(false);
     }
 
     /**

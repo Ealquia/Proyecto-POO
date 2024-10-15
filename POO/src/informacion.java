@@ -1,4 +1,4 @@
-package src;
+
 
 import java.awt.EventQueue;
 
@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-public class Estequio extends JFrame {
+public class informacion extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -17,7 +17,7 @@ public class Estequio extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Estequio frame = new Estequio();
+					informacion frame = new informacion();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -29,7 +29,7 @@ public class Estequio extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Estequio() {
+	public informacion() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
