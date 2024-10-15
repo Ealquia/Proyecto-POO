@@ -34,12 +34,12 @@ class problemaEsteq:
     
     def reactivoLimitante(self, datos=None):
         if  datos==None: datos = self.__Datos #Si no se pasa lista de datos se asume  que es la lista de datos del problema
-        prueba = copy.deepcopy(self.__Incognita) #Hacer una copia de la incognita
         valorCritico = 0
         for i  in range(len(self.__Datos)): #Por cada dato en la lista
             if self.__Datos[i]._PuntoPartida: #Si el dato es un punto de partida válido, 
+                prueba = copy.deepcopy(self.__Incognita) #Hacer una copia de la incognita
                 result = self.deCosaACosa(de=i, a=prueba) #obtener el valor de la incognita a partir de ese dato
-                if i == 0: valorCritico = result #Si el el primer dato, asignar el resultado a valor crítico
+                if i == 0: valorCritico = result #Si es el primer dato, asignar el resultado a valor crítico
                 if result <= valorCritico: #Si el resultado es menor al valor crítico, cambiar el valor crítico
                     valorCritico = result
                     reactivoLimitante = self.__Datos[i] #Asignar el dato correspondiente al reactivo limitante
@@ -53,5 +53,5 @@ class problemaEsteq:
                 self.__Incognita.setMagnitud(None) #Quitarle la magnitud a la incógnita
             else:
                 datosReales.append(dato) #Añadir el dato real a la lista de datos reales
-        if len(datosReales) > 1:
-            reactivo
+        #if len(datosReales) > 1:
+            #reactivo
