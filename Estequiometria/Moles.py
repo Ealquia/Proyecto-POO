@@ -14,6 +14,18 @@ class Moles:
             self.__Compuesto = Compuesto(compuesto)
         self.C = Conversiones() #Crear un objeto de tipo conversiones para que lo use la clase
     
+    #Convierte de moles de un compuesto a otro según los coeficientes de la reacción pasada
+    def aMolesDe(self, reaccion, otroCompuesto):
+        if isinstance(reaccion, str):  #Si la reacción es un string, crear un objeto reaccion
+            reaccion = Reaccion(reaccion)
+        if isinstance(otroCompuesto, Compuesto):  #Si el otro compuesto es un objeto Compuesto, obtener la fórmula
+            otroCompuesto = otroCompuesto.getCompuesto()
+        reaccion.Balancear() #Balancear la reaccion
+        miCoef = reaccion.getCompuesto(self.__Compuesto.getCompuesto()).getCoeficiente()  #Obtener el coeficiente de este compuesto
+        otroCoef = reaccion.getCompuesto(otroCompuesto).getCoeficiente()  #Obtener el coeficiente del otro compuesto
+        OtrosMoles = self.__Magnitud * (otroCoef / miCoef) #Calcular los moles del otro compuesto
+        return Moles(otroCompuesto, OtrosMoles) #Crear y devolver objeto moles
+    
     #Convierte a la unidad pasada como parámetro
     def Convert(self, nuevadimensional: str):
         conversion = self.C.convert(self.__Magnitud,self.__Dimensional) #Encontrar la conversión

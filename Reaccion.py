@@ -74,12 +74,35 @@ class Reaccion:
         for x in self.reactivos: #obtiene cada reactivo como objeto
             x.setCoeficiente(coefreac[i1]) # actualiza los coeficientes de cada reactivo
             i1 = i1+1
+            print(x.getCompuesto())
+            print(x.getCoeficiente())
         i2=0
         for x in self.productos: # obtiene cada producto como objeto
             x.setCoeficiente(coefprodu[i2]) #actualiza los coeficientes de cada producto
+            print(x.getCompuesto())
+            print(x.getCoeficiente())
             i2= i2+1
 
         return ch.Reaction(reac=react, prod=produ).string() # usando la librería chempy se retorna la reacción ya balanceada
+
+    #Método que devuelve el reactivo o producto cuya fórmula es la pasada como parámetro
+    def getCompuesto(self, formula:str):
+        found = False
+        for compuesto in self.reactivos: #Buscar entre los reactivos
+            if compuesto.getCompuesto() == formula: #Si se encuentra, devolverlo
+                found = True
+                return compuesto 
+        if not(found): #Si no se encuentra  entre los reactivos, buscar entre los productos
+            for compuesto  in self.productos:  
+                if compuesto.getCompuesto() == formula:  #Si se encuentra, devolverlo
+                    found = True
+                    return compuesto 
+        if not(found): 
+            raise ValueError("El compuesto no se encuentra en la reacción") #Si no se encuentra, lanzar excepción 
+
+        
+
+
 
 #Métodos estáticos ===============================================================================================================================
 
