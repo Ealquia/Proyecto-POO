@@ -74,13 +74,9 @@ class Reaccion:
         for x in self.reactivos: #obtiene cada reactivo como objeto
             x.setCoeficiente(coefreac[i1]) # actualiza los coeficientes de cada reactivo
             i1 = i1+1
-            print(x.getCompuesto())
-            print(x.getCoeficiente())
         i2=0
         for x in self.productos: # obtiene cada producto como objeto
             x.setCoeficiente(coefprodu[i2]) #actualiza los coeficientes de cada producto
-            print(x.getCompuesto())
-            print(x.getCoeficiente())
             i2= i2+1
 
         return ch.Reaction(reac=react, prod=produ).string() # usando la librería chempy se retorna la reacción ya balanceada
