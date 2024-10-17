@@ -53,6 +53,7 @@ def datoEstequiometria(reaccion):
 from Compuesto import Compuesto
 from Reaccion import Reaccion
 from Estequiometria.Conversiones import Conversiones
+from Nomenclatura.Nomenclatura import Nomenclatura
 
 #Main
 print("Gracias por ser un beta tester de nuestra app de química! ¿Qué función deseas usar?")
@@ -80,4 +81,39 @@ while(continuar):
             print("Escribe la reacción química sin balancear separada por un signo = ")
             strReaccion = input()  #input de la fórmula
             reaccion  = Reaccion(strReaccion) #Creación del objeto
-            
+    if opcion == 4: #  Nomenclatura
+        nomenclatura = Nomenclatura()
+        print("¿Qué nivel desea prácticar?")
+        menu = ["Nivel 1", "Nivel 2", "Nivel 3", "Nivel 4", "Todos los niveles"]
+        opcion1 = menuString(menu,"Ingrese el número de la opción correspondiente: ")
+        iones = nomenclatura.Nivel(opcion1) #csv de iones que se usará
+        cantidadAciertos = 0
+        try:
+            cantidad = int(input("Ingrese la cantidad de iones que quiere repasar: "))
+            for  i in range(cantidad):
+                pregunta, id, a= nomenclatura.Problema(iones) #pregunta que se le planteará al usuario
+                print(pregunta)
+                respuesta = input() #respuesta del usuario
+                if a == 0: # caso en el que muestra el nombre del ión y pregunta la formula
+                    if respuesta == iones.iloc[id,1]:
+                        print("Correcto")
+                        cantidadAciertos = cantidadAciertos+ 1
+                    else:
+                        print("Incorrecto, la respuesta correcta es "+ iones.iloc[id,1])
+                elif a == 1: # caso en el que muestra la fórmula del ión y pregunta el nombre
+                    if respuesta == iones.iloc[id,2]:
+                        print("Correcto")
+                        cantidadAciertos = cantidadAciertos+ 1
+                    else:
+                        print("Incorrecto, la respuesta correcta es "+ iones.iloc[id,2])
+                elif  a == 2: # caso en el que se pregunte la  carga del ión
+                    if respuesta == iones.iloc[id,3]:
+                        print("Correcto")
+                        cantidadAciertos = cantidadAciertos+ 1
+                    else:
+                        print("Incorrecto, la respuesta correcta es "+ iones.iloc[id,3])
+                else:
+                    print("Error en la generación del número aleatorio a, consultar Nomenclatura.py")
+            print("¡Felicidades ! Acertaste " + str(cantidadAciertos) + " de " + str(cantidad))
+        except TypeError:
+            print("Error, no se pudo leer la cantidad de iones que quieres repasar")

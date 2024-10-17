@@ -36,19 +36,19 @@ class Nomenclatura:
         #función para generar un problema aleatorio de un ion específico
         if ionesNivel  is not None: # si el dataframe no es None
             pregunta = ""
-            a = rn.randint(0,2)
+            a = rn.randint(0,2) # variable aleatoria que determina que se pregunta
             cantIones = ionesNivel.shape[0]
-            b = rn.randint(1,cantIones)
+            b = rn.randint(1,cantIones) # variable aleatoria que determina el fila del ión
             if a == 0: # caso en el que muestra el nombre del ión y pregunta la formula
-                pregunta = "¿Cuál es la fórmula de este ión"+ str(ionesNivel.iloc[b,0])+ " ?"
+                pregunta = "¿Cuál es la fórmula de este ión "+ str(ionesNivel.iloc[b,1])+ " ?"
             elif a == 1:  # caso en el que muestra la fórmula del ión y pregunta el nombre
-                pregunta = "¿Cuál es el nombre del ión "+ str(ionesNivel.iloc[b,1])+ " ?"
+                pregunta = "¿Cuál es el nombre del ión "+ str(ionesNivel.iloc[b,2])+ " ?"
             elif a  == 2:  # casos en el que pregunta la carga
                 aleatorio2 =  rn.randint(0,1)
                 if aleatorio2 == 0: # caso en el que muestra el nombre del ión y pregunta la carga
-                    pregunta = "¿Cuál es la carga del ión "+ str(ionesNivel.iloc[b,0]) + " ?"
+                    pregunta = "¿Cuál es la carga del ión "+ str(ionesNivel.iloc[b,1]) + " ?"
                 elif aleatorio2 ==1:  # caso en el que muestra la fórmula del ión y pregunta la carga
-                    pregunta = "¿Cuál es la carga del ión "+ str(ionesNivel.iloc[b,1]) +" ?"
+                    pregunta = "¿Cuál es la carga del ión "+ str(ionesNivel.iloc[b,2]) +" ?"
                 else: #error en la generación del número aleatorio 2
                     pregunta = "error en la generación del número aleatorio2"
             else:# error en la generación del número aleatorio 1
@@ -57,7 +57,7 @@ class Nomenclatura:
             pregunta = "Error en el dataFrame"
             b = 0
 
-        return pregunta, b # retorna el problema así como el número del ión para poder  acceder a sus datos y comprobar la respuesta         
+        return pregunta, b, a # retorna el problema así como el número del ión para poder  acceder a sus datos y comprobar la respuesta         
 
 
 
