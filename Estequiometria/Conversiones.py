@@ -44,7 +44,9 @@ class Conversiones:
         def convert(valor, dimensional):
             estandar = self.__Tabla[self.__Tabla['Simbolo'] == dimensional].reset_index().at[0, "Estandarizar"]
             return valor/estandar
-        if self.__Tabla[self.__Tabla['Simbolo'] == dimensional].reset_index().at[0, "Tipo"] == "Densidad": #Si la medida es de densidad
+        algo = self.__Tabla[self.__Tabla['Simbolo'] == dimensional].reset_index()
+        print(algo)
+        if algo.at[0, "Tipo"] == "Densidad": #Si la medida es de densidad
             dims = dimensional.split("/") #Dividir la dimensional en sus dimensionales de masa y volumen
             masa = convert(valor,dims[0]) #Convertir densidad a g/dimVolumen
             volumen = self.factor(dims[0],"mL") #Obtener factor mL/dimVolumen
