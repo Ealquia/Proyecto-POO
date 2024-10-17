@@ -79,6 +79,6 @@ class Conversiones:
         return tipo
     
     #Devuelve una lista de las dimensionales para el tipo indicado
-    def listaDimensionales(self, tipo: str):
-        dimensionales = self.__Tabla[self.__Tabla["Tipo"] == tipo]["Tipo"].to_list
+    def listaDimensionales(self,tipo: str):
+        dimensionales = self.__Tabla[self.__Tabla["Tipo"] == tipo]["Simbolo"].to_list()
         return dimensionales
