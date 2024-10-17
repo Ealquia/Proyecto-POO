@@ -30,8 +30,8 @@ class problemaEsteq:
         if (a==None): a = self.__Incognita #Si no se pasa parámetro "a" se asume que es la incógnita
         moles1 = de.aMoles() #Convertir el primer dato a moles
         moles2 = moles1.aMolesDe(self.__Reaccion, a.getCompuesto()) #Convertir a moles del segundo compuesto
-        a.getIncognita(moles2) #Encontrar el valor de la incógnita 
-        return a
+        #Encontrar el valor de la incógnita 
+        return a.getIncognita(moles2), a
     
     def reactivoLimitante(self, datos=None):
         if  datos==None: datos = self.__Datos #Si no se pasa lista de datos se asume  que es la lista de datos del problema
