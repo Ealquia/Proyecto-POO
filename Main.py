@@ -91,39 +91,39 @@ def incognitaEstequiometria(reaccion):
         dimensionales = menuString(C.listaDimensionales("Masa"),"Ingrese  el número de la unidad correspondiente: ")
         incognita = Masa(dimensional=dimensionales, compuesto=compuesto)
     if tipoDato==2 or  tipoDato==5:
-        dimensionales, magnitud, dimDensidad, densidad = None
+        magnitud, densidad = None, None
+        print("Dimensionales del volumen:")
+        dimensionales = menuString(C.listaDimensionales("Volumen"),"Ingrese  el número de la unidad correspondiente: ")
         if  tipoDato!=2:
-            print("Dimensionales del volumen:")
-            dimensionales = menuString(C.listaDimensionales("Volumen"),"Ingrese  el número de la unidad correspondiente: ")
             magnitud = float(input("Ingrese la magnitud del volumen del líquido: "))
+        print("Dimensionales de la densidad:")
+        dimDensidad = menuString(C.listaDimensionales("Densidad"),"Ingrese  el número de la unidad correspondiente: ")
         if  tipoDato!=3:
-            print("Dimensionales de la densidad:")
-            dimDensidad = menuString(C.listaDimensionales("Densidad"),"Ingrese  el número de la unidad correspondiente: ")
             densidad = float(input("Ingresela densidad del compuesto (si no la conoce,  ingrese 0): "))
             if densidad==0: densidad = None
         incognita = Liquido(compuesto=compuesto,dimMagnitud=dimensionales,dimDensidad=dimDensidad,magnitud=magnitud,densidad=densidad)
     if tipoDato==3 or tipoDato==6:
-        magnitud, dimensionales, molaridad = None, None, None
+        magnitud, molaridad = None, None
+        print("Dimensionales del volumen:")
+        dimensionales = menuString(C.listaDimensionales("Volumen"),"Ingrese  el número de la unidad correspondiente: ")
         if tipoDato!=3:
-            print("Dimensionales del volumen:")
-            dimensionales = menuString(C.listaDimensionales("Volumen"),"Ingrese  el número de la unidad correspondiente: ")
             magnitud = float(input("Ingrese la magnitud del volumen de la solución: "))
         if tipoDato != 6:
             molaridad = float(input("Ingrese la molaridad de la solución (M): "))
         incognita = Solucion(compuesto=compuesto,dimensional=dimensionales,magnitud=magnitud,molaridad=molaridad)
     if tipoDato==4 or tipoDato==7 or tipoDato==8:
-        magnitud,  dimensionales, dimPresion, dimTemp, temp = None, None, None, None, None
+        magnitud, presion, temp = None, None, None
+        print("Dimensionales del volumen:")
+        dimensionales = menuString(C.listaDimensionales("Volumen"),"Ingrese  el número de la unidad correspondiente: ")
         if  tipoDato!=4:
-            print("Dimensionales del volumen:")
-            dimensionales = menuString(C.listaDimensionales("Volumen"),"Ingrese  el número de la unidad correspondiente: ")
             magnitud = float(input("Ingrese la magnitud del volumen del gas: "))
+        print("Dimensionales de la presión:")
+        dimPresion =  menuString(C.listaDimensionales("Presion"),"Ingrese  el número de la unidad correspondiente: ")
         if tipoDato != 7:
-            print("Dimensionales de la presión:")
-            dimPresion =  menuString(C.listaDimensionales("Presion"),"Ingrese  el número de la unidad correspondiente: ")
             presion = float(input("Ingrese la magnitud de la presión: "))
+        print("Dimensionales de la temperatura")
+        dimTemp =  menuString(C.listaDimensionales("Temperatura"),"Ingrese  el número de la unidad correspondiente: ")
         if  tipoDato != 8:
-            print("Dimensionales de la temperatura")
-            dimTemp =  menuString(C.listaDimensionales("Temperatura"),"Ingrese  el número de la unidad correspondiente: ")
             temp = float(input("Ingrese la magnitud de la temperatura: "))
         incognita = Gas(compuesto=compuesto,magnitud=magnitud,dimVolumen=dimensionales,dimPresion=dimPresion,
                    presion=presion,dimTemperatura=dimTemp,temperatura=temp)
