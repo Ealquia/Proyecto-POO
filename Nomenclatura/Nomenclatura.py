@@ -57,7 +57,7 @@ class Nomenclatura:
             pregunta = "Error en el dataFrame"
             b = 0
 
-        return pregunta, b, a # retorna el problema así como el número del ión para poder  acceder a sus datos y comprobar la respuesta         
+        return pregunta, b# retorna el problema así como el número del ión para poder  acceder a sus datos y comprobar la respuesta         
 
 
 
