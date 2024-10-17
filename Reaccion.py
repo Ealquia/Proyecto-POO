@@ -88,3 +88,11 @@ def dividir(list1): # sirve para separar cada compuesto
             productos = list1[1].split("+")# se separa cada producto en un nuevo string
             return reactivos, productos # de vuelve la lista de los strings de reactivos y productos 
  
+
+reaccion = Reaccion("Fe(NO)3 + KSCN = KNO3 + FeNCS(NO3)2")
+print(reaccion.Balancear()) # imprime la reacción balanceada
+
+for x in reaccion.getReactivos():
+    print(x.getCompuesto() + ":" + str(x.getCoeficiente())) # imprime el nombre de cada reactivo
+for x in reaccion.getProductos():
+    print(x.getCompuesto() + ":" + str(x.getCoeficiente())) # imprime el nombre de cada reactivo
