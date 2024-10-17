@@ -38,11 +38,14 @@ from Estequiometria.Masa import Masa
 from Estequiometria.Solucion import  Solucion
 from Estequiometria.Liquido import Liquido
 from Estequiometria.Gas import Gas
+from Estequiometria.problemaEsteq import problemaEsteq
+
 
 def datoEstequiometria(reaccion):
-    print("Compuesto: ")
+    print("¿Qué te dan en el problema? ")
+    tipoDato = menu(["Masa","Volumen Líquido","Volumen Solución","Volumen de Gas"],"Ingrese el número correspondiente: ")
+    print("¿De qué compuesto?")
     compuesto = menuString(reaccion.ObtenerReactivosString()+reaccion.ObtenerProductosString(),"Ingrese el número del compuesto: ")
-    tipoDato = menu(["Masa","Volumen Líquido","Volumen Solución","Volumen de Gas"],"¿Qué tipo de dato desea ingresar? Ingrese el número correspondiente: ")
     C = Conversiones()
     if tipoDato==1:
         dimensionales = menuString(C.listaDimensionales("Masa"),"Ingrese  el número de la unidad correspondiente: ")
@@ -85,8 +88,9 @@ def incognitaEstequiometria(reaccion):
     C = Conversiones()
     if tipoDato==1:
         dimensionales = menuString(C.listaDimensionales("Masa"),"Ingrese  el número de la unidad correspondiente: ")
-        incognita = Masa(dimensional=dimensionales)
+        incognita = Masa(dimensional=dimensionales, compuesto=compuesto)
     if tipoDato==2 or  tipoDato==5:
+        dimensionales, magnitud, dimDensidad, densidad = None
         if  tipoDato!=2:
             print("Dimensionales del volumen:")
             dimensionales = menuString(C.listaDimensionales("Volumen"),"Ingrese  el número de la unidad correspondiente: ")
@@ -98,6 +102,7 @@ def incognitaEstequiometria(reaccion):
             if densidad==0: densidad = None
         incognita = Liquido(compuesto=compuesto,dimMagnitud=dimensionales,dimDensidad=dimDensidad,magnitud=magnitud,densidad=densidad)
     if tipoDato==3 or tipoDato==6:
+        magnitud, dimensionales, molaridad = None, None, None
         if tipoDato!=3:
             print("Dimensionales del volumen:")
             dimensionales = menuString(C.listaDimensionales("Volumen"),"Ingrese  el número de la unidad correspondiente: ")
@@ -106,6 +111,7 @@ def incognitaEstequiometria(reaccion):
             molaridad = float(input("Ingrese la molaridad de la solución (M): "))
         incognita = Solucion(compuesto=compuesto,dimensional=dimensionales,magnitud=magnitud,molaridad=molaridad)
     if tipoDato==4 or tipoDato==7 or tipoDato==8:
+        magnitud,  dimensionales, dimPresion, dimTemp, temp = None, None, None, None, None
         if  tipoDato!=4:
             print("Dimensionales del volumen:")
             dimensionales = menuString(C.listaDimensionales("Volumen"),"Ingrese  el número de la unidad correspondiente: ")
@@ -152,9 +158,20 @@ while(continuar):
         strReaccion = input()  #input de la fórmula
         reaccion  = Reaccion(strReaccion) #Creación del objeto
         if problema==1:
-            print("Ingrese el primer dato:")
+            print("Ingrese el dato de partida: ")
             dato = datoEstequiometria(reaccion)
             print(dato)
             print("Ingrese la incógnita: ")
-            incognita = incognitaEstequiometria(reaccion)
+            incognita, tipoIncognita = incognitaEstequiometria(reaccion)
+            problema = problemaEsteq(Datos=[dato],Incognita=incognita,reaccion=reaccion)
+            respuestaNum, respuestaDato = problema.deCosaACosa()
+            if  tipoIncognita<=4:
+                print("La respuesta es ", respuestaDato)
+            else:
+                print("La respuesta es ", respuestaNum)
+
+            
+
+            
+            
             
