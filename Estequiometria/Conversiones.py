@@ -12,18 +12,28 @@ class Conversiones:
     #Convierte cualquier unidad a su equivalente en el SI definido como estándar
     #Valor: valor numérico a convertir
     #dimensional: unidad de medida que se desea convertir al SI estándar
+    #Factor de conversión para dos unidades no estándar. Para convertir de la dim1 a dim2 multiplicar por el factor
+    def factor(self, dim1, dim2):
+        estandar1 = self.__Tabla[self.__Tabla['Simbolo'] == dim1].reset_index().at[0, "Estandarizar"] #Encontrar el factor estándar correspondiente (std/dim1)
+        estandar2 = self.__Tabla[self.__Tabla['Simbolo'] == dim2].reset_index().at[0, "Estandarizar"] #Encontrar el factor estándar correspondiente (std/dim2)
+        return estandar1/estandar2 #(std/dim1)/(std/dim2) = dim2/dim1
+    
     def aSI(self, valor: float, dimensional: str):
         def convert(valor: float, dimensional: str): #Sub proceso que hace una conversión con el factor dado en el df
             estandar = self.__Tabla[self.__Tabla['Simbolo'] == dimensional].reset_index().at[0, "Estandarizar"] #Encontrar el factor correspondiente
             return valor*estandar #Devolver la conversión
         if self.__Tabla[self.__Tabla['Simbolo'] == dimensional].reset_index().at[0, "Tipo"] == "Densidad": #Si la medida es de densidad
             dims = dimensional.split("/") #Separar las dimensionales de masa y volumen
-            return convert(valor,dims[0])/convert(1,dims[1]) #Convertir ambos masa y volumen y dividir  
+            masa = valor *  self.factor(dims[0], "g") #Convierte la masa a g
+            volumen = 1 * self.factor(dims[1],"L") #Convierte el volumen a L
+            return masa/volumen #Dividir masa entre volumen  
         elif self.__Tabla[self.__Tabla['Simbolo'] == dimensional].reset_index().at[0, "Tipo"] == "Temperatura": #Si la medida es de temperatura
             if dimensional=="C": #Conversión de Celsius a Kelvin
                 return valor + 273.15
-            if dimensional=="F": #Conversión de Farenheit a Kelvin
+            elif dimensional=="F": #Conversión de Farenheit a Kelvin
                 return (valor - 32)*(5/9) + 273.15
+            else:
+                return valor
         else: #Para el resto de tipos de medida, usar el subproceso convert
             return convert(valor, dimensional)
 
@@ -34,9 +44,11 @@ class Conversiones:
         def convert(valor, dimensional):
             estandar = self.__Tabla[self.__Tabla['Simbolo'] == dimensional].reset_index().at[0, "Estandarizar"]
             return valor/estandar
-        if self.__Tabla[self.__Tabla['Simbolo'] == dimensional].reset_index().at[0, "Tipo"] == "Densidad":
-            dims = dimensional.split("/")
-            return convert(valor,dims[0])/convert(1,dims[1])
+        if self.__Tabla[self.__Tabla['Simbolo'] == dimensional].reset_index().at[0, "Tipo"] == "Densidad": #Si la medida es de densidad
+            dims = dimensional.split("/") #Dividir la dimensional en sus dimensionales de masa y volumen
+            masa = convert(valor,dims[0]) #Convertir densidad a g/dimVolumen
+            volumen = self.factor(dims[0],"mL") #Obtener factor mL/dimVolumen
+            return masa/volumen #Devolver la nueva densidad (g/dimVolumen)/(mL/dimVolumen) = g/mL
         elif self.__Tabla[self.__Tabla['Simbolo'] == dimensional].reset_index().at[0, "Tipo"] == "Temperatura": #Si la medida es de temperatura
             if dimensional=="C": #Conversión de Kelvin a Celsius
                 return valor - 273.15

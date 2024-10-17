@@ -9,13 +9,12 @@ class TipoDato:
         return sum(c.isdigit() for c in cifrasSig if c != '.')
         
     #Constructor
-    def __init__(self, dimensional: str, compuesto, magnitud: float = None, cifrasSig = None, teorico: bool = True, moles: float = None,):
+    def __init__(self, dimensional: str, compuesto, magnitud: float = None, cifrasSig = None, teorico: bool = True, moles: float = None):
         self._Magnitud = magnitud #Float magnitud (Pueda inicializarse como None)
         self._Dimensional = dimensional #String con la dimensional
-        if isinstance(compuesto, Compuesto): #Si el parámetro es un objeto Compuesto asignarlo al atributo
-            self._Compuesto = compuesto 
         if isinstance(compuesto, str): #Si el parámetro es el string del compuesto, crear el objeto y asignarlo al atributo
             self._Compuesto = Compuesto(compuesto)
+        else: self._Compuesto = compuesto 
         if cifrasSig==None: #Si no se dan cifras significativas
             self._CifrasSig = TipoDato.cifrasSignificativas(magnitud) #Calcular las cifras significativas usando el método estático
         else:
@@ -24,15 +23,16 @@ class TipoDato:
         self._Teorico = teorico #True por default. Útil si el problema trabaja con porcentajes de rendimiento
         self._PuntoPartida = not(magnitud==None) #Verdadero solo si la magnitud no es nula
         self.C = Conversiones() #Crear un objeto de tipo conversiones para que lo use la clase
-        
+        self.Atributos = [self._Moles, self._Magnitud] #Lista de los atributos que pueden ser incógnitas
+         
     #Convierte el dato a su unidad estándar del SI y actualiza los atributos Magnitud y Dimensional
     def SI(self):
         if type(self._Dimensional) == str: #Si hay un solo subdato
             self._Magnitud = self.C.aSI(self._Magnitud,self._Dimensional) #Convertir la magnitud dada a las unidades estándar del SI
-            self._Dimensional = self.C.dimensionalSI(self._Dimensional) #Actualizar la dimensional
+            if self._PuntoPartida: self._Dimensional = self.C.dimensionalSI(self._Dimensional) #Actualizar la dimensional
         if type(self._Dimensional) == dict: #Si hay varios subdatos
             self._Magnitud = self.C.aSI(self._Magnitud,self._Dimensional["Magnitud"]) 
-            self._Dimensional["Magnitud"] = self.C.dimensionalSI(self._Dimensional["Magnitud"]) 
+            if self._PuntoPartida: self._Dimensional["Magnitud"] = self.C.dimensionalSI(self._Dimensional["Magnitud"]) 
         return self._Magnitud #Devolver la nueva magnitud
     
     #Convierte el dato (que debe estar en forma estándar) a la unidad pasada como parámetro
@@ -47,24 +47,24 @@ class TipoDato:
         return Moles(compuesto = self._Compuesto, magnitud = self._Moles) #Devolver un objeto moles
     
     #Encuentra el valor faltante
-    def getIncognita(self, getOtrasIncognitas, atributos = [], moles: float =None):
+    def getIncognita(self, getOtrasIncognitas, moles: Moles = None):
         if not(moles == None): #Si se pasó algún parámetro para moles
-            self._Moles = moles
-        if not(self.DatosInsuficientes(atributos)): #Si hay datos suficientes
+            self.setMoles(moles.getMoles())
+        datos = self.DatosInsuficientes()
+        if not(datos): #Si hay datos suficientes
             if self._Moles == None: #Si faltan los moles, 
                 return self.aMoles() #encontrar con el método aMoles
             else: #De lo contrario, realizar la función pasada como parámetro
                 return getOtrasIncognitas()
-        else: #Si los datos son insuficTientes
-            raise Exception("No hay datos suficientes")
+        if datos: #Si los datos son insuficTientes
+            raise Exception("No hay datos suficientes para encontrar la incógnita")
         
     #Verdadero si hay más de una incógnita
-    def DatosInsuficientes(self, atributos = []):
-        atributos.extend([self._Moles, self._Magnitud])
+    def DatosInsuficientes(self):
         vacios = 0
-        for atribute in atributos:
+        for atribute in self.Atributos:
             if atribute == None:
-                vacios =+ 1
+                vacios = vacios + 1
         return vacios>1
 
     #toString
@@ -79,6 +79,8 @@ class TipoDato:
     
     def setMagnitud(self, magnitud: float):
         self._Magnitud = magnitud
+        self.Atributos[1] =  magnitud
+
     
     def getDimensional(self):
         return  self._Dimensional
@@ -97,6 +99,7 @@ class TipoDato:
     
     def setMoles(self, moles):
         self._Moles = moles
+        self.Atributos[0] = moles
     
     def getTeorico(self):
         return  self._Teorico

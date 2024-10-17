@@ -1,3 +1,4 @@
+from Estequiometria.Moles import Moles
 from Estequiometria.TipoDato import TipoDato
 
 class Solucion(TipoDato):
@@ -7,16 +8,20 @@ class Solucion(TipoDato):
         self._PuntoPartida = not(magnitud==None) and not(molaridad==None) #Actualizar punto partida: Verdadero si se tienen la magnitud y la molaridad
         self._Molaridad = molaridad #Agregar atributo molaridad
         self._CifrasSig = [self._CifrasSig, Solucion.cifrasSignificativas(molaridad)] #Añadir las cifras significativas de la molaridad
+        self.Atributos.append(self._Molaridad) #Añadir el atributo molaridad a la lista de atributos
         
     #Override
     def aMoles(self):
-        self.SI() #Estandarizar
-        moles = self._Magnitud*self._Molaridad #Multiplicar la magnitud (L) por la molaridad (mol/L)
-        self._Moles = moles #Actualizar atributo moles
-        return super().aMoles() #Devolver un objeto moles
-    
+        if  self._PuntoPartida:
+            self.SI() #Estandarizar
+            moles = self._Magnitud*self._Molaridad #Multiplicar la magnitud (L) por la molaridad (mol/L)
+            self._Moles = moles #Actualizar atributo moles
+            return super().aMoles() #Devolver un objeto moles
+        else:
+            raise ValueError("El dato utilizado no era un punto de partida válido")
+        
     #Override
-    def getIncognita(self,moles = None):
+    def getIncognita(self, moles: Moles = None):
         def getOtrasIncognitas():
             if self._Magnitud == None: #Si falta la magnitud
                 mag = self._Moles/self._Molaridad #Encontrar con el proceso inverso
@@ -25,7 +30,7 @@ class Solucion(TipoDato):
             if self._Molaridad == None: #Si falta la molaridad
                 self._Molaridad = self._Moles/self.C.aSI(self._Magnitud, self._Dimensional) #Encontrarla como moles (mol) / Magnitud (L)
                 return self._Molaridad
-        return super().getIncognita(getOtrasIncognitas,[self._Molaridad],moles) #Hacer el proceso general + el proceso "getOtrasIncognitas"
+        return super().getIncognita(getOtrasIncognitas,moles) #Hacer el proceso general + el proceso "getOtrasIncognitas"
     
     #Override
     def __str__(self):
