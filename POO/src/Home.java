@@ -26,11 +26,8 @@ public class Home {
     /**
      * Launch the application.
      */
-    public static void main(String[] args) {
         Home window = new Home();
         window.frame.setVisible(true);
-    }
-
     /**
      * Create the application.
      */
