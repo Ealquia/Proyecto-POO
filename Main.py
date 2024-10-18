@@ -208,7 +208,7 @@ while(continuar):
                         print("Correcto")
                         cantidadAciertos = cantidadAciertos+ 1
                     else:
-                        print("Incorrecto, la respuesta correcta es "+ iones.iloc[id,3])
+                        print("Incorrecto, la respuesta correcta es "+ str(iones.iloc[id,3]))
                 else:
                     print("Error en la generación del número aleatorio a, consultar Nomenclatura.py")
             print("¡Felicidades ! Acertaste " + str(cantidadAciertos) + " de " + str(cantidad))
