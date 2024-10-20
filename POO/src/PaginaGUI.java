@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class PaginaGUI extends JFrame {
+public class PaginaGUI {//extends JFrame {
 
     protected JFrame frame;
     protected JTextArea instrucciones;

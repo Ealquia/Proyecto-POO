@@ -13,12 +13,12 @@ import java.awt.Color;
 import org.python.util.PythonInterpreter;
 import org.python.core.*;
 
-public class Momamolar extends PaginaGUI {
+public class momamolar extends PaginaGUI {
 
     private static final long serialVersionUID = 1L;
     private JPanel PanelMoma;
     private JTextField Compingresado;
-    private PythonInterpreter miPython;
+//    private PythonInterpreter miPython;
 
     /**
      * Launch the application.
@@ -27,7 +27,7 @@ public class Momamolar extends PaginaGUI {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    Momamolar frame = new Momamolar();
+                	momamolar frame = new momamolar();
                     frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -39,19 +39,19 @@ public class Momamolar extends PaginaGUI {
     /**
      * Create the frame.
      */
-    public Momamolar() {
+    public momamolar() {
         super();
 
-        miPython = new PythonInterpreter();
-        miPython.execfile("./src/CalcMasaMolar.py");
+    //    miPython = new PythonInterpreter();
+      //  miPython.execfile("./src/CalcMasaMolar.py");
 
         // Llamar a la función definida en el archivo Python
-        PyFunction funcionSaludo = (PyFunction) miPython.get("saludo", PyFunction.class);
+   //     PyFunction funcionSaludo = (PyFunction) miPython.get("saludo", PyFunction.class);
 
         // Pasar un argumento a la función Python
-        PyObject resultado = funcionSaludo.__call__(new PyString("H2O"));
+     //   PyObject resultado = funcionSaludo.__call__(new PyString("H2O"));
 
-        miPython.close();
+       // miPython.close();
 
         // Configuración del frame
         setTitle("MomaMolar");
