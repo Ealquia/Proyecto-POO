@@ -7,8 +7,9 @@ Masa;oz;0;28.3495
 Masa;lb;0;453.592
 Masa;ton;0;1000000
 Cantidad materia;mol;1;1
-Cantidad materia;micromol;0;0.000001
+Cantidad materia;umol;0;0.000001
 Cantidad materia;mmol;0;0.001
+Cantidad materia;particulas;0;0
 Volumen;L;1;1
 Volumen;mL;0;0.001
 Volumen;microL;0;0.000001
