@@ -44,14 +44,15 @@ class Conversiones:
         def convert(valor, dimensional):
             estandar = self.__Tabla[self.__Tabla['Simbolo'] == dimensional].reset_index().at[0, "Estandarizar"]
             return valor/estandar
-        algo = self.__Tabla[self.__Tabla['Simbolo'] == dimensional].reset_index()
-        print(algo)
-        if algo.at[0, "Tipo"] == "Densidad": #Si la medida es de densidad
+        eso = self.__Tabla[self.__Tabla['Simbolo'] == dimensional].reset_index()
+        if dimensional=="particulas":
+            return valor*6.022 #Conversion de moles a particulas
+        if eso.at[0, "Tipo"] == "Densidad": #Si la medida es de densidad
             dims = dimensional.split("/") #Dividir la dimensional en sus dimensionales de masa y volumen
             masa = convert(valor,dims[0]) #Convertir densidad a g/dimVolumen
             volumen = self.factor(dims[0],"mL") #Obtener factor mL/dimVolumen
             return masa/volumen #Devolver la nueva densidad (g/dimVolumen)/(mL/dimVolumen) = g/mL
-        elif self.__Tabla[self.__Tabla['Simbolo'] == dimensional].reset_index().at[0, "Tipo"] == "Temperatura": #Si la medida es de temperatura
+        elif eso.at[0, "Tipo"] == "Temperatura": #Si la medida es de temperatura
             if dimensional=="C": #Conversión de Kelvin a Celsius
                 return valor - 273.15
             if dimensional=="F": #Conversión de Kelvin a Farenheit
