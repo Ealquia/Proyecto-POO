@@ -1,0 +1,51 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class PaginaBalanceo extends Paginas {
+
+    private JTextField reaccionIngresada;
+    private JTextArea reaccionBalanceada;
+    private JButton botonBalancear;
+
+    public PaginaBalanceo() {
+        super();  
+        // Reconfigurar la ventana heredada de la clase padre
+        setTitle("Balanceador de Reacciones Químicas");
+
+        
+        reaccionIngresada = new JTextField();
+        reaccionBalanceada = new JTextArea();
+        reaccionBalanceada.setEditable(false);  
+        botonBalancear = new JButton("Balancear Reacción");
+
+        // Añadir un ActionListener para el botón de balancear
+        botonBalancear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String reaccion = reaccionIngresada.getText();
+                // lógica para balancear la reacción
+                String resultadoBalanceo = "Reacción balanceada"; // Reemplazar con la lógica real
+                reaccionBalanceada.setText(resultadoBalanceo);
+            }
+        });
+
+        // agregar los nuevos componentes
+        setLayout(new GridLayout(5, 1));  // Cambiamos el layout para agregar más filas
+        add(new JLabel("Ingrese la reacción química:"));
+        add(reaccionIngresada);
+        add(botonBalancear);
+        add(new JScrollPane(reaccionBalanceada));  // JScrollPane para scroll si es necesario
+        add(respuesta);  // Se usa el JLabel "respuesta" de la clase padre
+
+        // Configuración de la ventana
+        setSize(400, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    public static void main(String[] args) {
+        PaginaBalanceo paginaReaccion = new PaginaBalanceo();
+        paginaReaccion.setVisible(true);
+    }
+}
