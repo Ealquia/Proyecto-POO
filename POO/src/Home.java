@@ -139,7 +139,7 @@ public class Home {
                 perfii.setVisible(true);
             }
             if (e.getSource() == masamolar) {
-                mamol.setVisible(true);
+                mamol.getFrame().setVisible(true);
             }
             if (e.getSource() == tabla) {
                 tablap.setVisible(true);

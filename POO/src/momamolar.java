@@ -9,38 +9,37 @@ import java.awt.BorderLayout;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.Color;
-import org.python.util.PythonInterpreter;
-import org.python.core.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 
 public class momamolar extends PaginaGUI {
 
     private static final long serialVersionUID = 1L;
     private JPanel PanelMoma;
     private JTextField Compingresado;
+    private JButton btnRegistrar;
 //    private PythonInterpreter miPython;
 
     /**
      * Launch the application.
-     */
+     
     public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                	momamolar frame = new momamolar();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
+            momamolar frame = new momamolar();
+            frame.setVisible(true);
+    
+    }*/
 
     /**
      * Create the frame.
      */
     public momamolar() {
         super();
+        frame.setVisible(true);
 
     //    miPython = new PythonInterpreter();
       //  miPython.execfile("./src/CalcMasaMolar.py");
@@ -54,12 +53,12 @@ public class momamolar extends PaginaGUI {
        // miPython.close();
 
         // Configuración del frame
-        setTitle("MomaMolar");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(200, 200, 900, 600);
+        frame.setTitle("MomaMolar");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setBounds(200, 200, 900, 600);
         PanelMoma = new JPanel();
         PanelMoma.setBorder(new EmptyBorder(5, 5, 5, 5));
-        setContentPane(PanelMoma);
+        frame.setContentPane(PanelMoma);
         PanelMoma.setLayout(new BoxLayout(PanelMoma, BoxLayout.Y_AXIS));
 
         // Creación del frame interno para las instrucciones
@@ -91,7 +90,7 @@ public class momamolar extends PaginaGUI {
         Compingresado.setColumns(10);
 
         // Botón para calcular la masa molar
-        JButton Registrar = new JButton("Calcular");
+        btnRegistrar = new JButton("Calcular");
         Ingresodatos.add(Registrar);
 
         // Área de texto para mostrar el resultado
@@ -99,6 +98,30 @@ public class momamolar extends PaginaGUI {
         Resultado.setEditable(false);
         Resultado.setText("La masa molar de su compuesto es:\r\n");
         Ingresodatos.add(Resultado);
+    }
+    
+    private class MP implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			if (e.getSource() == btnRegistrar) {
+				
+				URI uri = URI.create("http://127.0.0.1:5000/api/nivel?opcion=" + Compingresado);
+				URL url;
+				try {
+					url = uri.toURL();
+					HttpURLConnection conn = ((HttpURLConnection) url).openConnection();
+				} catch (MalformedURLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+
+			}
+			
+		}
+    	
     }
 }
 
