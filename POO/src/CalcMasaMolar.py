@@ -1,8 +1,12 @@
-# -*- coding: utf-8 -*-
+from flask import Flask, jsonify, request
 from Compuesto import Compuesto
-from Elemento import Elemento
-def calcMasaMolar(comp_input):
-    compuesto = Compuesto(compuesto_input)
-	# Calcular la masa molar del compuesto
-    masa_molar = compuesto.masaMolar()
-    return masa_molar
+
+def calcular_masa_molar(compuesto_input):
+    try:
+        # Crea el objeto Compuesto y calcula la masa molar
+        comp = Compuesto(compuesto_input)
+        masa_molar = comp.masaMolar()
+
+        return str(masa_molar)
+    except ValueError as e:
+        return str(e)

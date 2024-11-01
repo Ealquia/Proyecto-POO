@@ -1,21 +1,22 @@
-import java.awt.EventQueue;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JInternalFrame;
-import javax.swing.BoxLayout;
-import javax.swing.JTextPane;
 import java.awt.BorderLayout;
-import javax.swing.JTextField;
-import javax.swing.JButton;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.border.EmptyBorder;
 
 public class momamolar extends PaginaGUI {
 
@@ -23,6 +24,7 @@ public class momamolar extends PaginaGUI {
     private JPanel PanelMoma;
     private JTextField Compingresado;
     private JButton btnRegistrar;
+    private JTextPane Resultado;
 //    private PythonInterpreter miPython;
 
     /**
@@ -84,44 +86,75 @@ public class momamolar extends PaginaGUI {
 
         // Campo de texto para ingresar el compuesto
         Compingresado = new JTextField();
-        Compingresado.setText("Ingrese su compuesto aquí:");
+        Compingresado.setText("");
         Compingresado.setToolTipText("Ingrese el compuesto químico");
         Ingresodatos.add(Compingresado);
         Compingresado.setColumns(10);
 
         // Botón para calcular la masa molar
         btnRegistrar = new JButton("Calcular");
-        Ingresodatos.add(Registrar);
+        btnRegistrar.addActionListener(new MP());
+        Ingresodatos.add(btnRegistrar);
+        
 
         // Área de texto para mostrar el resultado
-        JTextPane Resultado = new JTextPane();
+   Resultado = new JTextPane();
         Resultado.setEditable(false);
-        Resultado.setText("La masa molar de su compuesto es:\r\n");
-        Ingresodatos.add(Resultado);
+    Resultado.setText("La masa molar de su compuesto es:\r\n");
+    Ingresodatos.add(Resultado);
+}
+private class MP implements ActionListener {
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btnRegistrar) {
+            URI uri = URI.create("http://127.0.0.1:5000/mi_api/masa_molar");
+            try {
+                URL url = uri.toURL();
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");  // Configura el método HTTP
+                conn.setRequestProperty("Content-Type", "application/json; utf-8");
+                conn.setRequestProperty("Accept", "application/json");
+                conn.setDoOutput(true);
+
+                // JSON de datos de entrada
+                String jsonInputString = "{\"formula\": \"" + Compingresado.getText() + "\"}";
+
+                // Enviar los datos
+                try (OutputStream os = conn.getOutputStream()) {
+                    byte[] input = jsonInputString.getBytes("utf-8");
+                    os.write(input, 0, input.length);
+                }
+
+                // Verifica si la respuesta es exitosa (200 OK)
+                int responseCode = conn.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    // Lee la respuesta del servidor
+                    try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"))) {
+                        StringBuilder response = new StringBuilder();
+                        String responseLine;
+                        while ((responseLine = br.readLine()) != null) {
+                            response.append(responseLine.trim());
+                        }
+                        
+                        // Extrae el valor de "masa_molar" de la respuesta JSON
+                        String jsonResponse = response.toString();
+                        String masaMolar = jsonResponse.split("\"masa_molar\":\"")[1].split("\"")[0];
+
+                        // Actualiza el JTextPane con el resultado
+                        Resultado.setText("La masa molar de su compuesto es:\n" + masaMolar);
+                    }
+                } else {
+                    Resultado.setText("Error en la conexión: " + responseCode);
+                }
+
+                conn.disconnect();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                Resultado.setText("Error: " + e1.getMessage());
+            }
+        }
     }
-    
-    private class MP implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			if (e.getSource() == btnRegistrar) {
-				
-				URI uri = URI.create("http://127.0.0.1:5000/api/nivel?opcion=" + Compingresado);
-				URL url;
-				try {
-					url = uri.toURL();
-					HttpURLConnection conn = ((HttpURLConnection) url).openConnection();
-				} catch (MalformedURLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-
-			}
-			
-		}
-    	
-    }
+}
 }
 
