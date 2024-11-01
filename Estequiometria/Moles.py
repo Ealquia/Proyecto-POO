@@ -5,7 +5,7 @@ from Reaccion import Reaccion
 
 class Moles:
     #Constructor
-    def __init__(self, compuesto, magnitud: float, dimensional: str = "mol"):
+    def __init__(self, compuesto, magnitud: float = None, dimensional: str = "mol"):
         self.__Magnitud = magnitud #Float magnitud 
         self.__Dimensional = dimensional #String con la dimensional
         if isinstance(compuesto, Compuesto): #Si el parámetro es un objeto Compuesto asignarlo al atributo
@@ -16,6 +16,7 @@ class Moles:
     
     #Convierte de moles de un compuesto a otro según los coeficientes de la reacción pasada
     def aMolesDe(self, reaccion, otroCompuesto):
+        if self.__Dimensional != "mol": self.__Magnitud = self.C.aSI(self.__Magnitud,self.__Dimensional) 
         if isinstance(reaccion, str):  #Si la reacción es un string, crear un objeto reaccion
             reaccion = Reaccion(reaccion)
         if isinstance(otroCompuesto, Compuesto):  #Si el otro compuesto es un objeto Compuesto, obtener la fórmula
@@ -32,6 +33,10 @@ class Moles:
         self.__Magnitud = conversion #Actualizar Magnitud
         self.__Dimensional = nuevadimensional #Actualizar Dimensional
         return conversion #Devolver la conversión
+        
+    def getIncognita(self,moles):
+        self.__Magnitud = moles.getMoles()
+        return self.Convert(self.__Dimensional)
         
     #ToString
     def __str__(self):
@@ -54,4 +59,5 @@ class Moles:
         if isinstance(compuesto, str): #Si el parámetro es el string del compuesto, crear el objeto y asignarlo al atributo
             self.__Compuesto = Compuesto(compuesto)
             
-    
+    def getDimensional(self):
+        return self.__Dimensional

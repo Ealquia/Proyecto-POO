@@ -11,7 +11,7 @@ class TipoDato:
     #Constructor
     def __init__(self, dimensional: str, compuesto, magnitud: float = None, cifrasSig = None, teorico: bool = True, moles: float = None):
         self._Magnitud = magnitud #Float magnitud (Pueda inicializarse como None)
-        self._Dimensional = dimensional #String con la dimensional
+        self._Dimensional = {"Magnitud": dimensional} #String con la dimensional
         if isinstance(compuesto, str): #Si el parámetro es el string del compuesto, crear el objeto y asignarlo al atributo
             self._Compuesto = Compuesto(compuesto)
         else: self._Compuesto = compuesto 
@@ -27,12 +27,8 @@ class TipoDato:
          
     #Convierte el dato a su unidad estándar del SI y actualiza los atributos Magnitud y Dimensional
     def SI(self):
-        if type(self._Dimensional) == str: #Si hay un solo subdato
-            self._Magnitud = self.C.aSI(self._Magnitud,self._Dimensional) #Convertir la magnitud dada a las unidades estándar del SI
-            if self._PuntoPartida: self._Dimensional = self.C.dimensionalSI(self._Dimensional) #Actualizar la dimensional
-        if type(self._Dimensional) == dict: #Si hay varios subdatos
-            self._Magnitud = self.C.aSI(self._Magnitud,self._Dimensional["Magnitud"]) 
-            if self._PuntoPartida: self._Dimensional["Magnitud"] = self.C.dimensionalSI(self._Dimensional["Magnitud"]) 
+        self._Magnitud = self.C.aSI(self._Magnitud,self._Dimensional["Magnitud"]) #Convertir la magnitud
+        if self._PuntoPartida: self._Dimensional["Magnitud"] = self.C.dimensionalSI(self._Dimensional["Magnitud"]) #Actualizar la dimensional (a menos que se trate de una incógnita)
         return self._Magnitud #Devolver la nueva magnitud
     
     #Convierte el dato (que debe estar en forma estándar) a la unidad pasada como parámetro
@@ -72,7 +68,7 @@ class TipoDato:
         dimensional = self._Dimensional if type(self._Dimensional) == str else self._Dimensional["Magnitud"]
         info = f"{self._Magnitud} {dimensional} de {self._Compuesto.getCompuesto()}"
         return info
-
+        
     #Setters and getters
     def getMagnitud(self):
         return self._Magnitud 
@@ -81,7 +77,6 @@ class TipoDato:
         self._Magnitud = magnitud
         self.Atributos[1] =  magnitud
 
-    
     def getDimensional(self):
         return  self._Dimensional
     

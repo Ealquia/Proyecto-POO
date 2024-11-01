@@ -10,8 +10,7 @@ class Masa(TipoDato):
         def getOtrasIncognitas():
             if self._Magnitud == None: #Si falta la magnitud
                 mag = self._Moles*self._Compuesto.masaMolar() #Encontrar con el proceso inverso
-                print(mag)
-                self._Magnitud = self.C.convert(mag, self._Dimensional) #Convertir la masa encontrada a la unidad del dato. Actualizar magnitud
+                self._Magnitud = self.C.convert(mag, self._Dimensional["Magnitud"]) #Convertir la masa encontrada a la unidad del dato. Actualizar magnitud
                 return self._Magnitud #Devolver magnitud
             else: #Si se tienen los dos
                 self._Magnitud = self.C.convert(self._Magnitud, self._Dimensional) #Convertir la masa a la unidad del dato. Actualizar magnitud

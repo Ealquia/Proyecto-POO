@@ -96,7 +96,11 @@ class Reaccion:
         if not(found): 
             raise ValueError("El compuesto no se encuentra en la reacción") #Si no se encuentra, lanzar excepción 
 
-        
+    def esReactivo(self,compuesto:str):
+        return compuesto in self.ObtenerReactivosString()
+    
+    def esProducto(self,compuesto:str):
+        return compuesto in self.ObtenerProductosString()
 
 
 
