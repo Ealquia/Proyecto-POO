@@ -10,6 +10,7 @@ class Elemento:
         raise FileNotFoundError("El archivo de la tabla periódica no se encontró.")
 
     def __init__(self, simbolo, cant=1):
+        simbolo = simbolo.strip()
         elemento_info = Elemento.elementos_df[Elemento.elementos_df['Symbol'] == simbolo]
         
         if not elemento_info.empty:

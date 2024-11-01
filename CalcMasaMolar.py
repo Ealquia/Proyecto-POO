@@ -1,21 +1,32 @@
+from flask import Flask, jsonify, request
 from Compuesto import Compuesto
-from Elemento import Elemento
-def main():
-    continuar = True  # Variable de control
-    while continuar:
-        compuesto_input = input("Introduce la fórmula del compuesto (o escribe 'salir' para terminar): ")
-        if compuesto_input.lower() == 'salir':
-            continuar = False  # Cambia el estado para salir del ciclo
-            print("Saliendo del programa...")
-        else:
-            try:
-                # Crear el objeto Compuesto usando la fórmula ingresada por el usuario
-                compuesto = Compuesto(compuesto_input)
-                # Calcular la masa molar del compuesto
-                masa_molar = compuesto.masaMolar()
-                print(f"La masa molar de {compuesto_input} es: {masa_molar:.2f} g/mol")
-            except ValueError as e:
-                print(e)
 
-if __name__ == "__main__":
-    main()
+app = Flask(__name__)
+
+# Endpoint para calcular la masa molar del compuesto
+@app.route('/masa_molar', methods=['POST'])
+def calcular_masa_molar():
+    data = request.json  # Espera datos en formato JSON
+    compuesto_input = data.get('formula')  # Obtiene la fórmula desde el JSON
+    if not compuesto_input:
+        return jsonify({'error': 'Fórmula del compuesto no proporcionada'}), 400
+
+    try:
+        # Crea el objeto Compuesto y calcula la masa molar
+        compuesto = Compuesto(compuesto_input)
+        masa_molar = compuesto.masaMolar()
+        return jsonify({
+            'formula': compuesto_input,
+            'masa_molar': masa_molar
+        })
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+
+# Ruta de prueba para verificar que el servidor está en funcionamiento
+@app.route('/ping', methods=['GET'])
+def ping():
+    return jsonify({'message': 'pong'})
+
+# Ejecuta el servidor
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
