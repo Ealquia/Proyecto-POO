@@ -30,6 +30,7 @@ public class PaginaGUI {//extends JFrame {
      * Crea la aplicación.
      */
     public PaginaGUI() {
+    	frame = new JFrame();
         initialize();
         frame.setVisible(false);
     }
@@ -38,7 +39,7 @@ public class PaginaGUI {//extends JFrame {
      * Inicializa el contenido del frame.
      */
     protected void initialize() {
-        frame = new JFrame();
+        
         frame.setBounds(100, 100, 450, 300);
         frame.setTitle("Pagina GUI");
         frame.setSize(400, 300);
