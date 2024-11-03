@@ -11,7 +11,6 @@ class Solucion(TipoDato):
             self._CifrasSig["Molaridad"] = TipoDato.CifrasSig(molaridad)
             molaridad = float(molaridad) #Covertir la molaridad a float
         self._Molaridad = molaridad #Agregar atributo molaridad
-        self._CifrasSig = [self._CifrasSig, Solucion.cifrasSignificativas(molaridad)] #Añadir las cifras significativas de la molaridad
         self.Atributos.append(self._Molaridad) #Añadir el atributo molaridad a la lista de atributos
         
     #Override

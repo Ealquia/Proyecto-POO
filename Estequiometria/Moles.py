@@ -21,7 +21,8 @@ class Moles:
             #Calcular las cifras significativas usando el método estático, crear un diccionario de cifras significativas y asignarlas ahí
             self._CifrasSig = {"Magnitud": Moles.CifrasSig(magnitud)}
             magnitud = float(magnitud) #Convertir la magnitud a float
-        self._Magnitud = magnitud #Float magnitud (Pueda inicializarse como None)
+        self.__Magnitud = magnitud #Float magnitud (Pueda inicializarse como None)
+        self.__Dimensional = {"Magnitud": dimensional}
         if isinstance(compuesto, Compuesto): #Si el parámetro es un objeto Compuesto asignarlo al atributo
             self.__Compuesto = compuesto 
         if isinstance(compuesto, str): #Si el parámetro es el string del compuesto, crear el objeto y asignarlo al atributo
@@ -30,7 +31,7 @@ class Moles:
     
     #Convierte de moles de un compuesto a otro según los coeficientes de la reacción pasada
     def aMolesDe(self, reaccion, otroCompuesto):
-        if self.__Dimensional != "mol": self.__Magnitud = self.C.aSI(self.__Magnitud,self.__Dimensional) 
+        if self.__Dimensional["Magnitud"] != "mol": self.__Magnitud = self.C.aSI(self.__Magnitud,self.__Dimensional) 
         if isinstance(reaccion, str):  #Si la reacción es un string, crear un objeto reaccion
             reaccion = Reaccion(reaccion)
         if isinstance(otroCompuesto, Compuesto):  #Si el otro compuesto es un objeto Compuesto, obtener la fórmula

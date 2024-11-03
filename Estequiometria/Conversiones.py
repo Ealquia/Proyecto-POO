@@ -46,7 +46,7 @@ class Conversiones:
             return valor/estandar
         eso = self.__Tabla[self.__Tabla['Simbolo'] == dimensional].reset_index()
         if dimensional=="particulas":
-            return valor*6.022 #Conversion de moles a particulas
+            return valor*6.022e23 #Conversion de moles a particulas
         if eso.at[0, "Tipo"] == "Densidad": #Si la medida es de densidad
             dims = dimensional.split("/") #Dividir la dimensional en sus dimensionales de masa y volumen
             masa = convert(valor,dims[0]) #Convertir densidad a g/dimVolumen

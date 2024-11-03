@@ -21,6 +21,7 @@ class problemaEsteq:
         self.__Reaccion = reaccion
         self.__Rendimiento = Rendimiento
         self.__Respuesta = None
+        self.__CifrasSig = []
 
     def Respuesta(self):
         if self.__Respuesta == None: self.Resolver()
@@ -29,34 +30,53 @@ class problemaEsteq:
                 tipo = i  
                 i = 13
         compuesto = self.__Incognita.getCompuesto().getCompuesto()
+        respuesta = self.conCifrasSig()
         D = self.__Incognita.getDimensional()
-        if tipo >= 0 and tipo <= 3: respuesta = f"{self.__Respuesta} {D["Magnitud"]} de {compuesto}"
-        if tipo == 4: respuesta = f"Solución de {compuesto} {self.__Respuesta} Molar"
-        if tipo == 5: respuesta = f"La presión del gas {compuesto} es {self.__Respuesta} {D["Presion"]}"
-        if tipo == 6: respuesta = f"La temperatura del gas {compuesto} es {self.__Respuesta} {D["Temperatura"]}"
+        if tipo >= 0 and tipo <= 3: respuesta = f"{respuesta} {D["Magnitud"]} de {compuesto}"
+        if tipo == 4: respuesta = f"Solución de {compuesto} {respuesta} Molar"
+        if tipo == 5: respuesta = f"La presión del gas {compuesto} es {respuesta} {D["Presion"]}"
+        if tipo == 6: respuesta = f"La temperatura del gas {compuesto} es {respuesta} {D["Temperatura"]}"
         if tipo == 7:
             direccion =  "liberan" if self.__Respuesta < 0 else "absorben"
-            respuesta  = f"Se {direccion} {abs(self.__Respuesta)} {D["Magnitud"]} durante la reacción"
-        if tipo == 8:  respuesta = f"La entalpía de la reacción es {self.__Respuesta}  {D["Entalpia"]}"
-        if tipo == 9:   respuesta = f"La entalpía molar del {compuesto} es {self.__Respuesta}  {D["Entalpia"]}/mol"
+            respuesta  = f"Se {direccion} {respuesta} {D["Magnitud"]} durante la reacción"
+        if tipo == 8:  respuesta = f"La entalpía de la reacción es {respuesta}  {D["Entalpia"]}"
+        if tipo == 9:   respuesta = f"La entalpía molar del {compuesto} es {respuesta}  {D["Entalpia"]}/mol"
         if tipo == 10: 
             if D != "particulas":
-                respuesta = f"{self.__Respuesta} {D} de {compuesto}"
+                respuesta = f"{respuesta} {D} de {compuesto}"
             else:
                 particulas = "átomos" if self.__Compuesto.elementoPuro() and self.__Compuesto.getElementos[0].getCant == 1 else "moléculas"
-                respuesta = f"{self.__Respuesta}  {particulas} de {compuesto}"
-        if tipo == 11: respuesta = f"El rendimiento es del {self.__Respuesta}%"
+                respuesta = f"{respuesta}  {particulas} de {compuesto}"
+        if tipo == 11: respuesta = f"El rendimiento es del {respuesta}%"
         return respuesta
+
+    def CifrasSig(self,datos):
+        for dato  in datos:
+            self.__CifrasSig.extend(list(dato.getCifrasSig().values())) if dato.getCifrasSig() != None else None
+
+    def conCifrasSig(self):
+        if  self.__CifrasSig != []:
+            cifras = min(self.__CifrasSig) #Encontrar el número de cifras significativas
+            enteros = len(str(int(self.__Respuesta))) #Encontrar el número de enteros
+            if enteros  < cifras: #Si el número de enteros es menor que el número de cifras significativas
+                respuestaCS = str(round(abs(self.__Respuesta), cifras - enteros)) #Redondear a la cantidad de decimales =  cifras - enteros y convertir a string
+            else:
+                respuestaCS = f"{abs(self.__Respuesta):.{cifras-1}e}"
+            return respuestaCS
+        else:
+            return str(self.__Respuesta)
 
     def Resolver(self):
         tipo = self.TipoProblema()  
         if tipo=="deCosaACosa" or tipo=="unaCosa": #Si el problema es simple
             respuesta = self.deCosaACosa()
+            self.CifrasSig([self.__Datos[0],self.__Incognita]) #Añadir las cifras significativas de los datos usados
         if tipo== "reactivoLimitante":
             reactLimitante = self.reactivoLimitante()
             respuesta = self.deCosaACosa(de=reactLimitante)
+            self.CifrasSig([reactLimitante,self.__Incognita])  #Añadir las cifras significativas de los datos usados
         if tipo=="porcentajeRendimiento":
-            respuesta =  self.porcentajeRendimiento()
+            respuesta = self.porcentajeRendimiento()
         else:
             if tipo != "unaCosa":
                 compuesto = self.__Incognita.getCompuesto().getCompuesto()
@@ -97,17 +117,19 @@ class problemaEsteq:
                 if moles2 <= valorCritico: #Si el resultado es menor al valor crítico, cambiar el valor crítico
                     valorCritico = moles2
                     reactivoLimitante = i #Asignar el dato correspondiente al reactivo limitante
-        return reactivoLimitante #Devolver la respuesta como número y como dato y el reactivo limitante
+        return reactivoLimitante #Devolver el reactivo limitante
     
     def porcentajeRendimiento(self):
         for dato in self.__Datos: #Recorrer la lista de datos
             if not dato.getTeorico(): #Si se encuentra el dato real
-                self.__Incognita = copy.deepcopy(dato) #Asignar a la incógnita una copia del dato teórico
+                self.__Incognita = copy.deepcopy(dato) #Asignar a la incógnita una copia del dato real
                 self.__Incognita.setMagnitud(None) #Quitarle la magnitud a la incógnita
                 self.__Datos.remove(dato) #Quitar el dato teórico de los datos
-                real = dato.getMagnitud()  #Asignar la magnitud del dato real a la variable real
+                real = dato  #Asignar el dato real a la variable real
+                break #Terminar el for
         RL = self.reactivoLimitante() if len(self.__Datos) > 1 else 0  #Encontrar el reactivo limitante 
         teorico = self.deCosaACosa(de=RL) #Encontrar el dato teorico
-        rendimiento = 100*real/teorico #Encontrar el porcentaje de rendimiento
+        self.CifrasSig([self.__Datos[RL],real]) #Añadir las cifras significativas de los datos usados
+        rendimiento = 100*real.getMagnitud()/teorico #Encontrar el porcentaje de rendimiento
         return rendimiento #Devolver el porcentaje de rendimiento
 
