@@ -4,16 +4,19 @@ from Estequiometria.Moles import Moles
 
 class Liquido(TipoDato):
     #Constructor
-    def __init__(self, compuesto, dimMagnitud: str="L", dimDensidad: str = "g/L", magnitud: float = None, densidad:float = None, cifrasSig = None, teorico: bool = True, moles: float = None):
-        super().__init__(dimMagnitud, compuesto, magnitud, cifrasSig, teorico, moles) #Llamar al constructor de la clase padre
+    def __init__(self, compuesto, dimMagnitud: str="L", dimDensidad: str = "g/L", magnitud: float = None, densidad:float = None, teorico: bool = True, moles: float = None):
+        super().__init__(dimMagnitud, compuesto, magnitud, teorico, moles) #Llamar al constructor de la clase padre
+        if isinstance(densidad, str): #Si se pasa la densidad como un string
+            #Calcular las cifras significativas usando el método estático, asignar en el diccionario
+            self._CifrasSig["Densidad"] = TipoDato.CifrasSig(densidad)
+            densidad = float(densidad) #Covertir la densidad a float
         self._Densidad = densidad #Agregar atributo densidad
-        self._Dimensional = {"Magnitud": dimMagnitud, "Densidad": dimDensidad} #Actualizar atributo dimensional: Diccionario con las dimensionales de la magnitud y la densidad
+        self._Dimensional["Densidad"] = dimDensidad #Agregar al diccionario las dimensionales de la densidad
         if self._Compuesto.elementoPuro(): #Evaluar si el compuesto es un elemento puro
             self._Densidad = self._Compuesto.getElementos()[0].getDensidad() #Si lo es, encontrar la densidad del elemento
             self._Dimensional["Densidad"] = "g/mL" #Actualizar la dimensional de la densidad (las densidades de los elementos están en g/mL)
         self._PuntoPartida = not(magnitud==None) and not(densidad==None) #Actualizar punto partida: Verdadero si se tiene la magnitud y la densidad
         self.Atributos.append(self._Densidad) #Añadir el atributo  densidad a la lista de atributos
-        self._CifrasSig = [self._CifrasSig, Liquido.cifrasSignificativas(densidad)] #Añadir las cifras significativas de la densidad
 
     def elementoPuro(self):
         return self._Compuesto.elementoPuro()

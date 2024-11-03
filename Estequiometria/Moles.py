@@ -4,10 +4,25 @@ from Reaccion import Reaccion
 
 
 class Moles:
+    #Método para calcular cifras significativas
+    def CifrasSig(dato:str):
+        datoNum = float(dato)
+        dato = dato.replace(".","") #Quitar el punto decimal
+        for  i in range(len(dato)):
+            if dato[i]!="0": 
+                cifrasSig = len(dato[i:]) 
+                break
+            #Cortar la cadena después del primer dígito que no sea 0 y contar los dígitos
+        return cifrasSig
+    
     #Constructor
     def __init__(self, compuesto, magnitud: float = None, dimensional: str = "mol"):
-        self.__Magnitud = magnitud #Float magnitud 
-        self.__Dimensional = dimensional #String con la dimensional
+        if isinstance(magnitud, str): #Si se pasa la magnitud como un string
+            #Calcular las cifras significativas usando el método estático, crear un diccionario de cifras significativas y asignarlas ahí
+            self._CifrasSig = {"Magnitud": Moles.CifrasSig(magnitud)}
+            magnitud = float(magnitud) #Convertir la magnitud a float
+        self.__Magnitud = magnitud #Float magnitud (Pueda inicializarse como None)
+        self.__Dimensional = {"Magnitud": dimensional}
         if isinstance(compuesto, Compuesto): #Si el parámetro es un objeto Compuesto asignarlo al atributo
             self.__Compuesto = compuesto 
         if isinstance(compuesto, str): #Si el parámetro es el string del compuesto, crear el objeto y asignarlo al atributo
@@ -16,7 +31,7 @@ class Moles:
     
     #Convierte de moles de un compuesto a otro según los coeficientes de la reacción pasada
     def aMolesDe(self, reaccion, otroCompuesto):
-        if self.__Dimensional != "mol": self.__Magnitud = self.C.aSI(self.__Magnitud,self.__Dimensional) 
+        if self.__Dimensional["Magnitud"] != "mol": self.__Magnitud = self.C.aSI(self.__Magnitud,self.__Dimensional) 
         if isinstance(reaccion, str):  #Si la reacción es un string, crear un objeto reaccion
             reaccion = Reaccion(reaccion)
         if isinstance(otroCompuesto, Compuesto):  #Si el otro compuesto es un objeto Compuesto, obtener la fórmula
