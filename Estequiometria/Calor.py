@@ -5,6 +5,10 @@ from Reaccion import Reaccion
 class Calor(TipoDato):
     def __init__(self, reaccion: Reaccion,  compuesto = None, dimMagnitud: str="kJ", dimEntalpia: str = "kJ", magnitud: float = None, entalpia:float = None, cifrasSig = None, teorico: bool = True, moles: float = None):
         super().__init__(dimMagnitud, compuesto, magnitud, cifrasSig, teorico, moles) #Llamar al constructor de la clase padre
+        if isinstance(entalpia, str): #Si se pasa la entalpia como un string
+            #Calcular las cifras significativas usando el método estático, asignar en el diccionario
+            self._CifrasSig["Entalpia"] = TipoDato.CifrasSig(entalpia)
+            entalpia = float(entalpia) #Covertir la entalpia a float
         self._Entalpia = entalpia #Añadir el atributo entalpía
         self._Dimensional = {"Magnitud": dimMagnitud, "Entalpia": dimEntalpia}
         self._Reaccion = reaccion #Añadir el atributo reacción

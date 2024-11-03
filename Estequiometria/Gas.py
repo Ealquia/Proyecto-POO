@@ -5,7 +5,15 @@ class Gas(TipoDato):
     def __init__(self, compuesto, magnitud: float = None, dimVolumen: str = "L", temperatura: float = None, dimTemperatura: str = "C", presion: float = None, dimPresion: str = "atm", cifrasSig=None, teorico: bool = True, moles: float = None):
         super().__init__(dimVolumen, compuesto, magnitud, cifrasSig, teorico, moles) #Llamar al constructor de la clase padre
         self._Dimensional = {"Magnitud": dimVolumen, "Temperatura": dimTemperatura,  "Presion": dimPresion} #Actualizar las dimnesionales a un diccionario
+        if isinstance(temperatura, str): #Si se pasa la temperatura como un string
+            #Calcular las cifras significativas usando el método estático, asignar en el diccionario
+            self._CifrasSig["Temperatura"] = TipoDato.CifrasSig(temperatura)
+            temperatura = float(temperatura) #Covertir la temperatura a float
         self._Temperatura = temperatura
+        if isinstance(presion, str): #Si se pasa la presion como un string
+            #Calcular las cifras significativas usando el método estático, asignar en el diccionario
+            self._CifrasSig["Presion"] = TipoDato.CifrasSig(presion)
+            presion = float(presion) #Covertir la presion a float
         self._Presion = presion
         self.Atributos.extend([self._Temperatura, self._Presion]) #Añadir los atributos presion y temperatura a la lista de atributos
         self._PuntoPartida = not(magnitud==None) and not(temperatura==None) and  not(presion==None) #Si alguno de los atributos no está vacío
