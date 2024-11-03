@@ -1,23 +1,21 @@
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import java.awt.GridLayout;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JMenu;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JPopupMenu;
 import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 public class NomenclaturaGui extends JDialog {
 
@@ -48,7 +46,7 @@ public class NomenclaturaGui extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new GridLayout(0, 1, 0, 0));
 		{
-			JLabel TextoQueSeMuestra = new JLabel("texto que se muestra");
+			JLabel TextoQueSeMuestra = new JLabel("<html>Bienvenido, usa los menús de arriba para seleccionar el nivel que deseas practircar.<html>");
 			contentPanel.add(TextoQueSeMuestra);
 			{
 				JPopupMenu popupMenu = new JPopupMenu();
@@ -89,7 +87,7 @@ public class NomenclaturaGui extends JDialog {
 			TextoQueIngresa.setColumns(10);
 		}
 		{
-			JLabel TextoRespuesta = new JLabel("Texto de respuesta");
+			JLabel TextoRespuesta = new JLabel("<html>Aquí se mostrará la solución en caso de que la respuesta sea incorrecta.<html>");
 			contentPanel.add(TextoRespuesta);
 		}
 		{
@@ -179,5 +177,13 @@ public class NomenclaturaGui extends JDialog {
 			}
 		});
 	}
+
+	public void actionPerformed (ActionEvent e) {
+		JMenuItem source = (JMenuItem)  e.getSource();
+		
+
+	}
+
+
 }
 

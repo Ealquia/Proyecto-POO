@@ -61,10 +61,11 @@ class Nomenclatura:
         return pregunta, b# retorna el problema así como el número del ión para poder  acceder a sus datos y comprobar la respuesta         
 
 
-    def ComprobarRespuesta(self, respuesta, pregunta, id):
+    def ComprobarRespuesta(self, nivel, respuesta, pregunta, id):
         #1 = correcto
         #0 = incorrecto
-        solución
+        iones = Nivel(nivel)
+        solución = ""
         a = -1
         if pregunta == "¿Cuál es la fórmula de este ión "+ str(iones.iloc[id,1])+ " ?": # caso en el que muestra el nombre del ión y pregunta la formula
             if respuesta == iones.iloc[id,2]:
