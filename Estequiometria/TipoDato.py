@@ -3,22 +3,27 @@ from Estequiometria.Conversiones import Conversiones
 from Estequiometria.Moles import Moles
 
 class TipoDato:
-    def cifrasSignificativas(magnitud: float):
-        #Contar el número de dígitos en la magnitud y devolverlo
-        cifrasSig = str(magnitud) 
-        return sum(c.isdigit() for c in cifrasSig if c != '.')
-        
+    def CifrasSig(dato:str):
+        datoNum = float(dato)
+        dato = dato.replace(".","") #Quitar el punto decimal
+        for  i in range(len(dato)):
+            if dato[i]!="0": 
+                cifrasSig = len(dato[i:]) 
+                break
+            #Cortar la cadena después del primer dígito que no sea 0 y contar los dígitos
+        return cifrasSig
+          
     #Constructor
-    def __init__(self, dimensional: str, compuesto, magnitud: float = None, cifrasSig = None, teorico: bool = True, moles: float = None):
+    def __init__(self, dimensional: str, compuesto, magnitud = None, teorico: bool = True, moles: float = None):
+        if isinstance(magnitud, str): #Si se pasa la magnitud como un string
+            #Calcular las cifras significativas usando el método estático, crear un diccionario de cifras significativas y asignarlas ahí
+            self._CifrasSig = {"Magnitud": TipoDato.CifrasSig(magnitud)}
+            magnitud = float(magnitud) #Covertir la magnitud a float
         self._Magnitud = magnitud #Float magnitud (Pueda inicializarse como None)
         self._Dimensional = {"Magnitud": dimensional} #String con la dimensional
         if isinstance(compuesto, str): #Si el parámetro es el string del compuesto, crear el objeto y asignarlo al atributo
             self._Compuesto = Compuesto(compuesto)
         else: self._Compuesto = compuesto 
-        if cifrasSig==None: #Si no se dan cifras significativas
-            self._CifrasSig = TipoDato.cifrasSignificativas(magnitud) #Calcular las cifras significativas usando el método estático
-        else:
-            self._CifrasSig = cifrasSig
         self._Moles = moles #Número de moles (puede inicializarse como None)
         self._Teorico = teorico #True por default. Útil si el problema trabaja con porcentajes de rendimiento
         self._PuntoPartida = not(magnitud==None) #Verdadero solo si la magnitud no es nula
