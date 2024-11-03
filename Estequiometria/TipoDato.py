@@ -109,6 +109,9 @@ class TipoDato:
     def getTeorico(self):
         return  self._Teorico
     
+    def setTeorico(self, teorico):
+        self._Teorico = teorico
+    
     def getPuntoPartida(self):
         return  self._PuntoPartida
     

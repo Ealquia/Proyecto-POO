@@ -51,7 +51,7 @@ class problemaEsteq:
         return respuesta
 
     def CifrasSig(self,datos):
-        for dato  in datos:
+        for dato in datos:
             self.__CifrasSig.extend(list(dato.getCifrasSig().values())) if dato.getCifrasSig() != None else None
 
     def conCifrasSig(self):
@@ -74,7 +74,7 @@ class problemaEsteq:
         if tipo== "reactivoLimitante":
             reactLimitante = self.reactivoLimitante()
             respuesta = self.deCosaACosa(de=reactLimitante)
-            self.CifrasSig([reactLimitante,self.__Incognita])  #Añadir las cifras significativas de los datos usados
+            self.CifrasSig([self.__Datos[reactLimitante],self.__Incognita])  #Añadir las cifras significativas de los datos usados
         if tipo=="porcentajeRendimiento":
             respuesta = self.porcentajeRendimiento()
         else:
