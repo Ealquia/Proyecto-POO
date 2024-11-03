@@ -63,7 +63,9 @@ public class Home {
         // Pantalla de fondo
 
         
-        BackgroundPanel panel = new BackgroundPanel(new ImageIcon("C:\\Users\\k3yne\\OneDrive - UVG\\Semestre 2 2024\\Programación orientada a objetos\\Proyecto\\Proyecto github\\Proyecto-POO\\POO\\src\\T1.png").getImage());
+        
+        
+        BackgroundPanel panel = new BackgroundPanel(new ImageIcon(Home.class.getResource("T1.png")).getImage());
         panel.setLayout(null); // Posición absoluta
         frame.getContentPane().add(panel);
 
