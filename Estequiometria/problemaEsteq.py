@@ -57,11 +57,7 @@ class problemaEsteq:
     def conCifrasSig(self):
         if  self.__CifrasSig != []:
             cifras = min(self.__CifrasSig) #Encontrar el número de cifras significativas
-            enteros = len(str(int(self.__Respuesta))) #Encontrar el número de enteros
-            if enteros  < cifras: #Si el número de enteros es menor que el número de cifras significativas
-                respuestaCS = str(round(abs(self.__Respuesta), cifras - enteros)) #Redondear a la cantidad de decimales =  cifras - enteros y convertir a string
-            else:
-                respuestaCS = f"{abs(self.__Respuesta):.{cifras-1}e}"
+            respuestaCS = f"{abs(self.__Respuesta):.{cifras-1}e}" #Expresar en notación científica con las cifras correctas
             return respuestaCS
         else:
             return str(self.__Respuesta)
