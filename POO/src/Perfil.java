@@ -19,6 +19,7 @@ public class Perfil extends JFrame {
     private JButton botonAvatar;
 
     // Ruta a los avatares fijos
+    
     private String ruta1 = "C:\\Users\\esteb\\OneDrive\\Escritorio\\UVG\\UVG 2024 EHVM\\Segundo Semestre\\PROGRAMACIÓN ORIENTADA A OBJETOS\\Proyecto Progra\\POO\\src\\Chang.png";
     private String ruta2 = "C:\\Users\\esteb\\OneDrive\\Escritorio\\UVG\\UVG 2024 EHVM\\Segundo Semestre\\PROGRAMACIÓN ORIENTADA A OBJETOS\\Proyecto Progra\\POO\\src\\Chiquin.png";
 

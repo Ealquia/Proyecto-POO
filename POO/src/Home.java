@@ -61,7 +61,11 @@ public class Home {
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         // Pantalla de fondo
-        BackgroundPanel panel = new BackgroundPanel(new ImageIcon("C:\\Users\\esteb\\OneDrive\\Escritorio\\UVG\\UVG 2024 EHVM\\Segundo Semestre\\PROGRAMACIÓN ORIENTADA A OBJETOS\\Proyecto Progra\\POO\\src\\T1.png").getImage());
+
+        
+        
+        
+        BackgroundPanel panel = new BackgroundPanel(new ImageIcon(Home.class.getResource("T1.png")).getImage());
         panel.setLayout(null); // Posición absoluta
         frame.getContentPane().add(panel);
 
