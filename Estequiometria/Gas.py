@@ -17,6 +17,10 @@ class Gas(TipoDato):
         self._Presion = presion
         self.Atributos.extend([self._Temperatura, self._Presion]) #Añadir los atributos presion y temperatura a la lista de atributos
         self._PuntoPartida = not(magnitud==None) and not(temperatura==None) and  not(presion==None) #Si alguno de los atributos no está vacío
+    
+    def CifrasSigTemp(self,decimalesAntes):
+        cantDecimales = min(decimalesAntes,2) #Calcular la cantidad de decimales que debe tener la temperatura
+        return len(str(int(self._Temperatura))) + cantDecimales #Devolver la cantidad de enteros más la de decimales
        
     #Override 
     def SI(self):
@@ -25,8 +29,10 @@ class Gas(TipoDato):
             self._Presion = self.C.aSI(self._Presion,self._Dimensional["Presion"]) #Convertir la presion a atm
             if self._PuntoPartida: self._Dimensional["Presion"] = self.C.dimensionalSI(self._Dimensional["Presion"]) #Actualizar las dimensionales
         if not(self._Temperatura == None):
+            decimalesAntes = TipoDato.cantDecimales(self._Temperatura,self._CifrasSig["Temperatura"]) if self._CifrasSig != None else 0 #Guardar la cantidad de decimales original
             self._Temperatura = self.C.aSI(self._Temperatura,self._Dimensional["Temperatura"]) #Convertir la temperatura a Kelvin
             if self._PuntoPartida: self._Dimensional["Temperatura"] = self.C.dimensionalSI(self._Dimensional["Temperatura"]) #Actualizar las dimensionales
+            self._CifrasSig["Temperatura"] = self.CifrasSigTemp(decimalesAntes) if  self._CifrasSig != None else None #Actualizar las cifras significativas de la temperatura
         return self._Magnitud #Devolver la nueva magnitud 
         
     #Override

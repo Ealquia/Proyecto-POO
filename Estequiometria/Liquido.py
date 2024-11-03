@@ -6,7 +6,7 @@ class Liquido(TipoDato):
     #Constructor
     def __init__(self, compuesto, dimMagnitud: str="L", dimDensidad: str = "g/L", magnitud: float = None, densidad:float = None, teorico: bool = True, moles: float = None):
         super().__init__(dimMagnitud, compuesto, magnitud, teorico, moles) #Llamar al constructor de la clase padre
-        if isinstance(densidad, str): #Si se pasa la molairdad como un string
+        if isinstance(densidad, str): #Si se pasa la densidad como un string
             #Calcular las cifras significativas usando el método estático, asignar en el diccionario
             self._CifrasSig["Densidad"] = TipoDato.CifrasSig(densidad)
             densidad = float(densidad) #Covertir la densidad a float

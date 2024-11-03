@@ -3,6 +3,7 @@ from Estequiometria.Conversiones import Conversiones
 from Estequiometria.Moles import Moles
 
 class TipoDato:
+    #Método estático que devuelve as cifras significativas de un dato pasado como string
     def CifrasSig(dato:str):
         datoNum = float(dato)
         dato = dato.replace(".","") #Quitar el punto decimal
@@ -13,8 +14,12 @@ class TipoDato:
             #Cortar la cadena después del primer dígito que no sea 0 y contar los dígitos
         return cifrasSig
           
+    def cantDecimales(dato:float,cifras:int):
+        return cifras - len(str(int(dato)))
+    
     #Constructor
     def __init__(self, dimensional: str, compuesto, magnitud = None, teorico: bool = True, moles: float = None):
+        self._CifrasSig = None
         if isinstance(magnitud, str): #Si se pasa la magnitud como un string
             #Calcular las cifras significativas usando el método estático, crear un diccionario de cifras significativas y asignarlas ahí
             self._CifrasSig = {"Magnitud": TipoDato.CifrasSig(magnitud)}
