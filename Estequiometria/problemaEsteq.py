@@ -27,7 +27,7 @@ class problemaEsteq:
         if self.__Respuesta == None: self.Resolver()
         for i in range(12):
             if self.__TipoIncognita  == problemaEsteq.tipos[i]: 
-                tipo = i  
+                tipo = i 
                 i = 13
         compuesto = self.__Incognita.getCompuesto().getCompuesto()
         respuesta = self.conCifrasSig()

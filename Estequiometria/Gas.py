@@ -2,8 +2,8 @@ from Estequiometria.Moles import Moles
 from Estequiometria.TipoDato import TipoDato
 
 class Gas(TipoDato):
-    def __init__(self, compuesto, magnitud: float = None, dimVolumen: str = "L", temperatura: float = None, dimTemperatura: str = "C", presion: float = None, dimPresion: str = "atm", cifrasSig=None, teorico: bool = True, moles: float = None):
-        super().__init__(dimVolumen, compuesto, magnitud, cifrasSig, teorico, moles) #Llamar al constructor de la clase padre
+    def __init__(self, compuesto, magnitud: float = None, dimVolumen: str = "L", temperatura: float = None, dimTemperatura: str = "C", presion: float = None, dimPresion: str = "atm", teorico: bool = True, moles: float = None):
+        super().__init__(dimVolumen, compuesto, magnitud, teorico, moles) #Llamar al constructor de la clase padre
         self._Dimensional = {"Magnitud": dimVolumen, "Temperatura": dimTemperatura,  "Presion": dimPresion} #Actualizar las dimnesionales a un diccionario
         if isinstance(temperatura, str): #Si se pasa la temperatura como un string
             #Calcular las cifras significativas usando el método estático, asignar en el diccionario

@@ -1,3 +1,4 @@
+from Compuesto import Compuesto
 from Estequiometria.Conversiones import Conversiones
 from Estequiometria.Masa import Masa
 from Estequiometria.Moles import Moles
@@ -131,7 +132,7 @@ def incognitaEstequiometria(reaccion, compuesto, tipos):
     if tipoDato==8: #Cantidad de materia
         dimensionales = menuString(C.listaDimensionales("Cantidad Materia"),"Ingrese el número de la unidad correspondiente: ")
         incognita = Moles(dimensional=dimensionales, compuesto=compuesto)
-    return incognita, tipos[tipoDato]
+    return incognita, tipos[tipoDato-1]
 
 print("Gracias por ser un beta tester de nuestra app de química! Probaremos la función de estequiometría")
 continuar = True
@@ -143,7 +144,7 @@ while(continuar):
           """)
     strReaccion = input()  #input de la fórmula
     reaccion  = Reaccion(strReaccion) if "=" in strReaccion else None #Creación del objeto reacción
-    compuesto = compuesto(strReaccion) if "=" not in  strReaccion else None #Creación del objeto compuesto
+    compuesto = Compuesto(strReaccion) if "=" not in  strReaccion else None #Creación del objeto compuesto
     tipos = ["Masa", "Volumen de solución", "Volumen de líquido","Volumen de gas","Molaridad","Presión de un gas",
              "Temperatura de un gas", "Cantidad de materia"]
     if  reaccion != None: tipos.append("Porcentaje de rendimiento")
