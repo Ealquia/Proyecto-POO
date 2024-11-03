@@ -1,4 +1,5 @@
 #Se importan librerías útiles
+from flask import Flask, jsonify, request
 import pandas as pd #usado en el manejo de dataframes y lectura de csv
 import random as rn #usado en el método generarEjercicio
 iones = pd.read_csv('Iones.csv') #dataframe de los iones registrados
@@ -60,6 +61,37 @@ class Nomenclatura:
         return pregunta, b# retorna el problema así como el número del ión para poder  acceder a sus datos y comprobar la respuesta         
 
 
+    def ComprobarRespuesta(self, respuesta, pregunta, id):
+        #1 = correcto
+        #0 = incorrecto
+        solución
+        a = -1
+        if pregunta == "¿Cuál es la fórmula de este ión "+ str(iones.iloc[id,1])+ " ?": # caso en el que muestra el nombre del ión y pregunta la formula
+            if respuesta == iones.iloc[id,2]:
+                solución = "¡Correcto!"
+                a= 1
+            else:
+                solución = "Incorrecto, la respuesta correcta es "+ iones.iloc[id,2]
+                a = 0
+        elif pregunta == "¿Cuál es el nombre del ión "+ str(iones.iloc[id,2])+ " ?": # caso en el que muestra la fórmula del ión y pregunta el nombre
+            if respuesta == iones.iloc[id,1]:
+                solución = "¡Correcto!"
+                a = 1
+            else:
+                solución = "Incorrecto, la respuesta correcta es "+ iones.iloc[id,1]
+                a = 0
+        elif  pregunta == "¿Cuál es la carga del ión "+ str(iones.iloc[id,1]) + " ?" or pregunta == "¿Cuál es la carga del ión "+ str(iones.iloc[id,2]) +" ?": # caso en el que se pregunte la  carga del ión
+            if respuesta == iones.iloc[id,3]:
+                solución = "¡Correcto!"
+                a = 1
+            else:
+                solución = "Incorrecto, la respuesta correcta es "+ str(iones.iloc[id,3])
+                a = 0
+        else:
+            solución = "Error en la generación del número aleatorio a, consultar Nomenclatura.py"
+            a = -1
+            
+        return solución, a
 
 
 #Métodos estáticos ======================================================================================
