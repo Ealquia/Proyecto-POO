@@ -102,6 +102,18 @@ public class NomenclaturaGui extends JDialog {
 					public void actionPerformed(ActionEvent e) {
 					}
 				});
+				{
+					JLabel ContadorAciertos = new JLabel("Aciertos");
+					buttonPane.add(ContadorAciertos);
+				}
+				{
+					JLabel Slash = new JLabel("/");
+					buttonPane.add(Slash);
+				}
+				{
+					JLabel NumeroPreguntas = new JLabel("N.o. preguntas");
+					buttonPane.add(NumeroPreguntas);
+				}
 				ingresarButton.setActionCommand("OK");
 				buttonPane.add(ingresarButton);
 				getRootPane().setDefaultButton(ingresarButton);
