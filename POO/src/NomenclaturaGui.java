@@ -1,11 +1,15 @@
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.URI;
+
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -130,22 +134,27 @@ public class NomenclaturaGui extends JDialog {
 				menuBar.add(SeleccionIonesMenu);
 				{
 					JMenuItem Nivel1IonesMenuItem = new JMenuItem("Nivel 1");
+					Nivel1IonesMenuItem.putClientProperty("actionCommand", "nivel1");
 					SeleccionIonesMenu.add(Nivel1IonesMenuItem);
 				}
 				{
 					JMenuItem Nivel2IonesMenuItem = new JMenuItem("Nivel 2");
+					Nivel2IonesMenuItem.putClientProperty("actionCommand", "nivel2");
 					SeleccionIonesMenu.add(Nivel2IonesMenuItem);
 				}
 				{
 					JMenuItem Nivel3IonesMenuItem = new JMenuItem("Nivel 3");
+					Nivel3IonesMenuItem.putClientProperty("actionCommand", "nivel3");
 					SeleccionIonesMenu.add(Nivel3IonesMenuItem);
 				}
 				{
 					JMenuItem Nivel4IonesMenuItem = new JMenuItem("Nivel 4");
+					Nivel4IonesMenuItem.putClientProperty("actionCommand", "nivel4");
 					SeleccionIonesMenu.add(Nivel4IonesMenuItem);
 				}
 				{
 					JMenuItem TodosLosNivelesMenuItem = new JMenuItem("Todos los niveles");
+					TodosLosNivelesMenuItem.putClientProperty("actionCommand", "todos");
 					SeleccionIonesMenu.add(TodosLosNivelesMenuItem);
 				}
 			}
@@ -184,6 +193,28 @@ public class NomenclaturaGui extends JDialog {
 
 	}
 
+	private class MyAction extends AbstractAction{
+		public MyAction(String name) {
+			super(name); //Nombre de la acción
+			putValue(SHORT_DESCRIPTION, "Acción personalizada para calibrar el nivel de los iones");
+		}
+		public void actionPerformed(ActionEvent e) {
+			//Acciones a realizar cuando se selecciona la acción
+			JMenuItem source =  (JMenuItem)  e.getSource();
+			String command = (String) source.getClientProperty(e);
+
+			URI uri = URI.create("http://127.0.0.1:5000/mi_api/masa_molar"); // URI del endpoint de la API
+
+			switch (command) {
+				case "nivel1":
+					
+					break;
+				default:
+					throw new AssertionError();
+			}
+
+		}
+	}
 
 }
 
