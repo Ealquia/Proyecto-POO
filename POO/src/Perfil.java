@@ -1,5 +1,3 @@
-
-
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
@@ -18,19 +16,26 @@ public class Perfil extends JFrame {
     private JLabel infouser;
     private JButton botonAvatar;
 
-    // Ruta a los avatares fijos
-    
-    private String ruta1 = "C:\\Users\\esteb\\OneDrive\\Escritorio\\UVG\\UVG 2024 EHVM\\Segundo Semestre\\PROGRAMACIÓN ORIENTADA A OBJETOS\\Proyecto Progra\\POO\\src\\Chang.png";
-    private String ruta2 = "C:\\Users\\esteb\\OneDrive\\Escritorio\\UVG\\UVG 2024 EHVM\\Segundo Semestre\\PROGRAMACIÓN ORIENTADA A OBJETOS\\Proyecto Progra\\POO\\src\\Chiquin.png";
+    // Rutas a los avatares
+    private String[] rutasAvatares = {
+        "C:\\Users\\esteb\\OneDrive\\Escritorio\\UVG\\UVG 2024 EHVM\\Segundo Semestre\\PROGRAMACIÓN ORIENTADA A OBJETOS\\Proyecto Progra\\POO\\src\\Chang.png",
+        "C:\\Users\\esteb\\OneDrive\\Escritorio\\UVG\\UVG 2024 EHVM\\Segundo Semestre\\PROGRAMACIÓN ORIENTADA A OBJETOS\\Proyecto Progra\\POO\\src\\Chiquin.png",
+        "C:\\Users\\esteb\\OneDrive\\Escritorio\\UVG\\UVG 2024 EHVM\\Segundo Semestre\\PROGRAMACIÓN ORIENTADA A OBJETOS\\Proyecto Progra\\POO\\src\\Carla.png",
+        "C:\\Users\\esteb\\OneDrive\\Escritorio\\UVG\\UVG 2024 EHVM\\Segundo Semestre\\PROGRAMACIÓN ORIENTADA A OBJETOS\\Proyecto Progra\\POO\\src\\Majito.png"
+    };
 
-    // Ruta a los avatares iconicos xd
-    private String icono1 = "C:\\Users\\esteb\\OneDrive\\Escritorio\\UVG\\UVG 2024 EHVM\\Segundo Semestre\\PROGRAMACIÓN ORIENTADA A OBJETOS\\Proyecto Progra\\POO\\src\\Chang Default (1).gif";
-    private String icono2 = "C:\\Users\\esteb\\OneDrive\\Escritorio\\UVG\\UVG 2024 EHVM\\Segundo Semestre\\PROGRAMACIÓN ORIENTADA A OBJETOS\\Proyecto Progra\\POO\\src\\Chiquin Default (1).gif";
+    // Rutas a los iconos
+    private String[] iconos = {
+        "C:\\Users\\esteb\\OneDrive\\Escritorio\\UVG\\UVG 2024 EHVM\\Segundo Semestre\\PROGRAMACIÓN ORIENTADA A OBJETOS\\Proyecto Progra\\POO\\src\\Chang Default (1).gif",
+        "C:\\Users\\esteb\\OneDrive\\Escritorio\\UVG\\UVG 2024 EHVM\\Segundo Semestre\\PROGRAMACIÓN ORIENTADA A OBJETOS\\Proyecto Progra\\POO\\src\\Chiquin Default (1).gif",
+        "C:\\Users\\esteb\\OneDrive\\Escritorio\\UVG\\UVG 2024 EHVM\\Segundo Semestre\\PROGRAMACIÓN ORIENTADA A OBJETOS\\Proyecto Progra\\POO\\src\\Carla.gif",
+        "C:\\Users\\esteb\\OneDrive\\Escritorio\\UVG\\UVG 2024 EHVM\\Segundo Semestre\\PROGRAMACIÓN ORIENTADA A OBJETOS\\Proyecto Progra\\POO\\src\\Majito.gif"
+    };
 
-    private boolean usandoAvatar1 = true;  // que avatar se esta usando
+    private int avatarIndex = 0; // Índice para llevar el seguimiento del avatar actual
 
     public Perfil() {
-        // Set up the frame
+        // Configurar el marco
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 707, 419);
         contentPane = new JPanel();
@@ -42,7 +47,7 @@ public class Perfil extends JFrame {
         infoPanel.setLayout(new GridLayout(1, 2));
         contentPane.add(infoPanel, BorderLayout.CENTER);
 
-        // Informacion por excrito
+        // Información por escrito
         instruccion = new JTextPane();
         instruccion.setText("Nombre:\nCarnet:\nAño que cursa:\nQuímica 1 o 2:");
         infoPanel.add(instruccion);
@@ -51,57 +56,51 @@ public class Perfil extends JFrame {
         infouser = new JLabel("Perfil del Usuario:");
         infoPanel.add(infouser);
 
-        // crear el avatar
+        // Crear el avatar
         cartelavatar = new JLabel();
         cartelavatar.setHorizontalAlignment(SwingConstants.CENTER);
-        updateAvatarIcon(ruta1);  //avatar inicial
+        updateAvatarIcon(rutasAvatares[avatarIndex]); // avatar inicial
         infoPanel.add(cartelavatar);
 
-        // boton inicial del avatar
+        // Botón inicial del avatar
         botonAvatar = new JButton("Cambiar Avatar");
-        botonAvatar.setIcon(new ImageIcon(icono1));
+        botonAvatar.setIcon(new ImageIcon(iconos[avatarIndex]));
         botonAvatar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // cambiar icono al clickear
-                if (usandoAvatar1) {
-                    updateAvatarIcon(ruta2);
-                    botonAvatar.setIcon(new ImageIcon(icono2));  // Change button icon
-                    usandoAvatar1 = false;
-                } else {
-                    updateAvatarIcon(ruta1);
-                    botonAvatar.setIcon(new ImageIcon(icono1));  // Change button icon back
-                    usandoAvatar1 = true;
-                }
+                // Cambiar avatar al hacer clic
+                avatarIndex = (avatarIndex + 1) % rutasAvatares.length; // Cambia al siguiente avatar
+                updateAvatarIcon(rutasAvatares[avatarIndex]); // Actualiza el avatar
+                botonAvatar.setIcon(new ImageIcon(iconos[avatarIndex])); // Cambia el icono del botón
             }
         });
         infoPanel.add(botonAvatar);
 
-        // Create a panel at the bottom for the buttons
+        // Crear un panel en la parte inferior para los botones
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new BorderLayout());
         contentPane.add(bottomPanel, BorderLayout.SOUTH);
 
-        // Add a button to confirm the entered text
+        // Agregar un botón para confirmar la entrada de texto
         JButton confirmButton = new JButton("Registrar perfil");
         bottomPanel.add(confirmButton, BorderLayout.CENTER);
 
-        // Action listener to handle the confirm button click
+        // Action listener para manejar el clic en el botón de confirmar
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Get the text from JTextPane and display it in displayInfoLabel
+                // Obtener el texto de JTextPane y mostrarlo en infouser
                 String userInfo = instruccion.getText();
                 infouser.setText("<html><p>Información del Usuario:</p><p>" + userInfo.replaceAll("\n", "<br>") + "</p></html>");
             }
         });
     }
 
-    // Helper method to update the avatar icon
+    // Método auxiliar para actualizar el icono del avatar
     private void updateAvatarIcon(String avatarPath) {
         ImageIcon avatarIcon = new ImageIcon(avatarPath);
         Image avatarImage = avatarIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-        cartelavatar.setIcon(new ImageIcon(avatarImage)); // Ensure avatarLabel is initialized
+        cartelavatar.setIcon(new ImageIcon(avatarImage)); // Asegúrate de que cartelavatar esté inicializado
     }
 
     public static void main(String[] args) {

@@ -1,37 +1,103 @@
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class Balanceo extends JFrame {
 
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
+    private JTextField reaccionIngresada; // Campo para la reacción completa
+    private JTextArea reaccionBalanceada; // Campo para mostrar el resultado
+    private JButton botonBalancear;       // Botón para enviar la solicitud
 
-	/**
-	 * Launch the application.
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Balanceo frame = new Balanceo();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    public Balanceo() {
+        super();
+        setTitle("Balanceador de Reacciones Químicas");
 
-	/**
-	 * Create the frame.
-	 */
-	public Balanceo() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        // Inicializa los componentes de la interfaz
+        reaccionIngresada = new JTextField();
+        reaccionBalanceada = new JTextArea();
+        reaccionBalanceada.setEditable(false);
+        botonBalancear = new JButton("Balancear Reacción");
 
-		setContentPane(contentPane);
-	}
+        // ActionListener para el botón de balancear
+        botonBalancear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Lógica para enviar la solicitud a la API
+                if (reaccionIngresada.getText().isEmpty()) {
+                    reaccionBalanceada.setText("Por favor, ingrese la reacción química.");
+                } else {
+                    // Envia la solicitud a la API y obtien el resultado
+                    String resultadoBalanceo = enviarSolicitudBalanceo(reaccionIngresada.getText());
+                    // Muestra solo la reacción balanceada en el área de texto
+                    reaccionBalanceada.setText(resultadoBalanceo);
+                }
+            }
+        });
 
+        // Configuración de la interfaz
+        setLayout(new GridLayout(4, 1));
+        add(new JLabel("Ingrese la reacción química (ej: Al + O2 = Al2O3) :"));
+        add(reaccionIngresada);
+        add(botonBalancear);
+        add(new JScrollPane(reaccionBalanceada));  // JScrollPane para scroll
+        setSize(400, 400);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    // Método para enviar solicitud a la API de Flask
+    private String enviarSolicitudBalanceo(String reaccion) {
+        try {
+            // URL de la API
+            URL url = new URL("http://127.0.0.1:5000/mi_api/balancear_reaccion");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json; utf-8");
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setDoOutput(true);
+
+            // JSON de la solicitud
+            String jsonInputString = String.format("{\"reaccion\": \"%s\"}", reaccion.trim());
+
+            // Envia la solicitud
+            try (OutputStream os = conn.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+
+            // Verifica la respuesta
+            int responseCode = conn.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                //la respuesta del servidor
+                StringBuilder response = new StringBuilder();
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"))) {
+                    String responseLine;
+                    while ((responseLine = br.readLine()) != null) {
+                        response.append(responseLine.trim());
+                    }
+                }
+                // respuesta de la reacción balanceada
+                return response.toString(); // Retorna la respuesta como string
+            } else {
+                return "Error en la conexión: " + responseCode; // Mensaje de error 
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error: " + e.getMessage(); // Muestra el mensaje de error en la interfaz
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            Balanceo paginaReaccion = new Balanceo();
+            paginaReaccion.setVisible(true);
+        });
+    }
 }
+
