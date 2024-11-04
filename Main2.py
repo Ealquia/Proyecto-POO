@@ -130,7 +130,7 @@ def incognitaEstequiometria(reaccion, compuesto, tipos):
         incognita = Gas(compuesto=compuesto,magnitud=magnitud,dimVolumen=dimensionales,dimPresion=dimPresion,
                    presion=presion,dimTemperatura=dimTemp,temperatura=temp)
     if tipoDato==8: #Cantidad de materia
-        dimensionales = menuString(C.listaDimensionales("Cantidad Materia"),"Ingrese el número de la unidad correspondiente: ")
+        dimensionales = menuString(C.listaDimensionales("Cantidad materia"),"Ingrese el número de la unidad correspondiente: ")
         incognita = Moles(dimensional=dimensionales, compuesto=compuesto)
     return incognita, tipos[tipoDato-1]
 

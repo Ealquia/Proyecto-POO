@@ -16,8 +16,11 @@ class problemaEsteq:
         if isinstance(reaccion, str):
             reaccion = Reaccion(reaccion)
         self.__Compuesto = compuesto
-        if reaccion==None and compuesto==None:
-            self.__Compuesto = Datos[0].getCompuesto()
+        if compuesto==None:
+            if reaccion==None:
+                self.__Compuesto = Datos[0].getCompuesto()
+            else:
+                self.__Compuesto = Incognita.getCompuesto()
         self.__Reaccion = reaccion
         self.__Rendimiento = Rendimiento
         self.__Respuesta = None
@@ -45,7 +48,7 @@ class problemaEsteq:
             if D != "particulas":
                 respuesta = f"{respuesta} {D} de {compuesto}"
             else:
-                particulas = "átomos" if self.__Compuesto.elementoPuro() and self.__Compuesto.getElementos[0].getCant == 1 else "moléculas"
+                particulas = "átomos" if self.__Compuesto.elementoPuro() and self.__Compuesto.getElementos()[0].getCant == 1 else "moléculas"
                 respuesta = f"{respuesta}  {particulas} de {compuesto}"
         if tipo == 11: respuesta = f"El rendimiento es del {respuesta}%"
         return respuesta

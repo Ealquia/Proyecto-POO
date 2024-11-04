@@ -38,7 +38,7 @@ class Liquido(TipoDato):
         else: #Si se tiene la magnitud
             self.SI() #Estandarizar
             masa = self._Magnitud*self._Densidad #Convertir a masa (g) como magnitud (L) * densidad (g/L)
-            masa = Masa(compuesto=self._Compuesto, magnitud=masa,dimensional=dims, cifrasSig=min(self._CifrasSig)) #Crear un objeto tipo masa con los atributos correspondientes 
+            masa = Masa(compuesto=self._Compuesto, magnitud=masa,dimensional=dims) #Crear un objeto tipo masa con los atributos correspondientes 
             masa.getIncognita()
             return masa
     
