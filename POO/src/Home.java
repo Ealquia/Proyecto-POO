@@ -13,7 +13,7 @@ public class Home {
     private JButton balanceo;
     private JButton informacion;
     private JButton estequiometria;
-    private Nomenclatura nomenVentana;
+    private NomenclaturaGui nomenVentana;
     private Perfil perfii;
     private momamolar mamol;  // Nombre corregido
     private TablaP tablap;
@@ -45,7 +45,7 @@ public class Home {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Inicializar todas las ventanas correctamente
-        nomenVentana = new Nomenclatura();
+        nomenVentana = new NomenclaturaGui();
         perfii = new Perfil();
         mamol = new momamolar(); // Inicialización corregida
         tablap = new TablaP();
