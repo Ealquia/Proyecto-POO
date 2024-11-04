@@ -28,7 +28,7 @@ class Solucion(TipoDato):
         def getOtrasIncognitas():
             if self._Magnitud == None: #Si falta la magnitud
                 mag = self._Moles/self._Molaridad #Encontrar con el proceso inverso
-                self._Magnitud = self.C.convert(mag, self._Dimensional) #Convertir el volumen encontrado a la unidad del dato. Actualizar magnitud
+                self._Magnitud = self.C.convert(mag, self._Dimensional["Magnitud"]) #Convertir el volumen encontrado a la unidad del dato. Actualizar magnitud
                 return self._Magnitud #Devolver magnitud
             if self._Molaridad == None: #Si falta la molaridad
                 self._Molaridad = self._Moles/self.C.aSI(self._Magnitud, self._Dimensional["Magnitud"]) #Encontrarla como moles (mol) / Magnitud (L)
