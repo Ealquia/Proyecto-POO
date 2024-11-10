@@ -36,7 +36,7 @@ public class Perfil extends JFrame {
 
     public Perfil() {
         // Configurar el marco
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         setBounds(100, 100, 707, 419);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

@@ -31,7 +31,7 @@ public class momamolar extends PaginaGUI {
         frame.setVisible(true);
 
         frame.setTitle("MomaMolar");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Cierra la aplicación al cerrar la ventana
+        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE); // Cierra la aplicación al cerrar la ventana
         frame.setBounds(200, 200, 900, 600); // Tamaño y posición inicial de la ventana
         PanelMoma = new JPanel();
         PanelMoma.setBorder(new EmptyBorder(5, 5, 5, 5)); // Agrega margen alrededor del panel principal
