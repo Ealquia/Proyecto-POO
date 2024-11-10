@@ -1,5 +1,3 @@
-
-
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,11 +19,6 @@ public class PaginaGUI {//extends JFrame {
     /**
      * Lanza la aplicación.
      */
-  /*  public static void main(String[] args) {
-        PaginaGUI window = new PaginaGUI();
-        window.getFrame().setVisible(true);
-    }
-
     /**
      * Crea la aplicación.
      */
