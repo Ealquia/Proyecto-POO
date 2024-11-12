@@ -7,6 +7,7 @@ class problemaEsteq:
     tipos = ["Masa", "Volumen de solución", "Volumen de líquido","Volumen de gas","Molaridad","Presión de un gas",
              "Temperatura de un gas","Calor de la reacción", "Entalpía de la reacción", "Entalpía molar", 
              "Cantidad de materia", "Porcentaje de rendimiento"]
+    tiposDatos = ["Masa", "Volumen de solución", "Volumen de líquido","Volumen de gas","Cantidad de materia", "Calor de una reacción"]
     
     def  __init__(self, Datos, Incognita = None, reaccion = None, compuesto = None, tipo = None, Rendimiento: float =  100):
         self.__Datos = [] #Crear una lista vacía de datos
