@@ -25,7 +25,6 @@ public class Estequio extends JFrame {
 
     public Estequio() {
         initialize();
-        setVisible(true); // Asegúrate de que el JFrame es visible
     }
 
     protected void initialize() {

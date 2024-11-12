@@ -28,7 +28,6 @@ public class momamolar extends PaginaGUI {
 
     public momamolar() {
         super();
-        frame.setVisible(true);
 
         frame.setTitle("MomaMolar");
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE); // Cierra la aplicación al cerrar la ventana
