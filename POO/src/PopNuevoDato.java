@@ -9,15 +9,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.ArrayList; // Para leer datos de la respuesta del servidor
-import java.util.Collections; // Para leer la entrada del servidor como un flujo de caracteres
-import javax.swing.JButton; // Para enviar datos al servidor
-import javax.swing.JCheckBox; // Para establecer una conexión HTTP con el servidor
-import javax.swing.JComboBox; // Para manejar URIs de manera segura
-import javax.swing.JDialog; // Para representar y manipular direcciones URL
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import java.io.BufferedReader; // Para leer datos de la respuesta del servidor
+import java.io.InputStreamReader; // Para leer la entrada del servidor como un flujo de caracteres
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URI; // Para enviar datos al servidor
+import java.net.URL; // Para establecer una conexión HTTP con el servidor
+import java.util.ArrayList; // Para manejar URIs de manera segura
+import java.util.Collections; // Para representar y manipular direcciones URL
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox; // Para leer datos de la respuesta del servidor
+import javax.swing.JDialog; // Para leer la entrada del servidor como un flujo de caracteres
+import javax.swing.JLabel; // Para enviar datos al servidor
+import javax.swing.JPanel; // Para establecer una conexión HTTP con el servidor
+import javax.swing.JTextField; // Para manejar URIs de manera segura
 import javax.swing.border.EmptyBorder;
 
 public class PopNuevoDato extends JDialog implements ItemListener{
@@ -28,10 +36,12 @@ public class PopNuevoDato extends JDialog implements ItemListener{
 	private JLabel LabelCompuesto;
 	private JComboBox DropCompuesto;
 	private JTextField TxtMagnitud;
+	private JComboBox DropDimMag;
 	private JLabel LabelExtra1;
 	private JTextField TxtExtra1;
 	private JComboBox DropDimExtra1;
 	private JTextField TxtExtra2;
+	private JComboBox DropDimExtra2;
 	private JCheckBox CheckExtra;
 
 	/**
@@ -39,7 +49,7 @@ public class PopNuevoDato extends JDialog implements ItemListener{
 	 */
 	public static void main(String[] args) {
 		try {
-			PopNuevoDato dialog = new PopNuevoDato(false,"Volumen de líquido", new String[]{"H2O", "O2", "H2"});
+			PopNuevoDato dialog = new PopNuevoDato(false,"Cantidad de materia", new String[]{"H2O", "O2", "H2"});
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -165,7 +175,7 @@ public class PopNuevoDato extends JDialog implements ItemListener{
 			if (Tipo.equals("Masa")) dimensionales = new String[]{"g","kg","mg","microg","ton","lb", "oz"};
 			if (Tipo.equals("Calor de la reacción")||Tipo.equals("Entalpia de la reacción")||Tipo.equals("Entalpia molar"))  dimensionales = new String[]{"J", "kJ", "cal", "kcal"};
 			if (Tipo.equals("Cantidad de materia")) dimensionales = new String[]{"mol","umol","mmol","particulas"};
-			JComboBox DropDimMag = new JComboBox(dimensionales);
+			DropDimMag = new JComboBox(dimensionales);
 			DropDimMag.setFont(new Font("Tw Cen MT", Font.PLAIN, 18));
 			GridBagConstraints gbc_DropDimMag = new GridBagConstraints();
 			gbc_DropDimMag.insets = new Insets(0, 0, 5, 5);
@@ -272,7 +282,7 @@ public class PopNuevoDato extends JDialog implements ItemListener{
 		//DropBox dimensionales 2
 		{
 			if (Tipo.equals("Volumen de gas")||Tipo.equals("Presión de un gas")||Tipo.equals("Temperatura de un gas")){ 
-				JComboBox DropDimExtra2 = new JComboBox(new String[]{"K","C","F"});
+				DropDimExtra2 = new JComboBox(new String[]{"K","C","F"});
 				DropDimExtra2.setFont(new Font("Tw Cen MT", Font.PLAIN, 18));
 				GridBagConstraints gbc_DropDimExtra2 = new GridBagConstraints();
 				gbc_DropDimExtra2.insets = new Insets(0, 0, 5, 5);
@@ -331,10 +341,91 @@ public class PopNuevoDato extends JDialog implements ItemListener{
 			{
 				String TextoAceptar = (Incognita)? "Agregar Incógnita": "Agregar Dato";
 				JButton AcceptButton = new JButton(TextoAceptar);
+				AcceptButton.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						URI uri = URI.create("http://127.0.0.1:5000/mi_api/crear_dato"); // URI del endpoint de la API
+						try {
+							URL url = uri.toURL();
+							HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+							conn.setRequestMethod("POST"); // Configura el método HTTP como POST
+							conn.setRequestProperty("Content-Type", "application/json; utf-8"); // Formato de datos de entrada
+							conn.setRequestProperty("Accept", "application/json"); // Formato de datos de salida esperado
+							conn.setDoOutput(true); // Permite enviar datos en el cuerpo de la solicitud
+
+							// Crear un mapa para almacenar los datos
+							Map<String, Object> datos = new HashMap<>();
+							datos.put("Tipo", Tipo); datos.put("Compuesto", DropCompuesto.getSelectedItem());
+							datos.put("Dimensionales", DropDimMag.getSelectedItem()); datos.put("Magnitud", TxtMagnitud.getText()); 
+							if (Tipo.equals("Volumen de líquido")){datos.put("DimDensidad", DropDimExtra1.getSelectedItem()); datos.put("Densidad", TxtExtra1.getText());}
+							if (Tipo.equals("Volumen de solución")){datos.put("Molaridad", TxtExtra1.getText());}
+							if (Tipo.equals("Volumen de gas")){
+								datos.put("DimPresion", DropDimExtra1.getSelectedItem()); 
+								datos.put("Presion", TxtExtra1.getText());
+								datos.put("DimTemp", DropDimExtra2.getSelectedItem()); 
+								datos.put("Temperatura", TxtExtra2.getText());
+							}
+
+							// Crear el JSON de manera manual
+							StringBuilder json = new StringBuilder();
+							json.append("{");
+
+							// Recorrer el mapa y construir el JSON
+							boolean primero = true;
+							for (Map.Entry<String, Object> entry : datos.entrySet()) {
+								if (!primero) {
+									json.append(", ");
+								}
+								json.append("\"").append(entry.getKey()).append("\": ");
+								if (entry.getValue() instanceof String) {
+									json.append("\"").append(entry.getValue()).append("\"");
+								} else {
+									json.append(entry.getValue());
+								}
+								primero = false;
+							}
+
+							json.append("}");
+
+							// Convertir el StringBuilder en un String (JSON final)
+							String jsonInputString = json.toString();
+		
+							// Enviar los datos al servidor
+							try (OutputStream os = conn.getOutputStream()) {
+								byte[] input = jsonInputString.getBytes("utf-8");
+								os.write(input, 0, input.length); // Escribe el JSON en el flujo de salida
+							}
+		
+							// Verifica si la respuesta es exitosa (200 OK)
+							int responseCode = conn.getResponseCode();
+							if (responseCode == HttpURLConnection.HTTP_OK) {
+								// Lee la respuesta del servidor
+								try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"))) {
+									StringBuilder response = new StringBuilder();
+									String responseLine;
+									while ((responseLine = br.readLine()) != null) {
+										response.append(responseLine.trim());
+									}
+		
+									// Extrae el valor de "masa_molar" de la respuesta JSON manualmente
+									String jsonResponse = response.toString();
+									System.out.println(jsonResponse);
+								}
+							} else {
+								System.out.print("Error en la conexión: " + responseCode); // Mensaje de error si la respuesta no es 200
+							}
+							conn.disconnect();
+						} catch (Exception e1) {
+							e1.printStackTrace();
+							System.out.print("Error: " + e1.getMessage()); // Muestra el mensaje de error en la interfaz
+						}
+						dispose();
+					}
+				});
 				AcceptButton.setFont(new Font("Tw Cen MT", Font.PLAIN, 15));
-				AcceptButton.setActionCommand("OK");
 				buttonPane.add(AcceptButton);
 				getRootPane().setDefaultButton(AcceptButton);
+
 			}
 			{
 				JButton cancelButton = new JButton("Cancelar");
