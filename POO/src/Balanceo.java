@@ -21,8 +21,10 @@ public class Balanceo extends JFrame {
         // Inicializa los componentes de la interfaz
         reaccionIngresada = new JTextField();
         reaccionBalanceada = new JTextArea();
+        reaccionBalanceada.setFont(new Font("Malgun Gothic", Font.BOLD, 18));
         reaccionBalanceada.setEditable(false);
         botonBalancear = new JButton("Balancear Reacción");
+        botonBalancear.setBackground(SystemColor.activeCaption);
 
         // ActionListener para el botón de balancear
         botonBalancear.addActionListener(new ActionListener() {
@@ -41,13 +43,17 @@ public class Balanceo extends JFrame {
         });
 
         // Configuración de la interfaz
-        setLayout(new GridLayout(4, 1));
-        add(new JLabel("Ingrese la reacción química (ej: Al + O2 = Al2O3) :"));
-        add(reaccionIngresada);
-        add(botonBalancear);
-        add(new JScrollPane(reaccionBalanceada));  // JScrollPane para scroll
+        getContentPane().setLayout(new GridLayout(4, 1));
+        JLabel label = new JLabel("Ingrese la reacción química (ej: Al + O2 = Al2O3) :");
+        label.setBackground(Color.ORANGE);
+        label.setForeground(Color.BLACK);
+        label.setFont(new Font("Yu Gothic UI", Font.BOLD | Font.ITALIC, 16));
+        getContentPane().add(label);
+        getContentPane().add(reaccionIngresada);
+        getContentPane().add(botonBalancear);
+        getContentPane().add(new JScrollPane(reaccionBalanceada));  // JScrollPane para scroll
         setSize(400, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
     }
 
     // Método para enviar solicitud a la API de Flask

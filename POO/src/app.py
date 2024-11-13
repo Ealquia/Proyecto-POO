@@ -1,10 +1,9 @@
 from flask import Flask, jsonify, request  # Importamos Flask y funciones auxiliares para gestionar el API
 from CalcMasaMolar import calcular_masa_molar  # Importamos la función para calcular la masa molar
 from Compuesto import Compuesto  # Opcional: si decides usar la clase Compuesto directamente
-from Estequiometria.Conversiones import *
-from Estequiometria.crearDato import *
-from Estequiometria.problemaEsteq import *
-
+from Reaccion import Reaccion  
+import chempy as ch
+from Nomenclatura import *
 app = Flask(__name__)  # Creamos una instancia de Flask para configurar la aplicación
 
 # Definimos el endpoint de la API
@@ -30,29 +29,87 @@ def masa_molar():
     except ValueError as e:
         # Capturamos excepciones y devolvemos el error en formato JSON
         return jsonify({'error': str(e)}), 400
-    
 # endpoint de la API para el balanceo de ecuaciones
-@app.route('/mi_api/crear_dato', methods=['POST'])
-def crear_dato():
+@app.route('/mi_api/balancear_reaccion', methods=['POST'])
+def balancear_reaccion():
     # datos de la solicitud en formato JSON
-    dict = request.json
-    
-    if not dict:
-        # Si no se proporciona la fórmula, retornamos un error 400 (solicitud incorrecta)
-        return jsonify({'error': 'Fórmula del compuesto no proporcionada'}), 400
+    data = request.json
+    reaccion_str = data.get('reaccion')  # Obtiene la reacción como string
 
-    try:
-        #Creamos el dato
-        dato = crearDato(dict).__str__()
-        
-        # Retornamos el resultado en formato JSON
-        return jsonify(dato)
-    
-    except ValueError as e:
-        # Capturamos excepciones y devolvemos el error en formato JSON
-        return jsonify({'error': str(e)}), 400
-    
+
+
 
 # Ejecutamos la aplicación en modo de depuración para pruebas locales
+    if not reaccion_str:
+        return jsonify({'error': 'Reacción no proporcionada'}), 400
+
+    #instancia de Reaccion con el string de la reacción
+    try:
+        reaccion = Reaccion(reaccion_str)
+    except Exception as e:
+        return jsonify({'error': 'Error al crear la reacción: ' + str(e)}), 400
+
+    # Llama al método Balancear para balancear la reacción
+    try:
+        resultado_balanceo = reaccion.Balancear()
+    except Exception as e:
+        # Manejo de errores en caso de que falle el balanceo
+        return jsonify({'error': 'Error al balancear la reacción: ' + str(e)}), 500
+
+    return jsonify({
+        'reaccion_original': reaccion_str,
+        'reaccion_balanceada': resultado_balanceo
+    })
+
+@app.route("/api/ProblemaNivel1",  methods=["GET"])
+def ProblemaNivel1():
+    problema, id = Problema(Nivel(1))
+    return jsonify({"nivel":1,"id": id, "problema": problema})
+
+
+@app.route("/api/ProblemaNivel2", methods=["GET"])
+def ProblemaNivel2():
+    problema, id = Problema(Nivel(2))
+    return jsonify({"nivel":2,"id": id, "problema": problema})
+
+@app.route("/api/ProblemaNivel3",  methods=["GET"])
+def ProblemaNivel3():
+    problema, id = Problema(Nivel(3))
+    return jsonify({"nivel":3,"id": id, "problema": problema})
+
+@app.route("/api/ProblemaNivel4",  methods=["GET"])
+def ProblemaNivel4():
+    problema, id = Problema(Nivel(4))
+    return jsonify({"nivel":4,"id": id, "problema": problema})
+
+@app.route("/api/ProblemaTodos",   methods=["GET"])
+def ProblemaTodos():
+    problema, id =  Problema(Nivel(5))
+    return jsonify({"nivel":5,"id": id, "problema": problema})
+
+@app.route("/api/SolucionProblema", methods=["POST"])
+def IonesSolucionProblema():
+    data = request.json
+    nivel = data.get("nivel")
+    problema = data.get("problema")
+    solución = data.get("solución")
+    id = data.get("id")
+
+    if not solución:
+        return jsonify({"error": "Solución no proporcionada"})
+
+    if not  problema:
+        return jsonify({"error": "Problema no proporcionado"})
+
+    if not  id:
+        return jsonify({"error": "Id no proporcionado"})
+
+    try:
+        solucion, comprobante = Nomenclatura.ComprobarRespuesta(solución, problema, id)
+        return {"solución": solución,  "comprobante": comprobante}
+
+    except  ValueError as e:
+        return jsonify({"error": str(e)})
+
 if __name__ == '__main__':
     app.run(debug=True)
