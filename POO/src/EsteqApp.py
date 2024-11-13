@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request  # Importamos Flask y funciones auxiliares para gestionar el API
 from Estequiometria.Conversiones import *
 from Estequiometria.crearDato import *
+from Estequiometria.problemaEsteq import *
 
 app = Flask(__name__)
 
@@ -12,7 +13,7 @@ def crear_dato():
     
     if not dict:
         # Si no se proporciona la fórmula, retornamos un error 400 (solicitud incorrecta)
-        return jsonify({'error': 'Fórmula del compuesto no proporcionada'}), 400
+        return jsonify({'error': 'No se proporcionaron datos'}), 400
 
     try:
         #Creamos el dato

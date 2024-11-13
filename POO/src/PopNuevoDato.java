@@ -43,13 +43,14 @@ public class PopNuevoDato extends JDialog implements ItemListener{
 	private JTextField TxtExtra2;
 	private JComboBox DropDimExtra2;
 	private JCheckBox CheckExtra;
+	private JCheckBox CheckDatoReal;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			PopNuevoDato dialog = new PopNuevoDato(false,"Cantidad de materia", new String[]{"H2O", "O2", "H2"});
+			PopNuevoDato dialog = new PopNuevoDato(true,"Temperatura de un gas", new String[]{"H2O", "O2", "H2"});
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -315,7 +316,7 @@ public class PopNuevoDato extends JDialog implements ItemListener{
 		//Check Box para dato real
 		{
 			if(!Incognita){
-				JCheckBox CheckDatoReal = new JCheckBox("Dato real");
+				CheckDatoReal = new JCheckBox("Dato real");
 				CheckDatoReal.setFont(new Font("Tw Cen MT", Font.PLAIN, 20));
 				GridBagConstraints gbc_CheckDatoReal = new GridBagConstraints();
 				gbc_CheckDatoReal.insets = new Insets(0, 0, 0, 5);
@@ -355,16 +356,39 @@ public class PopNuevoDato extends JDialog implements ItemListener{
 
 							// Crear un mapa para almacenar los datos
 							Map<String, Object> datos = new HashMap<>();
-							datos.put("Tipo", Tipo); datos.put("Compuesto", DropCompuesto.getSelectedItem());
-							datos.put("Dimensionales", DropDimMag.getSelectedItem()); datos.put("Magnitud", TxtMagnitud.getText()); 
-							if (Tipo.equals("Volumen de líquido")){datos.put("DimDensidad", DropDimExtra1.getSelectedItem()); datos.put("Densidad", TxtExtra1.getText());}
+							//Agregar a todos incógnita, tipo y dimensionales de la magnitud
+							String incognita = (Incognita)? "Si": "No";
+							datos.put("Incognita", incognita);
+							datos.put("Tipo", Tipo); 
+							datos.put("Dimensionales", DropDimMag.getSelectedItem());
+							//Si no es calor o entalpia agregar compuesto
+							if (!Tipo.equals("Calor de la reacción") && !Tipo.equals("Entalpía de la reacción")) datos.put("Compuesto", DropCompuesto.getSelectedItem()); 
+							
+							//Si no es una incógnita de magnitud, agregar magnitud
+							ArrayList<String> IncognitasMagnitud = new ArrayList<>();
+							Collections.addAll(IncognitasMagnitud, "Masa", "Volumen de solución", "Volumen de líquido","Volumen de gas", "Calor de la reacción", "Cantidad de materia");
+							if (!Incognita || !IncognitasMagnitud.contains(Tipo)) datos.put("Magnitud", TxtMagnitud.getText());
+							
+							//Si es de líquido y se da densidad, agregar dimesnionales y magnitud de la densidad
+							if (Tipo.equals("Volumen de líquido") && !CheckExtra.isSelected()) {
+								datos.put("DimDensidad", DropDimExtra1.getSelectedItem()); 
+								datos.put("Densidad", TxtExtra1.getText());}
+							
+							//Si es de solución, agregar la magnitud
 							if (Tipo.equals("Volumen de solución")){datos.put("Molaridad", TxtExtra1.getText());}
-							if (Tipo.equals("Volumen de gas")){
+
+							//Si es de gas agregar dimensionales de presión y temeperatura
+							if (Tipo.equals("Volumen de gas")||Tipo.equals("Presión de un gas")||Tipo.equals("Temperatura de un gas")){
 								datos.put("DimPresion", DropDimExtra1.getSelectedItem()); 
-								datos.put("Presion", TxtExtra1.getText());
 								datos.put("DimTemp", DropDimExtra2.getSelectedItem()); 
-								datos.put("Temperatura", TxtExtra2.getText());
+								//Si la presión no es la incógnita, agregar la magnitud
+								if (!Tipo.equals("Presión de un gas")) datos.put("Presion", TxtExtra1.getText());
+								//Si la temeperatura no es la incógnita, agregar la magnitud
+								if (!Tipo.equals("Temperatura de un gas")) datos.put("Temperatura", TxtExtra2.getText());
 							}
+							
+							//Si es un dato, agregar el valor de Teórico
+							if (!Incognita) { String teorico = (CheckDatoReal.isSelected())? "Si": "No"; datos.put("Teorico",teorico); }
 
 							// Crear el JSON de manera manual
 							StringBuilder json = new StringBuilder();
@@ -409,6 +433,7 @@ public class PopNuevoDato extends JDialog implements ItemListener{
 		
 									// Extrae el valor de "masa_molar" de la respuesta JSON manualmente
 									String jsonResponse = response.toString();
+									//Printear el resultado para probar
 									System.out.println(jsonResponse);
 								}
 							} else {

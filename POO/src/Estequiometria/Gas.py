@@ -71,7 +71,9 @@ class Gas(TipoDato):
    
     #Override
     def __str__(self):
-        info = super().__str__() + f", a {self._Temperatura} {self._Dimensional["Temperatura"]} y {self._Presion} {self._Dimensional["Presion"]}"
+        tmeperatura = self._Temperatura if self._Temperatura != None else "Incognita"
+        presion = self._Presion if self._Presion != None else "Incognita"
+        info = super().__str__() + f", a {tmeperatura} {self._Dimensional["Temperatura"]} y {self._Presion} {self._Dimensional["Presion"]}"
         return info
     
     def getTemperatura(self):

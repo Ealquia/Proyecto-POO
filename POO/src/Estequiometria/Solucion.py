@@ -37,5 +37,5 @@ class Solucion(TipoDato):
     
     #Override
     def __str__(self):
-        info = super().__str__() + f" {self._Molaridad} Molar"
+        info = super().__str__() + f" {self._Molaridad} Molar" if self._Molaridad != None else f"Molaridad de una solución de {self._Magnitud} de {self._Compuesto.getCompuesto()}"
         return info
