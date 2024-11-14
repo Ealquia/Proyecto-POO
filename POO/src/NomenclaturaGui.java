@@ -271,12 +271,8 @@ public class NomenclaturaGui extends JDialog {
 		SeleccionIonesMenu.add(TodosLosNivelesMenuItem);
 	
 	
-	
-		JMenu CantidadPreguntasMenu = new JMenu("Cantidad de preguntas a realizar");
-		menuBar.add(CantidadPreguntasMenu);
-	
-		JMenuItem mntmNewMenuItem = new JMenuItem("Graduar la cantidad de preguntas");
-		CantidadPreguntasMenu.add(mntmNewMenuItem);
+		//JMenuItem mntmNewMenuItem = new JMenuItem("Graduar la cantidad de preguntas");
+		//menuBar.add(mntmNewMenuItem);
 				
 			
 		
