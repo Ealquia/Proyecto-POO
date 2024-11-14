@@ -9,23 +9,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.BufferedReader; // Para leer datos de la respuesta del servidor
-import java.io.InputStreamReader; // Para leer la entrada del servidor como un flujo de caracteres
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URI; // Para enviar datos al servidor
-import java.net.URL; // Para establecer una conexión HTTP con el servidor
-import java.util.ArrayList; // Para manejar URIs de manera segura
-import java.util.Collections; // Para representar y manipular direcciones URL
+import java.util.ArrayList; // Para leer datos de la respuesta del servidor
+import java.util.Collections; // Para leer la entrada del servidor como un flujo de caracteres
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox; // Para leer datos de la respuesta del servidor
-import javax.swing.JDialog; // Para leer la entrada del servidor como un flujo de caracteres
-import javax.swing.JLabel; // Para enviar datos al servidor
-import javax.swing.JPanel; // Para establecer una conexión HTTP con el servidor
-import javax.swing.JTextField; // Para manejar URIs de manera segura
+import javax.swing.JButton; // Para enviar datos al servidor
+import javax.swing.JCheckBox; // Para establecer una conexión HTTP con el servidor
+import javax.swing.JComboBox; // Para manejar URIs de manera segura
+import javax.swing.JDialog; // Para representar y manipular direcciones URL
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 public class PopNuevoDato extends JDialog implements ItemListener{
@@ -46,23 +40,10 @@ public class PopNuevoDato extends JDialog implements ItemListener{
 	private JCheckBox CheckDatoReal;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			PopNuevoDato dialog = new PopNuevoDato(true,"Temperatura de un gas", new String[]{"H2O", "O2", "H2"});
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
 	 * Create the dialog.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public PopNuevoDato(boolean Incognita, String Tipo, String[] compuestos) {
+	public PopNuevoDato(boolean Incognita, String Tipo, String[] compuestos, ControladoraEsteq jefa, JLabel etiquetaDatos) {
 		if (Incognita)
 			setTitle("Nueva Incógnita");
 		else 
@@ -345,105 +326,47 @@ public class PopNuevoDato extends JDialog implements ItemListener{
 				AcceptButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						URI uri = URI.create("http://127.0.0.1:5000/mi_api/crear_dato"); // URI del endpoint de la API
-						try {
-							URL url = uri.toURL();
-							HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-							conn.setRequestMethod("POST"); // Configura el método HTTP como POST
-							conn.setRequestProperty("Content-Type", "application/json; utf-8"); // Formato de datos de entrada
-							conn.setRequestProperty("Accept", "application/json"); // Formato de datos de salida esperado
-							conn.setDoOutput(true); // Permite enviar datos en el cuerpo de la solicitud
+						// Crear un mapa para almacenar los datos
+						Map<String, Object> datos = new HashMap<>();
+						//Agregar a todos incógnita, tipo y dimensionales de la magnitud
+						String incognita = (Incognita)? "Si": "No";
+						datos.put("Incognita", incognita);
+						datos.put("Tipo", Tipo); 
+						datos.put("Dimensionales", DropDimMag.getSelectedItem());
+						//Si no es calor o entalpia agregar compuesto
+						if (!Tipo.equals("Calor de la reacción") && !Tipo.equals("Entalpía de la reacción")) datos.put("Compuesto", DropCompuesto.getSelectedItem()); 
+						
+						//Si no es una incógnita de magnitud, agregar magnitud
+						ArrayList<String> IncognitasMagnitud = new ArrayList<>();
+						Collections.addAll(IncognitasMagnitud, "Masa", "Volumen de solución", "Volumen de líquido","Volumen de gas", "Calor de la reacción", "Cantidad de materia");
+						if (!Incognita || !IncognitasMagnitud.contains(Tipo)) datos.put("Magnitud", TxtMagnitud.getText());
+						
+						//Si es de líquido y se da densidad, agregar dimesnionales y magnitud de la densidad
+						if (Tipo.equals("Volumen de líquido") && !CheckExtra.isSelected()) {
+							datos.put("DimDensidad", DropDimExtra1.getSelectedItem()); 
+							datos.put("Densidad", TxtExtra1.getText());}
+						
+						//Si es de solución, agregar la magnitud
+						if (Tipo.equals("Volumen de solución")){datos.put("Molaridad", TxtExtra1.getText());}
 
-							// Crear un mapa para almacenar los datos
-							Map<String, Object> datos = new HashMap<>();
-							//Agregar a todos incógnita, tipo y dimensionales de la magnitud
-							String incognita = (Incognita)? "Si": "No";
-							datos.put("Incognita", incognita);
-							datos.put("Tipo", Tipo); 
-							datos.put("Dimensionales", DropDimMag.getSelectedItem());
-							//Si no es calor o entalpia agregar compuesto
-							if (!Tipo.equals("Calor de la reacción") && !Tipo.equals("Entalpía de la reacción")) datos.put("Compuesto", DropCompuesto.getSelectedItem()); 
-							
-							//Si no es una incógnita de magnitud, agregar magnitud
-							ArrayList<String> IncognitasMagnitud = new ArrayList<>();
-							Collections.addAll(IncognitasMagnitud, "Masa", "Volumen de solución", "Volumen de líquido","Volumen de gas", "Calor de la reacción", "Cantidad de materia");
-							if (!Incognita || !IncognitasMagnitud.contains(Tipo)) datos.put("Magnitud", TxtMagnitud.getText());
-							
-							//Si es de líquido y se da densidad, agregar dimesnionales y magnitud de la densidad
-							if (Tipo.equals("Volumen de líquido") && !CheckExtra.isSelected()) {
-								datos.put("DimDensidad", DropDimExtra1.getSelectedItem()); 
-								datos.put("Densidad", TxtExtra1.getText());}
-							
-							//Si es de solución, agregar la magnitud
-							if (Tipo.equals("Volumen de solución")){datos.put("Molaridad", TxtExtra1.getText());}
-
-							//Si es de gas agregar dimensionales de presión y temeperatura
-							if (Tipo.equals("Volumen de gas")||Tipo.equals("Presión de un gas")||Tipo.equals("Temperatura de un gas")){
-								datos.put("DimPresion", DropDimExtra1.getSelectedItem()); 
-								datos.put("DimTemp", DropDimExtra2.getSelectedItem()); 
-								//Si la presión no es la incógnita, agregar la magnitud
-								if (!Tipo.equals("Presión de un gas")) datos.put("Presion", TxtExtra1.getText());
-								//Si la temeperatura no es la incógnita, agregar la magnitud
-								if (!Tipo.equals("Temperatura de un gas")) datos.put("Temperatura", TxtExtra2.getText());
-							}
-							
-							//Si es un dato, agregar el valor de Teórico
-							if (!Incognita) { String teorico = (CheckDatoReal.isSelected())? "Si": "No"; datos.put("Teorico",teorico); }
-
-							// Crear el JSON de manera manual
-							StringBuilder json = new StringBuilder();
-							json.append("{");
-
-							// Recorrer el mapa y construir el JSON
-							boolean primero = true;
-							for (Map.Entry<String, Object> entry : datos.entrySet()) {
-								if (!primero) {
-									json.append(", ");
-								}
-								json.append("\"").append(entry.getKey()).append("\": ");
-								if (entry.getValue() instanceof String) {
-									json.append("\"").append(entry.getValue()).append("\"");
-								} else {
-									json.append(entry.getValue());
-								}
-								primero = false;
-							}
-
-							json.append("}");
-
-							// Convertir el StringBuilder en un String (JSON final)
-							String jsonInputString = json.toString();
-		
-							// Enviar los datos al servidor
-							try (OutputStream os = conn.getOutputStream()) {
-								byte[] input = jsonInputString.getBytes("utf-8");
-								os.write(input, 0, input.length); // Escribe el JSON en el flujo de salida
-							}
-		
-							// Verifica si la respuesta es exitosa (200 OK)
-							int responseCode = conn.getResponseCode();
-							if (responseCode == HttpURLConnection.HTTP_OK) {
-								// Lee la respuesta del servidor
-								try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"))) {
-									StringBuilder response = new StringBuilder();
-									String responseLine;
-									while ((responseLine = br.readLine()) != null) {
-										response.append(responseLine.trim());
-									}
-		
-									// Extrae el valor de "masa_molar" de la respuesta JSON manualmente
-									String jsonResponse = response.toString();
-									//Printear el resultado para probar
-									System.out.println(jsonResponse);
-								}
-							} else {
-								System.out.print("Error en la conexión: " + responseCode); // Mensaje de error si la respuesta no es 200
-							}
-							conn.disconnect();
-						} catch (Exception e1) {
-							e1.printStackTrace();
-							System.out.print("Error: " + e1.getMessage()); // Muestra el mensaje de error en la interfaz
+						//Si es de gas agregar dimensionales de presión y temeperatura
+						if (Tipo.equals("Volumen de gas")||Tipo.equals("Presión de un gas")||Tipo.equals("Temperatura de un gas")){
+							datos.put("DimPresion", DropDimExtra1.getSelectedItem()); 
+							datos.put("DimTemp", DropDimExtra2.getSelectedItem()); 
+							//Si la presión no es la incógnita, agregar la magnitud
+							if (!Tipo.equals("Presión de un gas")) datos.put("Presion", TxtExtra1.getText());
+							//Si la temeperatura no es la incógnita, agregar la magnitud
+							if (!Tipo.equals("Temperatura de un gas")) datos.put("Temperatura", TxtExtra2.getText());
 						}
+						
+						//Si es un dato, agregar el valor de Teórico
+						if (!Incognita) { String teorico = (CheckDatoReal.isSelected())? "Si": "No"; datos.put("Teorico",teorico); }
+						
+						//Enviarle el mapa a la jefa, recibir el string del dato y ponerlo en la etiqueta
+						String nuevoDato = jefa.nuevoDato(datos);
+						etiquetaDatos.setText(nuevoDato);
+
+						//Cerrar el jDialog
 						dispose();
 					}
 				});

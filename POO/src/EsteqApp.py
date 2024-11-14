@@ -6,21 +6,34 @@ from Estequiometria.problemaEsteq import *
 app = Flask(__name__)
 
 # endpoint de la API para el balanceo de ecuaciones
-@app.route('/mi_api/crear_dato', methods=['POST'])
-def crear_dato():
+@app.route('/mi_api/resolver_Problema', methods=['POST'])
+def resolver_Problema():
+    respuesta = ""
+    losDatos = []
     # datos de la solicitud en formato JSON
-    dict = request.json
+    todo = request.get_json(force=True)
     
-    if not dict:
-        # Si no se proporciona la fórmula, retornamos un error 400 (solicitud incorrecta)
+    if not todo:
+        # Si no se proporcionan datos, retornamos un error 400 (solicitud incorrecta)
         return jsonify({'error': 'No se proporcionaron datos'}), 400
 
     try:
-        #Creamos el dato
-        dato = crearDato(dict).__str__()
+        #Creamos los datos
+        for d in todo["Datos"]:
+            losDatos.append(crearDato(d)),
+        
+        #Creamos los problemas por cada incógnita
+        for i in todo["Incognitas"]:
+            #Creamos la incógnita
+            incognita = crearDato(i)
+            #Creamos el problema
+            tipo = i["Tipo"]
+            porcentaje = float(todo["Porcentaje"])
+            problema = problemaEsteq(Datos=losDatos,Incognita=incognita,reaccion=todo["Reaccion"],tipo=tipo,Rendimiento=porcentaje)
+            respuesta = respuesta + problema.Respuesta() + "\n"
         
         # Retornamos el resultado en formato JSON
-        return jsonify(dato)
+        return jsonify(respuesta)
     
     except ValueError as e:
         # Capturamos excepciones y devolvemos el error en formato JSON
