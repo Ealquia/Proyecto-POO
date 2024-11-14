@@ -137,6 +137,7 @@ public class ControladoraEsteq {
                         response.append(responseLine.trim());
                     }
                     respuesta = response.toString();
+                    respuesta = respuesta.substring(1, respuesta.length() - 1);
 
                 }
             } else {
