@@ -74,21 +74,21 @@ class Nomenclatura:
                 solución = "Correcto!"
                 a= 1
             else:
-                solución = "Incorrecto; la respuesta correcta es "+ iones.iloc[id,2]
+                solución = "la respuesta correcta es "+ iones.iloc[id,2]
                 a = 0
         elif pregunta == "Cual es el nombre del ion "+ str(formula)+ " ?": # caso en el que muestra la fórmula del ión y pregunta el nombre
             if respuesta == iones.iloc[id,1]:
                 solución = "Correcto!"
                 a = 1
             else:
-                solución = "Incorrecto; la respuesta correcta es "+ iones.iloc[id,1]
+                solución = "la respuesta correcta es "+ iones.iloc[id,1]
                 a = 0
         elif  pregunta == "Cual es la carga del ion "+ str(ion) + " ?" or pregunta == "Cual es la carga del ion "+ str(formula) +" ?": # caso en el que se pregunte la  carga del ión
             if int(respuesta) == iones.iloc[id,3]:
                 solución = "Correcto!"
                 a = 1
             else:
-                solución = "Incorrecto; la respuesta correcta es "+ str(iones.iloc[id,3])
+                solución = "la respuesta correcta es "+ str(iones.iloc[id,3])
                 a = 0
         else:
             solución = "Error en la lectura de la pregunta, consultar Nomenclatura.py"

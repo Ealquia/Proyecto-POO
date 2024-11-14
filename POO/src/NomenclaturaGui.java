@@ -230,7 +230,7 @@ public class NomenclaturaGui extends JDialog {
 	
 	
 		JButton saltarButton = new JButton("Saltar pregunta");
-		saltarButton.setActionCommand("Cancel");
+		saltarButton.addActionListener(e-> comprobarRespuestaPorNivel(this.getNivel(), this.getID()));
 		buttonPane.add(saltarButton);
 			
 		
@@ -384,14 +384,25 @@ public class NomenclaturaGui extends JDialog {
             conn.setRequestProperty("Accept", "application/json"); // Formato de datos de salida esperado
             conn.setDoOutput(true); // Permite enviar datos en el cuerpo de la solicitud
 
-			// JSON con la fórmula ingresada por el usuario
-			String jsonInputString ="{\"nivel\": \""+level+ "\", "+ "\"problema\":\""+ this.getProblema()+ "\", "+"\"solución\": \"" + TextoQueIngresa.getText() + "\", " + "\"id\": \"" + id + "\"}";
+			if(TextoQueIngresa.getText().equalsIgnoreCase("")){
+				String jsonInputString ="{\"nivel\": \""+level+ "\", "+ "\"problema\":\""+ this.getProblema()+ "\", "+"\"solución\": \"" + "solución no dada" + "\", " + "\"id\": \"" + id + "\"}";
+				// Enviar los datos al servidor
+				try (OutputStream os = conn.getOutputStream()) {
+					byte[] input = jsonInputString.getBytes("utf-8");
+					os.write(input, 0, input.length); // Escribe el JSON en el flujo de salida
+				}
+			}else{
+				// JSON con la fórmula ingresada por el usuario
+				String jsonInputString ="{\"nivel\": \""+level+ "\", "+ "\"problema\":\""+ this.getProblema()+ "\", "+"\"solución\": \"" + TextoQueIngresa.getText() + "\", " + "\"id\": \"" + id + "\"}";
+				// Enviar los datos al servidor
+				try (OutputStream os = conn.getOutputStream()) {
+					byte[] input = jsonInputString.getBytes("utf-8");
+					os.write(input, 0, input.length); // Escribe el JSON en el flujo de salida
+				}
+				
 
-            // Enviar los datos al servidor
-			try (OutputStream os = conn.getOutputStream()) {
-				byte[] input = jsonInputString.getBytes("utf-8");
-				os.write(input, 0, input.length); // Escribe el JSON en el flujo de salida
 			}
+
 
 			// Verifica si la respuesta es exitosa (200 OK)
 			int responseCode = conn.getResponseCode();
@@ -424,9 +435,21 @@ public class NomenclaturaGui extends JDialog {
 						TextoRespuesta.setText("<html> ¡Correcto! <html>");
 					}
 
-					if(this.getComprobante().equalsIgnoreCase("\"comprobante\": 0")){
-							TextoRespuesta.setText("<html> Incorrecto, "+ solucion2 +"<html>");
-						}
+
+					if(TextoQueIngresa.getText().equalsIgnoreCase("")){
+						if(this.getComprobante().equalsIgnoreCase("\"comprobante\": 0")){
+							TextoRespuesta.setText("<html>"+ solucion2 +"<html>");
+						}	
+					}else{
+						if(this.getComprobante().equalsIgnoreCase("\"comprobante\": 0")){
+								TextoRespuesta.setText("<html> Incorrecto, "+ solucion2 +"<html>");
+							}
+					}
+
+
+					if(this.getComprobante().equalsIgnoreCase("\"comprobante\": -1")){
+						TextoRespuesta.setText("<html>"+ solucion2 +"<html>");
+					}
 					
 
 					this.aumentarNoPreguntas();
@@ -444,6 +467,11 @@ public class NomenclaturaGui extends JDialog {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+	}
+
+	private void saltarRespuesta(int level, int id){
+		
 
 	}
 

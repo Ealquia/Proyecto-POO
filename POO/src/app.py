@@ -102,12 +102,21 @@ def IonesSolucionProblema():
     if not  id:
         return jsonify({"error": "Id no proporcionado"})
 
-    try:
-        solucion, comprobante = ComprobarRespuesta(int(nivel), solución, problema, id)
-        return jsonify({"solucion": str(solucion), "comprobante": int(comprobante)})
+    if (solución != "solución no dada"):
+        try:
+            solucion, comprobante = ComprobarRespuesta(int(nivel), solución, problema, id)
+            return jsonify({"solucion": "Incorrecto; "+str(solucion), "comprobante": int(comprobante)})
 
-    except  ValueError as e:
-        return jsonify({"error": str(e)})
+        except  ValueError as e:
+            return jsonify({"error": str(e)})
+    else:
+        try:
+            solucion, comprobante = ComprobarRespuesta(int(nivel), solución, problema, id)
+            return jsonify({"solucion": str(solucion), "comprobante": int(comprobante)})
+
+        except  ValueError as e:
+            return jsonify({"error": str(e)})
+
 
 if __name__ == '__main__':
     app.run(debug=True)
