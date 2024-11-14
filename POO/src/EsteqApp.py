@@ -30,7 +30,7 @@ def resolver_Problema():
             tipo = i["Tipo"]
             porcentaje = float(todo["Porcentaje"])
             problema = problemaEsteq(Datos=losDatos,Incognita=incognita,reaccion=todo["Reaccion"],tipo=tipo,Rendimiento=porcentaje)
-            respuesta = respuesta + problema.Respuesta() + "\n"
+            respuesta = respuesta + problema.Respuesta() + "|"
         
         # Retornamos el resultado en formato JSON
         return jsonify(respuesta)
@@ -50,7 +50,7 @@ def lista_Compuestos():
 
     try:
         R = Reaccion(reaccion) if "=" in reaccion else reaccion
-        lista_Compuestos = R.getReactivosString() + R.getProductosString() if "=" in reaccion else [reaccion]
+        lista_Compuestos = R.ObtenerReactivosString() + R.ObtenerProductosString() if "=" in reaccion else [reaccion]
         
         # Retornamos el resultado en formato JSON
         return jsonify(lista_Compuestos)

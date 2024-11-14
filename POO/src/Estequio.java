@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -127,6 +129,24 @@ public class Estequio extends JFrame {
         textField.setFont(new Font("Sitka Subheading", Font.PLAIN, 18));
         panel.add(textField, BorderLayout.SOUTH);
         textField.setColumns(10);
+        textField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                // Borrar el texto cuando el campo recibe el foco
+                textField.setText("");
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+            }
+        });
+        textField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Deshabilitar la edición del JTextField al presionar Enter
+                textField.setEditable(false);
+            }
+        });
+
         
         //Panel de las incógnitas
         JPanel panel_1 = new JPanel();
@@ -176,6 +196,7 @@ public class Estequio extends JFrame {
          //Label de respuesta
         respuesta = new JTextArea("");
         respuesta.setFont(new Font("Sitka Subheading", Font.BOLD, 18));
+        respuesta.setEditable(false);
         GridBagConstraints gbc_respuesta = new GridBagConstraints();
         gbc_respuesta.fill = GridBagConstraints.BOTH;
         gbc_respuesta.gridx = 0;
