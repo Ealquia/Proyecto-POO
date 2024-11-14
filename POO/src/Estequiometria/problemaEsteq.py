@@ -81,24 +81,24 @@ class problemaEsteq:
             if tipo != "unaCosa":
                 compuesto = self.__Incognita.getCompuesto().getCompuesto()
                 respuesta = respuesta * self.__Rendimiento / 100 if self.__Reaccion.esProducto(compuesto) else  respuesta * 100 / self.__Rendimiento 
-        #respuesta = self.CifrasSignificativas(respuesta)
         self.__Respuesta = respuesta
         return respuesta
 
     def TipoProblema(self):
-        if not(self.__Compuesto ==None):  
+        if self.__Reaccion ==None:  
             return "unaCosa" #Hay un compuesto y la conversión es entre el mismo compuesto
-        if len(self.__Datos)==1 and not(self.__Incognita==None) and not(self.__Reaccion==None): 
-            return "deCosaACosa"  #Hay un solo dato, una incógnita y una reacción, es un problema de esequiometría simple
-        if len(self.__Datos)>1  and not(self.__Incognita==None) and not(self.__Reaccion==None):
+        else:
+            if len(self.__Datos)==1 and not(self.__Incognita==None): 
+                return "deCosaACosa"  #Hay un solo dato, una incógnita y una reacción, es un problema de esequiometría simple
+        if len(self.__Datos)>1  and not(self.__Incognita==None):
             return "reactivoLimitante" #Hay más de un dato, una incógnita y una reacción, es un problema de reactivo limitante
-        if len(self.__Datos)>1 and (self.__Incognita==None): #Hay más de un dato y no hay incógnita 
+        if self.__TipoIncognita == "Porcentaje de Rendimiento": #Hay más de un dato y no hay incógnita 
             return "porcentajeRendimiento"
 
     def deCosaACosa(self, de=0, a=None):
         de = self.__Datos[de] #Obtener el dato de la lista de datos (el primer dato es el default)
         if (a==None): a = self.__Incognita #Si no se pasa parámetro "a" se asume que es la incógnita
-        moles1 = de.aMoles() #Convertir el primer dato a moles
+        moles1 = de.aMoles() if type(de) != Moles else de #Convertir el primer dato a moles
         moles2 = moles1.aMolesDe(self.__Reaccion, a.getCompuesto()) if not(self.TipoProblema()=="unaCosa") else moles1 
         #Convertir a moles del segundo compuesto (a menos que no haya reacción, en cuyo caso mantener los moles obtenidos antes)
         #Encontrar el valor de la incógnita 
