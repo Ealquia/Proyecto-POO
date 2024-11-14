@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import javax.swing.*;
 
 public class Home {
@@ -22,6 +23,14 @@ public class Home {
     private Estequio estequi;
 
     public static void main(String[] args) {
+        try {
+            ProcessBuilder processBuilder = new ProcessBuilder("python", "POO\\src\\app.py");
+            processBuilder.redirectErrorStream(true);
+            Process process = processBuilder.start();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         // Esto va en el main para lanzar la aplicación
         EventQueue.invokeLater(new Runnable() {
             public void run() {
