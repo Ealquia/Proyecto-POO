@@ -42,29 +42,18 @@ def resolver_Problema():
 @app.route('/mi_api/lista_Compuestos', methods=['POST'])
 def lista_Compuestos():
     # datos de la solicitud en formato JSON
-    reaccion = request.get_json(force=True)
+    reaccion = request.get_json(force=True).get("Reaccion")
     
     if not reaccion:
         # Si no se proporcionan datos, retornamos un error 400 (solicitud incorrecta)
-        return jsonify({'error': 'No se proporcionó una reacción'}), 400
+        return jsonify({'error': 'No se proporcionó una reacción o un compuesto'}), 400
 
     try:
-        #Creamos los datos
-        for d in todo["Datos"]:
-            losDatos.append(crearDato(d)),
-        
-        #Creamos los problemas por cada incógnita
-        for i in todo["Incognitas"]:
-            #Creamos la incógnita
-            incognita = crearDato(i)
-            #Creamos el problema
-            tipo = i["Tipo"]
-            porcentaje = float(todo["Porcentaje"])
-            problema = problemaEsteq(Datos=losDatos,Incognita=incognita,reaccion=todo["Reaccion"],tipo=tipo,Rendimiento=porcentaje)
-            respuesta = respuesta + problema.Respuesta() + "\n"
+        R = Reaccion(reaccion) if "=" in reaccion else reaccion
+        lista_Compuestos = R.getReactivosString() + R.getProductosString() if "=" in reaccion else [reaccion]
         
         # Retornamos el resultado en formato JSON
-        return jsonify(respuesta)
+        return jsonify(lista_Compuestos)
     
     except ValueError as e:
         # Capturamos excepciones y devolvemos el error en formato JSON

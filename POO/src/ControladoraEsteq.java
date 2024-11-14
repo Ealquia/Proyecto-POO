@@ -15,13 +15,15 @@ public class ControladoraEsteq {
     private String textoIncognitas;
 
     public ControladoraEsteq(){
-        textoDatos = "";
-        textoIncognitas = "";
+        textoDatos = "DATOS: \r\n";
+        textoIncognitas = "INCÓGNITAS: \r\n";
         datos = "[";
         incognitas = "[";
     }
 
-    public void anadirDato(boolean Incognita, String Tipo, String[] compuestos, JLabel etiquetaDatos){
+    public void anadirDato(boolean Incognita, String Tipo, String reaccion, JLabel etiquetaDatos){
+        //Crear la lista de compuestos
+        String[] compuestos = this.listaCompuestos(reaccion);
         //Abrir el popUp
         try {
 			PopNuevoDato dialog = new PopNuevoDato(Incognita,Tipo, compuestos, this, etiquetaDatos);
@@ -135,8 +137,7 @@ public class ControladoraEsteq {
                         response.append(responseLine.trim());
                     }
                     respuesta = response.toString();
-                    //Printear el resultado para probar
-                    System.out.println(respuesta);
+
                 }
             } else {
                 System.out.print("Error en la conexión: " + responseCode); // Mensaje de error si la respuesta no es 200
@@ -147,6 +148,83 @@ public class ControladoraEsteq {
             System.out.print("Error: " + e1.getMessage()); // Muestra el mensaje de error en la interfaz
         }
         return respuesta;
+    }
+
+    public String[] listaCompuestos(String reaccion){
+        String[] arrayCompuestos = new String[]{};
+        //Conectarse con el servidor
+        URI uri = URI.create("http://127.0.0.1:5000/mi_api/lista_Compuestos"); // URI del endpoint de la API
+        try {
+            URL url = uri.toURL();
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST"); // Configura el método HTTP como POST
+            conn.setRequestProperty("Content-Type", "application/json; utf-8"); // Formato de datos de entrada
+            conn.setRequestProperty("Accept", "application/json"); // Formato de datos de salida esperado
+            conn.setDoOutput(true); // Permite enviar datos en el cuerpo de la solicitud
+
+            String jsonInputString = "{\"Reaccion\": \"" + reaccion + "\"}";
+
+            // Enviar los datos al servidor
+            try (OutputStream os = conn.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes("utf-8");
+                os.write(input, 0, input.length); // Escribe el JSON en el flujo de salida
+            }
+
+            // Verifica si la respuesta es exitosa (200 OK)
+            int responseCode = conn.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                // Lee la respuesta del servidor
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"))) {
+                    StringBuilder response = new StringBuilder();
+                    String responseLine;
+                    while ((responseLine = br.readLine()) != null) {
+                        response.append(responseLine.trim());
+                    }
+                    String jsonResponse  = response.toString();
+                    jsonResponse = jsonResponse.substring(2, jsonResponse.length() - 2);
+                    arrayCompuestos = jsonResponse.split("\",\"");
+                }
+            } else {
+                System.out.print("Error en la conexión: " + responseCode); // Mensaje de error si la respuesta no es 200
+            }
+            conn.disconnect();
+        } catch (Exception e1) {
+            e1.printStackTrace();
+            System.out.print("Error: " + e1.getMessage()); // Muestra el mensaje de error en la interfaz
+        }
+        return arrayCompuestos;
+    }
+
+    public String getDatos() {
+        return datos;
+    }
+
+    public void setDatos(String datos) {
+        this.datos = datos;
+    }
+
+    public String getIncognitas() {
+        return incognitas;
+    }
+
+    public void setIncognitas(String incognitas) {
+        this.incognitas = incognitas;
+    }
+
+    public String getTextoDatos() {
+        return textoDatos;
+    }
+
+    public void setTextoDatos(String textoDatos) {
+        this.textoDatos = textoDatos;
+    }
+
+    public String getTextoIncognitas() {
+        return textoIncognitas;
+    }
+
+    public void setTextoIncognitas(String textoIncognitas) {
+        this.textoIncognitas = textoIncognitas;
     }
 }
 
