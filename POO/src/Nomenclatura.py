@@ -39,9 +39,9 @@ class Nomenclatura:
             pregunta = ""
             a = rn.randint(0,2) # variable aleatoria que determina que se pregunta
             cantIones = ionesNivel.shape[0]
-            b = rn.randint(1,cantIones) # variable aleatoria que determina el fila del ión
+            b = rn.randint(1,cantIones-1) # variable aleatoria que determina el fila del ión
             if a == 0: # caso en el que muestra el nombre del ión y pregunta la formula
-                pregunta = "Cual es la fórmula de este ian "+ str(ionesNivel.iloc[b,1])+ " ?"
+                pregunta = "Cual es la formula de este ion "+ str(ionesNivel.iloc[b,1])+ " ?"
             elif a == 1:  # caso en el que muestra la fórmula del ión y pregunta el nombre
                 pregunta = "Cual es el nombre del ion "+ str(ionesNivel.iloc[b,2])+ " ?"
             elif a  == 2:  # casos en el que pregunta la carga
@@ -49,7 +49,7 @@ class Nomenclatura:
                 if aleatorio2 == 0: # caso en el que muestra el nombre del ión y pregunta la carga
                     pregunta = "Cual es la carga del ion "+ str(ionesNivel.iloc[b,1]) + " ?"
                 elif aleatorio2 ==1:  # caso en el que muestra la fórmula del ión y pregunta la carga
-                    pregunta = "Cuál es la carga del ion "+ str(ionesNivel.iloc[b,2]) +" ?"
+                    pregunta = "Cual es la carga del ion "+ str(ionesNivel.iloc[b,2]) +" ?"
                 else: #error en la generación del número aleatorio 2
                     pregunta = "error en la generación del número aleatorio2"
             else:# error en la generación del número aleatorio 1
@@ -64,32 +64,34 @@ class Nomenclatura:
     def ComprobarRespuesta(self, nivel, respuesta, pregunta, id):
         #1 = correcto
         #0 = incorrecto
-        iones = Nivel(nivel)
+        iones = self.Nivel(nivel)
         solución = ""
         a = -1
-        if pregunta == "Cual es la fórmula de este ión "+ str(iones.iloc[id,1])+ " ?": # caso en el que muestra el nombre del ión y pregunta la formula
+        ion = iones.iloc[id,1]
+        formula = iones.iloc[id,2]
+        if pregunta == "Cual es la formula de este ion "+ str(ion)+ " ?": # caso en el que muestra el nombre del ión y pregunta la formula
             if respuesta == iones.iloc[id,2]:
-                solución = "¡Correcto!"
+                solución = "Correcto!"
                 a= 1
             else:
-                solución = "Incorrecto, la respuesta correcta es "+ iones.iloc[id,2]
+                solución = "la respuesta correcta es "+ iones.iloc[id,2]
                 a = 0
-        elif pregunta == "¿Cuál es el nombre del ión "+ str(iones.iloc[id,2])+ " ?": # caso en el que muestra la fórmula del ión y pregunta el nombre
+        elif pregunta == "Cual es el nombre del ion "+ str(formula)+ " ?": # caso en el que muestra la fórmula del ión y pregunta el nombre
             if respuesta == iones.iloc[id,1]:
-                solución = "¡Correcto!"
+                solución = "Correcto!"
                 a = 1
             else:
-                solución = "Incorrecto, la respuesta correcta es "+ iones.iloc[id,1]
+                solución = "la respuesta correcta es "+ iones.iloc[id,1]
                 a = 0
-        elif  pregunta == "¿Cuál es la carga del ión "+ str(iones.iloc[id,1]) + " ?" or pregunta == "¿Cuál es la carga del ión "+ str(iones.iloc[id,2]) +" ?": # caso en el que se pregunte la  carga del ión
-            if respuesta == iones.iloc[id,3]:
-                solución = "¡Correcto!"
+        elif  pregunta == "Cual es la carga del ion "+ str(ion) + " ?" or pregunta == "Cual es la carga del ion "+ str(formula) +" ?": # caso en el que se pregunte la  carga del ión
+            if int(respuesta) == iones.iloc[id,3]:
+                solución = "Correcto!"
                 a = 1
             else:
-                solución = "Incorrecto, la respuesta correcta es "+ str(iones.iloc[id,3])
+                solución = "la respuesta correcta es "+ str(iones.iloc[id,3])
                 a = 0
         else:
-            solución = "Error en la generación del número aleatorio a, consultar Nomenclatura.py"
+            solución = "Error en la lectura de la pregunta, consultar Nomenclatura.py"
             a = -1
             
         return solución, a
@@ -105,3 +107,10 @@ def menú():
     4. Nivel 4
     5. Todos los niveles"""
     return a
+
+
+print(iones.dtypes)
+
+nomenclatura = Nomenclatura()
+
+print(nomenclatura.Problema(nomenclatura.Nivel(1)))
