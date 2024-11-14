@@ -10,12 +10,11 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 public class Estequio extends JFrame {
@@ -23,16 +22,12 @@ public class Estequio extends JFrame {
     private JTextField datosIngresados;
     private JSplitPane splitPaneInfo;
     private JSplitPane splitPaneBotones;
-    private JButton nuevoDato;
-    private JButton nuevaIncognita;
     private JComboBox tipoDato;
     private JComboBox tipoIncognita;
-    private JLabel lblDatos;
-    private JButton btnNuevoDato;
-    private JLabel lblIncognitas;
-    private JButton btnNuevaIncognita;
+    private JTextArea lblDatos;
+    private JTextArea lblIncognitas;
     private JTextField textField;
-    private JLabel respuesta;
+    private JTextArea respuesta;
     private JButton btnResolver;
     private ControladoraEsteq Jefa;
 
@@ -55,7 +50,7 @@ public class Estequio extends JFrame {
         getContentPane().setLayout(gridBagLayout);
         
         //Instrucciones
-	    instrucciones = new JTextArea("Escribe la reacción química sin balancear separada por un signo =.  \r\n          Por ejemplo: H2 + O2 = H2O\r\n          Si no te dan una reacción (si no solo un compuesto) escribe su fórmula.\r\n          Por ejemplo: H2O");
+	    instrucciones = new JTextArea("Escribe la reacción química sin balancear separada por un signo =.  \r\n          Por ejemplo: H2 + O2 = H2O\r\n          Si no te dan una reacción (si no solo un compuesto) escribe su fórmula.\r\n          Por ejemplo: H2O\r\n      Presiona enter antes de continuar");
 	    instrucciones.setFont(new Font("Sitka Display", Font.BOLD, 17));
 	    instrucciones.setEditable(false);
 	    GridBagConstraints gbc_instrucciones = new GridBagConstraints();
@@ -73,6 +68,13 @@ public class Estequio extends JFrame {
         gbc_datosIngresados.gridx = 0;
         gbc_datosIngresados.gridy = 1;
         datosIngresados.setFont(new Font("Sitka Subheading", Font.PLAIN, 25));
+        datosIngresados.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Deshabilitar la edición del JTextField al presionar Enter
+                datosIngresados.setEditable(false);
+            }
+        });
         getContentPane().add(datosIngresados, gbc_datosIngresados);
         
         //Split plane con las labels de los datos
@@ -90,26 +92,33 @@ public class Estequio extends JFrame {
         panel.setLayout(new BorderLayout(0, 0));
         
         //Label de los datos
-        lblDatos = new JLabel(Jefa.getDatos());
-        lblDatos.setHorizontalAlignment(SwingConstants.CENTER);
-        lblDatos.setFont(new Font("Sitka Subheading", Font.PLAIN, 18));
-        Border borde = BorderFactory.createLineBorder(Color.BLACK, 5);
+        lblDatos = new JTextArea("DATOS: \n");
+        lblDatos.setFont(new Font("Sitka Subheading", Font.PLAIN, 15));
+        lblDatos.setEditable(false);
+        Border borde = BorderFactory.createLineBorder(Color.BLACK, 3);
         lblDatos.setBorder(borde);
         panel.add(lblDatos, BorderLayout.NORTH);
         
         //DropDown de tipo dato
-        tipoDato = new JComboBox<>(new String[]{"Masa", "Volumen de solución", "Volumen de líquido","Volumen de gas","Cantidad de materia"});
+        tipoDato = new JComboBox<>(new String[]{"¿Qué me dan en el problema?", "Masa", "Volumen de solución", "Volumen de líquido","Volumen de gas","Cantidad de materia"});
         panel.add(tipoDato, BorderLayout.CENTER);
         
         //Botón para agregarDato
-        btnNuevoDato = new JButton("+");
-        btnNuevoDato.setFont(new Font("Sitka Subheading", Font.BOLD, 30));
+        JButton btnNuevoDato = new JButton("Añadir dato");
+        btnNuevoDato.setFont(new Font("Sitka Subheading", Font.BOLD, 15));
         panel.add(btnNuevoDato, BorderLayout.EAST);
         //Funcionalidad del botón
         btnNuevoDato.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                String tipo = tipoDato.getSelectedItem().toString();
-                Jefa.anadirDato(false, tipo, datosIngresados.getText(), lblDatos);
+                if (datosIngresados.getText().isEmpty())
+                    JOptionPane.showMessageDialog(null, "Debe ingresar una reacción o un compuesto", "Error", JOptionPane.ERROR_MESSAGE);
+                else {
+                    if (tipoDato.getSelectedIndex()==0)
+                        JOptionPane.showMessageDialog(null, "Elija un tipo de dato", "Error", JOptionPane.ERROR_MESSAGE);
+                    else {
+                        String tipo = tipoDato.getSelectedItem().toString();
+                        Jefa.anadirDato(false, tipo, datosIngresados.getText(), lblDatos); }
+                }
             }
         });
         
@@ -125,23 +134,27 @@ public class Estequio extends JFrame {
          panel_1.setLayout(new BorderLayout(0, 0));
          
          //Label Incógnitas
-         lblIncognitas = new JLabel("New label");
-         lblIncognitas.setHorizontalAlignment(SwingConstants.CENTER);
-         lblIncognitas.setFont(new Font("Sitka Subheading", Font.PLAIN, 18));
+         lblIncognitas = new JTextArea("INCÓGNITAS: \n");
+         lblIncognitas.setEditable(false);
+         lblIncognitas.setFont(new Font("Sitka Subheading", Font.PLAIN, 15));
+         lblIncognitas.setBorder(borde);
          panel_1.add(lblIncognitas, BorderLayout.NORTH);
 
          //Combobox de tipoIncognita
-         tipoIncognita = new JComboBox(new String[]{"Masa", "Volumen de solución", "Volumen de líquido","Volumen de gas","Molaridad","Presión de un gas",
+         tipoIncognita = new JComboBox(new String[]{"¿Qué tengo que encontrar?", "Masa", "Volumen de solución", "Volumen de líquido","Volumen de gas","Molaridad","Presión de un gas",
              "Temperatura de un gas","Cantidad de materia", "Porcentaje de rendimiento"});
          panel_1.add(tipoIncognita, BorderLayout.CENTER);
          
          //Botón para añadir incógnita
-         btnNuevaIncognita = new JButton("+");
-         btnNuevaIncognita.setFont(new Font("Sitka Subheading", Font.BOLD, 30));
+         JButton btnNuevaIncognita = new JButton("Añadir incógnita");
+         btnNuevaIncognita.setFont(new Font("Sitka Subheading", Font.BOLD, 15));
          btnNuevaIncognita.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                String tipo = tipoIncognita.getSelectedItem().toString();
-                Jefa.anadirDato(true, tipo, datosIngresados.getText(), lblIncognitas);
+                if (datosIngresados.getText().isEmpty())
+                    JOptionPane.showMessageDialog(null, "Debe ingresar una reacción o un compuesp", "Error", JOptionPane.ERROR_MESSAGE);
+                else {
+                    String tipo = tipoIncognita.getSelectedItem().toString();
+                    Jefa.anadirDato(true, tipo, datosIngresados.getText(), lblIncognitas); }
             }
          });
          panel_1.add(btnNuevaIncognita, BorderLayout.EAST);
@@ -161,8 +174,7 @@ public class Estequio extends JFrame {
          panel_1.add(btnResolver, BorderLayout.SOUTH);
     
          //Label de respuesta
-        respuesta = new JLabel("");
-        respuesta.setHorizontalAlignment(SwingConstants.CENTER);
+        respuesta = new JTextArea("");
         respuesta.setFont(new Font("Sitka Subheading", Font.BOLD, 18));
         GridBagConstraints gbc_respuesta = new GridBagConstraints();
         gbc_respuesta.fill = GridBagConstraints.BOTH;

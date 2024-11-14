@@ -6,7 +6,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.Map;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
+import javax.swing.JTextArea;
 
 public class ControladoraEsteq {
     private String datos;
@@ -21,7 +21,7 @@ public class ControladoraEsteq {
         incognitas = "[";
     }
 
-    public void anadirDato(boolean Incognita, String Tipo, String reaccion, JLabel etiquetaDatos){
+    public void anadirDato(boolean Incognita, String Tipo, String reaccion, JTextArea etiquetaDatos){
         //Crear la lista de compuestos
         String[] compuestos = this.listaCompuestos(reaccion);
         //Abrir el popUp

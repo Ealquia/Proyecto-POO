@@ -19,6 +19,7 @@ import javax.swing.JComboBox; // Para manejar URIs de manera segura
 import javax.swing.JDialog; // Para representar y manipular direcciones URL
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
@@ -43,7 +44,7 @@ public class PopNuevoDato extends JDialog implements ItemListener{
 	 * Create the dialog.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public PopNuevoDato(boolean Incognita, String Tipo, String[] compuestos, ControladoraEsteq jefa, JLabel etiquetaDatos) {
+	public PopNuevoDato(boolean Incognita, String Tipo, String[] compuestos, ControladoraEsteq jefa, JTextArea etiquetaDatos) {
 		if (Incognita)
 			setTitle("Nueva Incógnita");
 		else 
