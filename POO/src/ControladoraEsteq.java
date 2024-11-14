@@ -66,7 +66,7 @@ public class ControladoraEsteq {
         }
 
         //Devolver el texto para las labels actualizado
-        if (DatoEntrante.get("Incognita").equals("Si")) {
+        if (DatoEntrante.get("Incognita").equals("No")) {
             textoDatos = textoDatos + respuesta + "\n"; 
             return textoDatos;}
         else {
@@ -138,6 +138,7 @@ public class ControladoraEsteq {
                     }
                     respuesta = response.toString();
                     respuesta = respuesta.substring(1, respuesta.length() - 1);
+                    respuesta = respuesta.replaceAll("\\|", "\n");
 
                 }
             } else {
