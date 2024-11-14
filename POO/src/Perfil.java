@@ -4,8 +4,16 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import org.json.JSONObject;
 
 public class Perfil extends JFrame {
 
@@ -92,6 +100,10 @@ public class Perfil extends JFrame {
                 // Obtener el texto de JTextPane y mostrarlo en infouser
                 String userInfo = instruccion.getText();
                 infouser.setText("<html><p>Información del Usuario:</p><p>" + userInfo.replaceAll("\n", "<br>") + "</p></html>");
+
+                // Llamar al método para enviar los datos al servidor Flask
+                String response = enviarPerfil(userInfo);
+                JOptionPane.showMessageDialog(null, "Respuesta del servidor: " + response);
             }
         });
     }
@@ -101,6 +113,52 @@ public class Perfil extends JFrame {
         ImageIcon avatarIcon = new ImageIcon(avatarPath);
         Image avatarImage = avatarIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
         cartelavatar.setIcon(new ImageIcon(avatarImage)); // Asegúrate de que cartelavatar esté inicializado
+    }
+
+    // Método para enviar el perfil al servidor Flask
+    public String enviarPerfil(String perfilData) {
+        try {
+            // Crear un objeto JSON a partir de los datos del perfil
+            JSONObject perfilJson = new JSONObject();
+            String[] dataLines = perfilData.split("\n");
+            for (String line : dataLines) {
+                String[] parts = line.split(": ");
+                perfilJson.put(parts[0].trim(), parts[1].trim());
+            }
+
+            // Establecer la conexión HTTP
+            URL url = new URL("http://localhost:5000/registrar_datos"); // Dirección del servidor Flask
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
+
+            // Convertir el objeto JSON a string y enviar en el cuerpo de la solicitud
+            String jsonInputString = perfilJson.toString();
+            try (OutputStream os = conn.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+
+            // Verificar la respuesta del servidor
+            int responseCode = conn.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                // La respuesta del servidor
+                StringBuilder response = new StringBuilder();
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"))) {
+                    String responseLine;
+                    while ((responseLine = br.readLine()) != null) {
+                        response.append(responseLine.trim());
+                    }
+                }
+                return response.toString(); // Retorna la respuesta del servidor
+            } else {
+                return "Error en la conexión: " + responseCode; // Error en la conexión
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Error al enviar los datos: " + e.getMessage();
+        }
     }
 
     public static void main(String[] args) {
@@ -114,4 +172,3 @@ public class Perfil extends JFrame {
         });
     }
 }
-
