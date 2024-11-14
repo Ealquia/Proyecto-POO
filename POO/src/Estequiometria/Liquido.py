@@ -11,7 +11,7 @@ class Liquido(TipoDato):
             self._CifrasSig["Densidad"] = TipoDato.CifrasSig(densidad)
             densidad = float(densidad) #Covertir la densidad a float
         self._Densidad = densidad #Agregar atributo densidad
-        self._Dimensional["Densidad"] = dimDensidad #Agregar al diccionario las dimensionales de la densidad
+        self._Dimensional["Densidad"] = dimDensidad if dimDensidad!= None else "g/L" #Agregar al diccionario las dimensionales de la densidad
         if self._Compuesto.elementoPuro(): #Evaluar si el compuesto es un elemento puro
             self._Densidad = self._Compuesto.getElementos()[0].getDensidad() #Si lo es, encontrar la densidad del elemento
             self._Dimensional["Densidad"] = "g/mL" #Actualizar la dimensional de la densidad (las densidades de los elementos están en g/mL)

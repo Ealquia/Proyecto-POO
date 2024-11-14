@@ -4,7 +4,6 @@ from Compuesto import Compuesto  # Opcional: si decides usar la clase Compuesto 
 from Reaccion import Reaccion  
 import chempy as ch
 from FuncionesNomenclatur import *
-
 app = Flask(__name__)  # Creamos una instancia de Flask para configurar la aplicación
 
 # Definimos el endpoint de la API
@@ -30,13 +29,15 @@ def masa_molar():
     except ValueError as e:
         # Capturamos excepciones y devolvemos el error en formato JSON
         return jsonify({'error': str(e)}), 400
-    
 # endpoint de la API para el balanceo de ecuaciones
 @app.route('/mi_api/balancear_reaccion', methods=['POST'])
 def balancear_reaccion():
     # datos de la solicitud en formato JSON
     data = request.json
     reaccion_str = data.get('reaccion')  # Obtiene la reacción como string
+
+
+
 
     if not reaccion_str:
         return jsonify({'error': 'Reacción no proporcionada'}), 400

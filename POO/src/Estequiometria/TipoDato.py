@@ -75,8 +75,9 @@ class TipoDato:
 
     #toString
     def __str__(self):
-        dimensional = self._Dimensional if type(self._Dimensional) == str else self._Dimensional["Magnitud"]
-        info = f"{self._Magnitud} {dimensional} de {self._Compuesto.getCompuesto()}"
+        dimensional = self._Dimensional["Magnitud"]
+        magnitud = self._Magnitud if self._Magnitud != None else "Incognita"
+        info = f"{magnitud} {dimensional} de {self._Compuesto.getCompuesto()}"
         return info
         
     #Setters and getters

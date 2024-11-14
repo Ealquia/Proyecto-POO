@@ -16,7 +16,7 @@ class Moles:
         return cifrasSig
     
     #Constructor
-    def __init__(self, compuesto, magnitud: float = None, dimensional: str = "mol"):
+    def __init__(self, compuesto, magnitud: float = None, dimensional: str = "mol", teorico=True):
         self._CifrasSig = {}
         if isinstance(magnitud, str): #Si se pasa la magnitud como un string
             #Calcular las cifras significativas usando el método estático, crear un diccionario de cifras significativas y asignarlas ahí
@@ -28,6 +28,7 @@ class Moles:
             self.__Compuesto = compuesto 
         if isinstance(compuesto, str): #Si el parámetro es el string del compuesto, crear el objeto y asignarlo al atributo
             self.__Compuesto = Compuesto(compuesto)
+        self.__Teorico = teorico
         self.C = Conversiones() #Crear un objeto de tipo conversiones para que lo use la clase
     
     #Convierte de moles de un compuesto a otro según los coeficientes de la reacción pasada
@@ -83,3 +84,9 @@ class Moles:
 
     def getCifrasSig(self):
         return  self._CifrasSig
+
+    def getTeorico(self):
+        return self.__Teorico
+    
+    def setTeorico(self, teorico):
+        self.__Teorico = teorico
