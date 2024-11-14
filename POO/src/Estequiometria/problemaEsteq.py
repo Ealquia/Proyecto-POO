@@ -81,18 +81,18 @@ class problemaEsteq:
             if tipo != "unaCosa":
                 compuesto = self.__Incognita.getCompuesto().getCompuesto()
                 respuesta = respuesta * self.__Rendimiento / 100 if self.__Reaccion.esProducto(compuesto) else  respuesta * 100 / self.__Rendimiento 
-        #respuesta = self.CifrasSignificativas(respuesta)
         self.__Respuesta = respuesta
         return respuesta
 
     def TipoProblema(self):
-        if not(self.__Compuesto ==None):  
+        if self.__Reaccion ==None:  
             return "unaCosa" #Hay un compuesto y la conversión es entre el mismo compuesto
-        if len(self.__Datos)==1 and not(self.__Incognita==None) and not(self.__Reaccion==None): 
-            return "deCosaACosa"  #Hay un solo dato, una incógnita y una reacción, es un problema de esequiometría simple
-        if len(self.__Datos)>1  and not(self.__Incognita==None) and not(self.__Reaccion==None):
+        else:
+            if len(self.__Datos)==1 and not(self.__Incognita==None): 
+                return "deCosaACosa"  #Hay un solo dato, una incógnita y una reacción, es un problema de esequiometría simple
+        if len(self.__Datos)>1  and not(self.__Incognita==None):
             return "reactivoLimitante" #Hay más de un dato, una incógnita y una reacción, es un problema de reactivo limitante
-        if len(self.__Datos)>1 and (self.__Incognita==None): #Hay más de un dato y no hay incógnita 
+        if self.__TipoIncognita == "Porcentaje de Rendimiento": #Hay más de un dato y no hay incógnita 
             return "porcentajeRendimiento"
 
     def deCosaACosa(self, de=0, a=None):
