@@ -1,10 +1,10 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import javax.swing.*;
 
 public class informacion extends JFrame {
     private JButton BotonA;
@@ -30,7 +30,7 @@ public class informacion extends JFrame {
                 File pdfFile = new File(desktop, "downloaded.pdf");
 
                 // Ruta local del archivo PDF
-                File localPdf = new File("C:\\Users\\esteb\\OneDrive\\Escritorio\\UVG\\UVG 2024 EHVM\\Segundo Semestre\\PROGRAMACIÓN ORIENTADA A OBJETOS\\Proyecto Progra\\POO\\src\\TABLA_LA.pdf");
+                File localPdf = new File("POO\\src\\TABLA_LA.pdf");
                 
                 // Copiar el archivo local al escritorio
                 Files.copy(localPdf.toPath(), pdfFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
