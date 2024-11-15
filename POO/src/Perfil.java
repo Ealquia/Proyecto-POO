@@ -13,7 +13,6 @@ import java.net.URL;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import org.json.JSONObject;
 
 public class Perfil extends JFrame {
 
@@ -118,13 +117,21 @@ public class Perfil extends JFrame {
     // Método para enviar el perfil al servidor Flask
     public String enviarPerfil(String perfilData) {
         try {
-            // Crear un objeto JSON a partir de los datos del perfil
-            JSONObject perfilJson = new JSONObject();
+          
+            StringBuilder perfilJson = new StringBuilder("{");
             String[] dataLines = perfilData.split("\n");
             for (String line : dataLines) {
-                String[] parts = line.split(": ");
-                perfilJson.put(parts[0].trim(), parts[1].trim());
+                String[] parts = line.split(":");
+                if (parts.length == 2) {
+                    // Agrega cada par clave-valor al JSON
+                    perfilJson.append(String.format("\"%s\":\"%s\",", parts[0].trim(), parts[1].trim()));
+                }
             }
+            //cierra el JSON
+            if (perfilJson.charAt(perfilJson.length() - 1) == ',') {
+                perfilJson.deleteCharAt(perfilJson.length() - 1);
+            }
+            perfilJson.append("}");
 
             // Establecer la conexión HTTP
             URL url = new URL("http://localhost:5000/registrar_datos"); // Dirección del servidor Flask
@@ -133,7 +140,7 @@ public class Perfil extends JFrame {
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setDoOutput(true);
 
-            // Convertir el objeto JSON a string y enviar en el cuerpo de la solicitud
+            // Convertir la cadena JSON a bytes y enviar en el cuerpo de la solicitud
             String jsonInputString = perfilJson.toString();
             try (OutputStream os = conn.getOutputStream()) {
                 byte[] input = jsonInputString.getBytes("utf-8");
